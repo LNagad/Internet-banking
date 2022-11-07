@@ -1,13 +1,12 @@
-﻿using Core.Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Domain.Entities
+namespace Core.Domain.Common
 {
-    public class Prestamo: AuditableBaseEntity
+    public class AuditableBaseEntity
     {
         public int Id { get; set; }
     }
