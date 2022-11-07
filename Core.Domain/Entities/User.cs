@@ -8,5 +8,6 @@ namespace Core.Domain.Entities
 {
     public class User
     {
+        
     }
 }
