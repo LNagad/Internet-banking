@@ -8,6 +8,6 @@ namespace Core.Domain.Entities
 {
     public class Prestamo
     {
-
+        public int Id { get; set; }
     }
 }
