@@ -1,6 +1,16 @@
-﻿namespace Core.Domain.Entities;
+﻿using Core.Domain.Common;
 
-public class CuentaAhorro
+namespace Core.Domain.Entities;
+
+public class CuentaAhorro : AuditableBaseEntity
 {
-    public int Id { get; set; }
+    public string NumeroCuenta { get; set; }
+    
+    public int Balance { get; set; }
+    
+    public int Principal { get; set; }
+    
+    //navigation property
+    public int IdProduct { get; set; }
+    public Product Product { get; set; }
 }
