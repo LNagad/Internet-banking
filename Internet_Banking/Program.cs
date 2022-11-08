@@ -1,10 +1,18 @@
+
 using Infrastructure.Persistence;
+
+using Infrastructure.Identity;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
+
 
 var app = builder.Build();
 
