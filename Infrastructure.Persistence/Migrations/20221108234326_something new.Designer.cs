@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221108225820_relations between beneficiarios, account and User added")]
-    partial class relationsbetweenbeneficiariosaccountandUseradded
+    [Migration("20221108234326_something new")]
+    partial class somethingnew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,14 +36,20 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("IdAccount")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdBeneficiario")
+                        .HasColumnType("int");
+
                     b.Property<int>("IdUser")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdAccount");
 
-                    b.HasIndex("IdUser");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Beneficiarios", (string)null);
                 });
@@ -276,15 +282,11 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.Entities.User", "user")
+                    b.HasOne("Core.Domain.Entities.User", null)
                         .WithMany("Beneficiarios")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CuentaAhorro");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>

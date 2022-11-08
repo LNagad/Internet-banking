@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class relationsbetweenbeneficiariosaccountandUseradded : Migration
+    public partial class somethingnew : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -148,7 +148,9 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdAccount = table.Column<int>(type: "int", nullable: false),
-                    IdUser = table.Column<int>(type: "int", nullable: false)
+                    IdUser = table.Column<int>(type: "int", nullable: false),
+                    IdBeneficiario = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -160,8 +162,8 @@ namespace Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Beneficiarios_Users_IdUser",
-                        column: x => x.IdUser,
+                        name: "FK_Beneficiarios_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
                 });
@@ -172,9 +174,9 @@ namespace Infrastructure.Persistence.Migrations
                 column: "IdAccount");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Beneficiarios_IdUser",
+                name: "IX_Beneficiarios_UserId",
                 table: "Beneficiarios",
-                column: "IdUser");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CuentaAhorros_IdProduct",

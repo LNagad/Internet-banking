@@ -34,6 +34,6 @@ namespace Core.Domain.Entities
         
         //Navigation Properties
         public ICollection<Product> Products { get; set; }
-        public ICollection<Beneficiario> Beneficiarios { get; set; }
+        public ICollection<Beneficiario>? Beneficiarios { get; set; }
     }
 }

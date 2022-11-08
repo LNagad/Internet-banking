@@ -67,12 +67,6 @@ public class ApplicationContext : DbContext
 
 
             //beneficiarios
-            modelBuilder.Entity<User>()
-                .HasMany<Beneficiario>(P => P.Beneficiarios)
-                .WithOne(B => B.user)
-                .HasForeignKey(B => B.IdUser)
-                .OnDelete(DeleteBehavior.NoAction);
-
             modelBuilder.Entity<CuentaAhorro>()
                 .HasMany<Beneficiario>(CA => CA.Beneficiarios)
                 .WithOne(B => B.CuentaAhorro)
