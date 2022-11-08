@@ -45,26 +45,29 @@ public class ApplicationContext : DbContext
                 .HasMany<Product>(user => user.Products)
                 .WithOne(P => P.User)
                 .HasForeignKey(product => product.IdUser)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Product>()
                 .HasMany<CuentaAhorro>( P => P.CuentaAhorros)
                 .WithOne( CA => CA.Product)
                 .HasForeignKey( CA => CA.IdProduct)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Product>()
                 .HasMany<TarjetaCredito>( P => P.TarjetaCreditos)
                 .WithOne( TC => TC.Product)
                 .HasForeignKey( TC => TC.Idproduct)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Product>()
                 .HasMany<Prestamo>( P => P.Prestamos)
                 .WithOne( PS => PS.Product)
                 .HasForeignKey( PS => PS.IdProduct) 
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         
+
+            //beneficiarios
+
         #endregion
         
         #region PropertyConfigurations
