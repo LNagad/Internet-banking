@@ -64,10 +64,20 @@ public class ApplicationContext : DbContext
                 .WithOne( PS => PS.Product)
                 .HasForeignKey( PS => PS.IdProduct) 
                 .OnDelete(DeleteBehavior.Cascade);
-        
+
 
             //beneficiarios
+            modelBuilder.Entity<User>()
+                .HasMany<Beneficiario>(P => P.Beneficiarios)
+                .WithOne(B => B.user)
+                .HasForeignKey(B => B.IdUser)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<CuentaAhorro>()
+                .HasMany<Beneficiario>(CA => CA.Beneficiarios)
+                .WithOne(B => B.CuentaAhorro)
+                .HasForeignKey(B => B.IdAccount)
+                .OnDelete(DeleteBehavior.Cascade);
         #endregion
         
         #region PropertyConfigurations

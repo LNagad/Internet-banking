@@ -12,7 +12,7 @@ namespace Core.Domain.Common
         
         public DateTime? Created { get; set; }
         
-        public int CreateBy { get; set; } //Id del user/admin que lo creo
+        public int CreatedBy { get; set; } //Id del user/admin que lo creo
         
         public DateTime? LastModified { get; set; }
         

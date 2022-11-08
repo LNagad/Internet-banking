@@ -6,13 +6,13 @@ public class TarjetaCredito : AuditableBaseEntity
 {
     public string NumeroTarjeta { get; set; }
     
-    public int Limite { get; set; }
+    public double Limite { get; set; }
     
-    public int Pago { get; set; }
+    public double Pago { get; set; }
     
-    public int Debe { get; set; } // 1, 0
+    public double Debe { get; set; } // 1, 0
     
-    public int Balance { get; set; }
+    public double Balance { get; set; }
     
     //navigation property
     public int Idproduct { get; set; }

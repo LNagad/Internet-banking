@@ -6,25 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class relationsbetweenbeneficiariosaccountandUseradded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Beneficiarios",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdAccount = table.Column<int>(type: "int", nullable: false),
-                    IdUser = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Beneficiarios", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -42,7 +28,7 @@ namespace Infrastructure.Persistence.Migrations
                     IdCard = table.Column<int>(type: "int", nullable: false),
                     UserType = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -69,7 +55,8 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_Products_Users_IdUser",
                         column: x => x.IdUser,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,11 +66,11 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumeroCuenta = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Balance = table.Column<int>(type: "int", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     Principal = table.Column<int>(type: "int", nullable: false),
                     IdProduct = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -94,7 +81,8 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_CuentaAhorros_Products_IdProduct",
                         column: x => x.IdProduct,
                         principalTable: "Products",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,13 +92,13 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumeroPrestamo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Monto = table.Column<int>(type: "int", nullable: false),
-                    Pago = table.Column<int>(type: "int", nullable: false),
+                    Monto = table.Column<double>(type: "float", nullable: false),
+                    Pago = table.Column<double>(type: "float", nullable: false),
                     Debe = table.Column<int>(type: "int", nullable: false),
-                    Balance = table.Column<int>(type: "int", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     IdProduct = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -121,7 +109,8 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_Prestamos_Products_IdProduct",
                         column: x => x.IdProduct,
                         principalTable: "Products",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -131,13 +120,13 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NumeroTarjeta = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Limite = table.Column<int>(type: "int", nullable: false),
-                    Pago = table.Column<int>(type: "int", nullable: false),
-                    Debe = table.Column<int>(type: "int", nullable: false),
-                    Balance = table.Column<int>(type: "int", nullable: false),
+                    Limite = table.Column<double>(type: "float", nullable: false),
+                    Pago = table.Column<double>(type: "float", nullable: false),
+                    Debe = table.Column<double>(type: "float", nullable: false),
+                    Balance = table.Column<double>(type: "float", nullable: false),
                     Idproduct = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -148,8 +137,44 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_TarjetaCreditos_Products_Idproduct",
                         column: x => x.Idproduct,
                         principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Beneficiarios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdAccount = table.Column<int>(type: "int", nullable: false),
+                    IdUser = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Beneficiarios", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Beneficiarios_CuentaAhorros_IdAccount",
+                        column: x => x.IdAccount,
+                        principalTable: "CuentaAhorros",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Beneficiarios_Users_IdUser",
+                        column: x => x.IdUser,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Beneficiarios_IdAccount",
+                table: "Beneficiarios",
+                column: "IdAccount");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Beneficiarios_IdUser",
+                table: "Beneficiarios",
+                column: "IdUser");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CuentaAhorros_IdProduct",
@@ -179,13 +204,13 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Beneficiarios");
 
             migrationBuilder.DropTable(
-                name: "CuentaAhorros");
-
-            migrationBuilder.DropTable(
                 name: "Prestamos");
 
             migrationBuilder.DropTable(
                 name: "TarjetaCreditos");
+
+            migrationBuilder.DropTable(
+                name: "CuentaAhorros");
 
             migrationBuilder.DropTable(
                 name: "Products");

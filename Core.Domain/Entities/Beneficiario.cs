@@ -7,4 +7,8 @@ public class Beneficiario
     public int IdAccount { get; set; }
     
     public int IdUser { get; set; }
+
+    //Navigation property
+    public User user { get; set; }
+    public CuentaAhorro CuentaAhorro { get; set; }
 }

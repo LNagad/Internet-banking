@@ -38,6 +38,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdAccount");
+
+                    b.HasIndex("IdUser");
+
                     b.ToTable("Beneficiarios", (string)null);
                 });
 
@@ -49,14 +53,14 @@ namespace Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreateBy")
-                        .HasColumnType("int");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdProduct")
                         .HasColumnType("int");
@@ -89,14 +93,14 @@ namespace Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreateBy")
-                        .HasColumnType("int");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<int>("Debe")
                         .HasColumnType("int");
@@ -110,15 +114,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedBy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Monto")
-                        .HasColumnType("int");
+                    b.Property<double>("Monto")
+                        .HasColumnType("float");
 
                     b.Property<string>("NumeroPrestamo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Pago")
-                        .HasColumnType("int");
+                    b.Property<double>("Pago")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -162,17 +166,17 @@ namespace Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreateBy")
-                        .HasColumnType("int");
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Debe")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
+
+                    b.Property<double>("Debe")
+                        .HasColumnType("float");
 
                     b.Property<int>("Idproduct")
                         .HasColumnType("int");
@@ -183,15 +187,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedBy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Limite")
-                        .HasColumnType("int");
+                    b.Property<double>("Limite")
+                        .HasColumnType("float");
 
                     b.Property<string>("NumeroTarjeta")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Pago")
-                        .HasColumnType("int");
+                    b.Property<double>("Pago")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -212,11 +216,11 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CreateBy")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -259,6 +263,25 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Domain.Entities.Beneficiario", b =>
+                {
+                    b.HasOne("Core.Domain.Entities.CuentaAhorro", "CuentaAhorro")
+                        .WithMany("Beneficiarios")
+                        .HasForeignKey("IdAccount")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Domain.Entities.User", "user")
+                        .WithMany("Beneficiarios")
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("CuentaAhorro");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>
@@ -305,6 +328,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>
+                {
+                    b.Navigation("Beneficiarios");
+                });
+
             modelBuilder.Entity("Core.Domain.Entities.Product", b =>
                 {
                     b.Navigation("CuentaAhorros");
@@ -316,6 +344,8 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Domain.Entities.User", b =>
                 {
+                    b.Navigation("Beneficiarios");
+
                     b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
