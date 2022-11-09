@@ -11,7 +11,7 @@ public static class ServiceRegistration
     {
         #region Contexts
 
-        if (configuration.GetValue<bool>("UserInMemoryDatabase"))
+        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
             services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase("ApplicationDb"));
         }
