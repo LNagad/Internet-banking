@@ -4,10 +4,13 @@ using Infrastructure.Persistence;
 using Infrastructure.Identity;
 
 
+using Infrastructure.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 
