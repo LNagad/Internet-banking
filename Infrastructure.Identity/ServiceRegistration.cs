@@ -18,7 +18,7 @@ namespace Infrastructure.Identity
         {
 
             #region "InMemory Database"
-            if (config.GetValue<bool>("InMemoryDatabase"))
+            if (config.GetValue<bool>("UseInMemoryDatabase"))
             {
                 services.AddDbContext<IdentityContext>(options => options
                 .UseInMemoryDatabase("IdentityDB"));

@@ -36,7 +36,7 @@ namespace Infrastructure.Identity.Context
 
             builder.Entity<IdentityUserRole<string>>(p =>
             {
-                p.ToTable("Roles");
+                p.ToTable("UserRoles");
             });
 
             builder.Entity<IdentityUserLogin<string>>(p =>
