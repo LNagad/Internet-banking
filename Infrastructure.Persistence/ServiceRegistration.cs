@@ -1,4 +1,6 @@
+using Core.Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
+using Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,13 +23,20 @@ public static class ServiceRegistration
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
             m => m.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
         }
-        
+
+
         #endregion
-        
         #region Repositories
-        
-            //repositories
-        
+
+        //repositories
+            services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IBeneficiarioRepository, BeneficiarioRepository>();
+            services.AddTransient<ICuentaAhorroRepository, CuentaAhorroRepository>();
+            services.AddTransient<IPrestamoRepository, PrestamoRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ITarjetaCreditoRepository, TarjetaCreditoRepository>();
+
         #endregion
     }
 }

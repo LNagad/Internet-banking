@@ -1,5 +1,5 @@
 ﻿using Core.Application.ViewModels.Prestamo;
-using Core.Application.ViewModels.Product;
+using Core.Application.ViewModels.Products;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;

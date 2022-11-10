@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.Product
+namespace Core.Application.ViewModels.Products
 {
     public class ProductViewModel
     {

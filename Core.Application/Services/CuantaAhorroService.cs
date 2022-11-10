@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Core.Application.Services
 {
-    internal class CuantaAhorroService : GenericService<SaveCuentaAhorroViewModel, CuentaAhorroViewModel, CuentaAhorro>, ICuenta
+    internal class CuantaAhorroService : GenericService<SaveCuentaAhorroViewModel, CuentaAhorroViewModel, CuentaAhorro>, ICuentaAhorroService
     {
         private readonly ICuentaAhorroRepository _repository;
         private readonly IMapper _mapper;

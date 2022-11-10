@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.Beneficiario
+namespace Core.Application.ViewModels.Beneficiarios
 {
     public class SaveBeneficiarioViewModel
     {

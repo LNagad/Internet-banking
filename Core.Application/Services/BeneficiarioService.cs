@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
-using Core.Application.ViewModels.Beneficiario;
+using Core.Application.ViewModels.Beneficiarios;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
