@@ -1,4 +1,4 @@
-﻿using Core.Application.ViewModels.TarjetaCredito;
+﻿using Core.Application.ViewModels.TarjetaCreditos;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;

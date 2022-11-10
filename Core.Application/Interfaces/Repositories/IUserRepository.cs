@@ -1,4 +1,4 @@
-﻿using Core.Application.ViewModels.User;
+﻿using Core.Application.ViewModels.Users;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;

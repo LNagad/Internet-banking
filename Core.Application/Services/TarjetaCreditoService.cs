@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
-using Core.Application.ViewModels.TarjetaCredito;
+using Core.Application.ViewModels.TarjetaCreditos;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿using Core.Application.ViewModels.Prestamo;
+﻿using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.Products;
 using Core.Domain.Entities;
 using System;

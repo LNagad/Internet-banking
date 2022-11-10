@@ -1,4 +1,4 @@
-﻿using Core.Application.ViewModels.CuentaAhorro;
+﻿using Core.Application.ViewModels.CuentaAhorros;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
