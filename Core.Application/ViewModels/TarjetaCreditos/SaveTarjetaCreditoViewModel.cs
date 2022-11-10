@@ -1,14 +1,14 @@
-﻿using Core.Domain.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.TarjetaCredito
+namespace Core.Application.ViewModels.TarjetaCreditos
 {
-    public class TarjetaCreditoViewModel
+    public class SaveTarjetaCreditoViewModel
     {
+        //faltan verificaciones ( en espera )
         public string NumeroTarjeta { get; set; }
 
         public double Limite { get; set; }

@@ -11,6 +11,5 @@ public class Beneficiario
     public int IdBeneficiario { get; set; }
 
     //Navigation property
-    //public User user { get; set; }
     public CuentaAhorro CuentaAhorro { get; set; }
 }

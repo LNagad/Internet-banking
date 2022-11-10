@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,10 @@ namespace Core.Application.ViewModels.Products
 
         public int Primary { get; set; } // 1 = True, 0 = False
 
+        //Navigation properties
+        public User User { get; set; }
+        public ICollection<CuentaAhorro> CuentaAhorros { get; set; }
+        public ICollection<TarjetaCredito> TarjetaCreditos { get; set; }
+        public ICollection<Prestamo> Prestamos { get; set; }
     }
 }

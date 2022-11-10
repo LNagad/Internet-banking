@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.Prestamo
+namespace Core.Application.ViewModels.Prestamos
 {
     public class SavePrestamoViewModel
     {

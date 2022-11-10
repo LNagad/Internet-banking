@@ -17,5 +17,7 @@ namespace Core.Application.ViewModels.Beneficiarios
 
         public int IdBeneficiario { get; set; }
 
+        //Navigation property
+        public CuentaAhorro CuentaAhorro { get; set; }
     }
 }
