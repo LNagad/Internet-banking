@@ -5,6 +5,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Identity.Entities;
 using Infrastructure.Identity.Seeds;
+using Core.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddApplicationLayer();
 
 var app = builder.Build();
 
