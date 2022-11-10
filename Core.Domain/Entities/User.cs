@@ -13,7 +13,7 @@ namespace Core.Domain.Entities
         
         public string Name { get; set; }
         
-        public int Phone { get; set; }
+        public string Phone { get; set; }
         
         public int Status { get; set; } //1 = True, 0 = False
         
