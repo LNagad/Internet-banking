@@ -1,9 +1,5 @@
-﻿using Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Application.ViewModels.Beneficiarios;
+using Core.Application.ViewModels.Products;
 
 namespace Core.Application.ViewModels.CuentaAhorros
 {
@@ -17,7 +13,7 @@ namespace Core.Application.ViewModels.CuentaAhorros
 
         //navigation property
         public int IdProduct { get; set; }
-        public Product Product { get; set; }
-        public ICollection<Beneficiario> Beneficiarios { get; set; }
+        public ProductViewModel Product { get; set; }
+        public List<BeneficiarioViewModel> Beneficiarios { get; set; }
     }
 }

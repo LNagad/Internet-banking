@@ -1,9 +1,9 @@
+using Core.Domain.Common;
+
 namespace Core.Domain.Entities;
 
-public class Product
-{
-    public int Id { get; set; }
-    
+public class Product : AuditableBaseEntity
+{ 
     public int IdProduct { get; set; }
     
     public int IdProductType { get; set; }

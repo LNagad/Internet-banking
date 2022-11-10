@@ -1,4 +1,5 @@
-﻿using Core.Domain.Entities;
+﻿using Core.Application.ViewModels.Products;
+
 
 namespace Core.Application.ViewModels.Prestamos
 {
@@ -16,6 +17,6 @@ namespace Core.Application.ViewModels.Prestamos
 
         //navigation property
         public int IdProduct { get; set; }
-        public Product Product { get; set; }
+        public ProductViewModel Product { get; set; }
     }
 }

@@ -1,9 +1,9 @@
+using Core.Domain.Common;
+
 namespace Core.Domain.Entities;
 
-public class Beneficiario
+public class Beneficiario : AuditableBaseEntity
 {
-    public int Id { get; set; }
-    
     public int IdAccount { get; set; }
     
     public int IdUser { get; set; }

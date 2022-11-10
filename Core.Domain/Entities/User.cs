@@ -18,7 +18,6 @@ namespace Core.Domain.Entities
         public int Status { get; set; } //1 = True, 0 = False
         
         public string ImagePath { get; set; }
-        //public IFormFile File {get; set; }
         
         public string Username { get; set; }
         
