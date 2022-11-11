@@ -98,7 +98,7 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.Product, opt => opt.Ignore())
                 .ForMember(P => P.Beneficiarios, opt => opt.Ignore());
 
-            //Beneficiarios
+            //Beneficiario
             CreateMap<Beneficiario, BeneficiarioViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
