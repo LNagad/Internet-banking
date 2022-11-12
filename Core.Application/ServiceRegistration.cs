@@ -13,6 +13,10 @@ namespace Core.Application
 
             #region Services
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICuentaAhorroService, CuantaAhorroService>();
+            services.AddTransient<ITarjetaCreditoService, TarjetaCreditoService>();
+            services.AddTransient<IPrestamoService, PrestamoService>();
             #endregion
         }
     }

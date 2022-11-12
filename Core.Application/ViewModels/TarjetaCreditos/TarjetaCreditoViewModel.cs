@@ -1,4 +1,5 @@
-﻿using Core.Domain.Entities;
+﻿using Core.Application.ViewModels.Products;
+using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,6 @@ namespace Core.Application.ViewModels.TarjetaCreditos
 
         //navigation property
         public int Idproduct { get; set; }
-        public Product Product { get; set; }
+        public ProductViewModel Product { get; set; }
     }
 }

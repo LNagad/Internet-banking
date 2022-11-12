@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
+using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.Users;
 using Core.Domain.Entities;
 
@@ -20,7 +21,8 @@ namespace Core.Application.Services
 
         public async Task<List<UserViewModel>> GetAllViewModelWithInclude()
         {
-            var userList = await _repository.GetAllWithInclude(new List<string> { "Comments", "Users" });
+
+            var userList = await _repository.GetAllWithInclude(new List<string> { "Users" });
             return userList.Select(user => new UserViewModel
             {
                 Id = user.Id,
@@ -33,8 +35,6 @@ namespace Core.Application.Services
                 ActivationKey = user.ActivationKey,
                 IdCard = user.IdCard,
                 UserType = user.UserType,
-                //Products = user.Products, esperar a crear los servicios de products
-                //Beneficiarios = user.Beneficiarios, esperar a crear los servicio de beneficiarios
             }).ToList();
         }
     }

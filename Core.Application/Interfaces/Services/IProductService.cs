@@ -11,5 +11,7 @@ namespace Core.Application.Interfaces.Services
 {
     public interface IProductService : IGenericService<SaveProductViewModel, ProductViewModel ,Product>
     {
+
+        Task<List<ProductViewModel>> GetAllViewModelWithInclude();
     }
 }
