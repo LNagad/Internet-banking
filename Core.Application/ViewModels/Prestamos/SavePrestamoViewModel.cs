@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.Prestamo
+namespace Core.Application.ViewModels.Prestamos
 {
     public class SavePrestamoViewModel
     {
@@ -18,5 +18,6 @@ namespace Core.Application.ViewModels.Prestamo
         public int Debe { get; set; } //1 , 0
 
         public double Balance { get; set; }
+        public int IdProduct { get; set; }
     }
 }

@@ -1,12 +1,8 @@
-﻿using Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using Core.Application.ViewModels.Beneficiarios;
+using Core.Application.ViewModels.Products;
 
-namespace Core.Application.ViewModels.User
+namespace Core.Application.ViewModels.Users
 {
     public class UserViewModel
     {
@@ -33,7 +29,7 @@ namespace Core.Application.ViewModels.User
         public int UserType { get; set; }
 
         //Navigation Properties
-        public ICollection<Product>? Products { get; set; }
-        public ICollection<Beneficiario>? Beneficiarios { get; set; }
+        public List<ProductViewModel>? Products { get; set; }
+        public List<BeneficiarioViewModel>? Beneficiarios { get; set; }
     }
 }

@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Core.Application.ViewModels.Products;
+using Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Application.ViewModels.TarjetaCredito
+namespace Core.Application.ViewModels.TarjetaCreditos
 {
-    public class SaveTarjetaCreditoViewModel
+    public class TarjetaCreditoViewModel
     {
-        //faltan verificaciones ( en espera )
         public string NumeroTarjeta { get; set; }
 
         public double Limite { get; set; }
@@ -18,5 +19,9 @@ namespace Core.Application.ViewModels.TarjetaCredito
         public double Debe { get; set; } // 1, 0
 
         public double Balance { get; set; }
+
+        //navigation property
+        public int Idproduct { get; set; }
+        public ProductViewModel Product { get; set; }
     }
 }

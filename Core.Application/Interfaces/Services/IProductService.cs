@@ -1,4 +1,4 @@
-﻿using Core.Application.ViewModels.Prestamo;
+﻿using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.Products;
 using Core.Domain.Entities;
 using System;
@@ -11,5 +11,7 @@ namespace Core.Application.Interfaces.Services
 {
     public interface IProductService : IGenericService<SaveProductViewModel, ProductViewModel ,Product>
     {
+
+        Task<List<ProductViewModel>> GetAllViewModelWithInclude();
     }
 }
