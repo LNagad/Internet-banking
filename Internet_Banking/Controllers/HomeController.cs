@@ -14,7 +14,7 @@ namespace Internet_Banking.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View("Probando");
+            return View();
         }
     }
 }
