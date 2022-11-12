@@ -5,16 +5,16 @@ namespace Internet_Banking.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IProductService _productService;
 
-        public HomeController(IUserService userService)
+        public HomeController(IProductService productService)
         {
-            _userService = userService; 
+            _productService = productService; 
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            return View("Probando");
         }
     }
 }
