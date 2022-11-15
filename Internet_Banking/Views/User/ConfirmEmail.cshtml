@@ -1,0 +1,20 @@
+﻿@model string
+
+@{
+    ViewData["Tittle"] = "Confirm";
+}
+
+@Html.ValidationSummary(false, "", new{@class = "text-danger"})
+
+<div class="d-flex flex-column">
+
+    <div class="card">
+        <div class="card-body">
+            <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                <h2>@Model - <a class="btn btn-primary" asp-controller="User" asp-action="Index">Sign In</a></h2>
+                <button class="btn btn-close" data-bs-dismiss="alert" arial-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,41 +1,60 @@
 ﻿using AutoMapper;
-using Core.Application.Interfaces.Repositories;
+using Core.Application.Dtos.Account;
 using Core.Application.Interfaces.Services;
-using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.Users;
-using Core.Domain.Entities;
-
 
 namespace Core.Application.Services
 {
-    public class UserService : GenericService<SaveUserViewModel, UserViewModel, User>, IUserService
+    public class UserService : IUserService
     {
-        private readonly IUserRepository _repository;
+        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper) : base(userRepository, mapper)
+        public UserService(IAccountService accountService, IMapper mapper)
         {
-            _repository = userRepository;
+            _accountService = accountService;
             _mapper = mapper;
         }
 
-        public async Task<List<UserViewModel>> GetAllViewModelWithInclude()
+        public async Task<AuthenticationResponse> LoginAsync(LoginViewModel vm)
         {
+            AuthenticationRequest loginRequest = _mapper.Map<AuthenticationRequest>(vm);
 
-            var userList = await _repository.GetAllWithInclude(new List<string> { "Users" });
-            return userList.Select(user => new UserViewModel
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Phone = user.Phone,
-                Status = user.Status,
-                ImagePath = user.ImagePath,
-                Username = user.Username,
-                Email = user.Email,
-                ActivationKey = user.ActivationKey,
-                IdCard = user.IdCard,
-                UserType = user.UserType,
-            }).ToList();
+            AuthenticationResponse userResponse = await _accountService.AuthenticateAsync(loginRequest);
+
+            return userResponse;
+        }
+
+        public async Task SignOutAsync()
+        {
+            await _accountService.SignOutAsync();
+        }
+
+        public async Task<RegisterResponse> RegisterAsync(SaveUserViewModel vm, string origin)
+        {
+            RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
+
+            return await _accountService.RegisterBasicUserAsync(registerRequest, origin);
+
+        }
+
+        public async Task<string> ConfirmEmailAsync(string userId, string token)
+        {
+            return await _accountService.ConfirmAccountAsync(userId, token);
+        }
+
+        public async Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel vm, string origin)
+        {
+            ForgotPasswordRequest forgotRequest = _mapper.Map<ForgotPasswordRequest>(vm);
+
+            return await _accountService.ForgotPasswordAsync(forgotRequest, origin);
+        }
+
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel vm)
+        {
+            ResetPasswordRequest resetRequest = _mapper.Map<ResetPasswordRequest>(vm);
+
+            return await _accountService.ResetPasswordAsync(resetRequest);
         }
     }
 }

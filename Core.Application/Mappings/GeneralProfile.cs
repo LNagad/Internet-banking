@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Application.Dtos.Account;
 using Core.Application.ViewModels.Beneficiarios;
 using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Prestamos;
@@ -31,23 +32,27 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.TarjetaCreditos, opt => opt.Ignore())
                 .ForMember(P => P.Prestamos, opt => opt.Ignore());
 
-            //User
-            CreateMap<User, UserViewModel>()
-                .ReverseMap()
-                .ForMember(P => P.Created, opt => opt.Ignore())
-                .ForMember(P => P.CreatedBy, opt => opt.Ignore())
-                .ForMember(P => P.LastModified, opt => opt.Ignore())
-                .ForMember(P => P.LastModifiedBy, opt => opt.Ignore());
+            //Account
+            CreateMap<AuthenticationRequest, LoginViewModel>()
+                .ForMember(p => p.HasError, opt => opt.Ignore())
+                .ForMember(p => p.Error, opt => opt.Ignore())
+                .ReverseMap();
 
-            CreateMap<User, SaveUserViewModel>()
-                .ForMember(P => P.File, opt => opt.Ignore())
-                .ReverseMap()
-                .ForMember(P => P.Created, opt => opt.Ignore())
-                .ForMember(P => P.CreatedBy, opt => opt.Ignore())
-                .ForMember(P => P.LastModified, opt => opt.Ignore())
-                .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
-                .ForMember(P => P.Products, opt => opt.Ignore())
-                .ForMember(P => P.Beneficiarios, opt => opt.Ignore());
+            CreateMap<RegisterRequest, SaveUserViewModel>()
+                .ForMember(p => p.HasError, opt => opt.Ignore())
+                .ForMember(p => p.Error, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<ForgotPasswordRequest, ForgotPasswordViewModel>()
+                .ForMember(p => p.HasError, opt => opt.Ignore())
+                .ForMember(p => p.Error, opt => opt.Ignore())
+                .ReverseMap();
+
+            CreateMap<ResetPasswordRequest, ResetPasswordViewModel>()
+                .ForMember(p => p.HasError, opt => opt.Ignore())
+                .ForMember(p => p.Error, opt => opt.Ignore())
+                .ReverseMap();
+
 
             //Tarjeta de Credito
             CreateMap<TarjetaCredito, TarjetaCreditoViewModel>()

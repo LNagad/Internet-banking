@@ -1,15 +1,15 @@
-﻿using Core.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Core.Application.Dtos.Account;
 using Core.Application.ViewModels.Users;
 
 namespace Core.Application.Interfaces.Services
 {
-    public interface IUserService : IGenericService<SaveUserViewModel, UserViewModel, User>
+    public interface IUserService
     {
-        //custom
+        Task<string> ConfirmEmailAsync(string userId, string token);
+        Task<ForgotPasswordResponse> ForgotPasswordAsync(ForgotPasswordViewModel vm, string origin);
+        Task<AuthenticationResponse> LoginAsync(LoginViewModel vm);
+        Task<RegisterResponse> RegisterAsync(SaveUserViewModel vm, string origin);
+        Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordViewModel vm);
+        Task SignOutAsync();
     }
 }

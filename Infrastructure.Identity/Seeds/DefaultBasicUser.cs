@@ -16,7 +16,7 @@ namespace Infrastructure.Identity.Seeds
         {
             ApplicationUser defaultUser = new();
             defaultUser.UserName = "basicUser";
-            defaultUser.Email = "BasicUser@internet_banking.com";
+            defaultUser.Email = "BasicUser@internetBanking.com";
             defaultUser.FirstName = "Basic";
             defaultUser.LastName = "User";
             defaultUser.EmailConfirmed = true;

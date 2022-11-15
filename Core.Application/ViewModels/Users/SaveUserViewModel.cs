@@ -10,42 +10,38 @@ namespace Core.Application.ViewModels.Users
 {
     public class SaveUserViewModel
     {
-        public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Debe colocar el nombre")]
         [DataType(DataType.Text)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Debe colocar el apellido")]
+        [DataType(DataType.Text)]
+        public string LastName { get; set; }
 
         [RegularExpression(@"(809|829|849)\d{3}\d{4}", ErrorMessage = "Tu numero de telefono es invalido (FORMATO RD)")]
-        [Required]
+        [Required(ErrorMessage = "Debe colocar el numero de telefono")]
         [DataType(DataType.Text)]
         public string Phone { get; set; }
 
-        public int? Status { get; set; }
-
-        public string? ImagePath { get; set; }
-        public IFormFile? File { get; set; }
-
-        [Required(ErrorMessage="Nombre de usuario incorrecto")]
+        [Required(ErrorMessage= "Debe colocar el nombre de usuario")]
         [DataType(DataType.Text)]
-        public string Username { get; set; }
-
-        [Required(ErrorMessage = "Password incorrecta")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [Compare(nameof(Password), ErrorMessage = "Las password no coinciden")]
-        [Required(ErrorMessage = "Necesitas llenar esta informacion")]
-        public string SavePassword { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Tienes que ingresar un correo electronico")]
         [DataType(DataType.Text)]
         public string Email { get; set; }
 
-        public string? ActivationKey { get; set; }
+        [Required(ErrorMessage = "Debe colocar una contrasena")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 
-        public int? IdCard { get; set; }
+        [Required(ErrorMessage = "Necesitas llenar esta informacion")]
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "Las contrasenas no coinciden")]
+        public string ConfirmPassword { get; set; }
 
-        public int? UserType { get; set; }
+        public bool HasError { get; set; }
+        public string? Error { get; set; }
     }
 }

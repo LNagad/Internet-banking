@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.Services
 {
-    public class AccountService
+    public class AccountService : IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -23,9 +23,9 @@ namespace Infrastructure.Identity.Services
 
         public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService)
         {
-            _userManager= userManager;
-            _signInManager= signInManager;
-            _emailService= emailService;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _emailService = emailService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -36,21 +36,21 @@ namespace Infrastructure.Identity.Services
 
             if (user == null)
             {
-                response.HasError= true;
+                response.HasError = true;
                 response.Error = $"No se encontro ninguna cuenta registrada con el correo {request.Email}";
                 return response;
             }
 
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, false);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
             {
                 response.HasError = true;
                 response.Error = $"Credenciales invalidas para el correo {request.Email}";
                 return response;
             }
 
-            if(!user.EmailConfirmed)
+            if (!user.EmailConfirmed)
             {
                 response.HasError = true;
                 response.Error = $"{request.Email} no ha sido confirmada/o activada ";
@@ -58,14 +58,14 @@ namespace Infrastructure.Identity.Services
             }
 
             response.Id = user.Id;
-            response.Email= user.Email;
-            response.UserName= user.UserName;
+            response.Email = user.Email;
+            response.UserName = user.UserName;
 
             var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
             response.Roles = rolesList.ToList();
             response.IsVerified = user.EmailConfirmed;
-            
+
             return response;
         }
 
@@ -123,7 +123,7 @@ namespace Infrastructure.Identity.Services
                     Subject = "Confirm registration"
                 });
 
-            } 
+            }
             else
             {
                 response.HasError = true;
@@ -151,7 +151,7 @@ namespace Infrastructure.Identity.Services
             if (result.Succeeded)
             {
                 return $"La cuenta ha sido confirmada para el usuario {user.Email}. Ya puedes iniciar sesion";
-            } 
+            }
             else
             {
                 return $"Hubo un error al confirmar la cuenta {user.Email}";
@@ -164,21 +164,21 @@ namespace Infrastructure.Identity.Services
             {
                 HasError = false
             };
-            
-            var account = await _userManager.FindByEmailAsync(request.Email);
 
-            if (account == null)
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            if (user == null)
             {
                 response.HasError = true;
                 response.Error = $"No se encontro ninguna cuenta registrada con el correo {request.Email}";
             }
 
-            var verificationUri = await SendForgotPasswordUri(account, origin);
+            var verificationUri = await SendForgotPasswordUri(user, origin);
 
             //send email here
             await _emailService.SendAsync(new EmailRequest
             {
-                To = account.Email,
+                To = user.Email,
                 Body = $"Reinicia tu contrase;a visitando esta url {verificationUri}",
                 Subject = "Reinicio de contrase;a"
             });
@@ -188,14 +188,14 @@ namespace Infrastructure.Identity.Services
         }
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)
         {
-            ResetPasswordResponse response = new ()
+            ResetPasswordResponse response = new()
             {
                 HasError = false
             };
 
-            var account = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
-            if (account == null)
+            if (user == null)
             {
                 response.HasError = true;
                 response.Error = $"No se encontro ninguna cuenta registrada con el correo {request.Email}";
@@ -205,12 +205,12 @@ namespace Infrastructure.Identity.Services
 
             request.Token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Token));
 
-            var result = await _userManager.ResetPasswordAsync(account, request.Token, request.Password);
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.Password);
 
             if (!result.Succeeded)
             {
                 response.HasError = true;
-                response.Error = $"Hubo un error al intentar cambiar la contrase;a para el usuario {account.Email}";
+                response.Error = $"Hubo un error al intentar cambiar la contrase;a para el usuario {user.Email}";
 
                 return response;
             }
@@ -230,7 +230,7 @@ namespace Infrastructure.Identity.Services
 
             var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "userId", user.Id);
 
-            verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "token", code);
+            verificationUri = QueryHelpers.AddQueryString(verificationUri, "token", code);
 
 
             return verificationUri;
@@ -246,7 +246,7 @@ namespace Infrastructure.Identity.Services
 
             var Uri = new Uri(string.Concat($"{origin}/", route));
 
-            var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "token", code);
+            var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "Token", code);
 
             return verificationUri;
         }

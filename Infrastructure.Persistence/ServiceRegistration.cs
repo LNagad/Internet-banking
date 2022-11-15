@@ -26,11 +26,11 @@ public static class ServiceRegistration
 
 
         #endregion
+
         #region Repositories
 
         //repositories
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBeneficiarioRepository, BeneficiarioRepository>();
             services.AddTransient<ICuentaAhorroRepository, CuentaAhorroRepository>();
             services.AddTransient<IPrestamoRepository, PrestamoRepository>();
