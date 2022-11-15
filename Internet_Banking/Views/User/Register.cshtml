@@ -1,0 +1,76 @@
+﻿@using Core.Application.ViewModels.Users;
+@model SaveUserViewModel
+@{
+    ViewData["Title"] = "Registrarse";
+}
+
+<div class="col-12 d-flex justify-content-center">
+    <div class="col-5 mt-5">
+        <form method="post" asp-action="Register" asp-controller="User" enctype="multipart/form-data">
+
+            <div class="card">
+                <div class="card-header">
+                    <h4>Registrarse</h4>
+                </div>
+                <div class="card-body">
+                    @Html.ValidationSummary(false, "", new{@class = "text-danger"})
+
+                    @if (Model.HasError)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <button class="btn btn-close" data-bs-dismiss="alert" arial-label="Close"></button>
+                        </div>
+                    }
+
+                    <!-- Name input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="FirstName" class="form-label">Nombre</label>
+                        <input asp-for="FirstName" class="form-control" />
+                    </div>
+
+                    <!-- LastName input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="LastName" class="form-label">Apellido</label>
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
+                    <!-- Phone input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="Phone" class="form-label">Telefono</label>
+                        <input id="Phone" asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+
+                    <!-- Username input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="UserName" class="form-label">Username</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Password input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" class="form-control" />
+                    </div>
+
+                    <!-- Repeat Password input -->
+                    <div class="form-outline mb-4">
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <label asp-for="ConfirmPassword" class="form-label">Repeat password</label>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-primary btn-block mb-3">Registrarse</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

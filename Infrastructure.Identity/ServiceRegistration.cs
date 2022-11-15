@@ -1,5 +1,7 @@
-﻿using Infrastructure.Identity.Context;
+﻿using Core.Application.Interfaces.Services;
+using Infrastructure.Identity.Context;
 using Infrastructure.Identity.Entities;
+using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,14 +33,17 @@ namespace Infrastructure.Identity
             }
             #endregion
 
-
             #region "Identity"
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
             services.AddAuthentication();
-         
+
+            #endregion
+
+            #region services
+            services.AddTransient<IAccountService, AccountService>();
             #endregion
         }
     }

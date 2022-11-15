@@ -23,17 +23,16 @@ namespace Core.Application.Services
         private readonly ICuentaAhorroRepository _cuentaAhorroRepository;
         private readonly IPrestamoRepository _prestamoRepository;
         private readonly ITarjetaCreditoRepository _tarjetaCreditoRepository;
-        private readonly IUserRepository _userRepository;
 
-        public ProductService(
-            IProductRepository repository,IMapper mapper, ICuentaAhorroRepository cuentaAhorroRepository, IPrestamoRepository prestamoRepository, ITarjetaCreditoRepository tarjetaCreditoRepository, IUserRepository userRepository) : base(repository, mapper)
+        public ProductService(IProductRepository repository, ICuentaAhorroRepository cuentaAhorroRepository, 
+            IPrestamoRepository prestamoRepository, ITarjetaCreditoRepository tarjetaCreditoRepository
+            , IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
             _cuentaAhorroRepository = cuentaAhorroRepository;
             _prestamoRepository = prestamoRepository;
             _tarjetaCreditoRepository = tarjetaCreditoRepository;
-            _userRepository = userRepository;
         }
 
         public async Task<List<ProductViewModel>> GetAllViewModelWithInclude()
@@ -48,6 +47,7 @@ namespace Core.Application.Services
             List<TarjetaCreditoViewModel> tarjetaCreditoList = _mapper.Map<List<TarjetaCreditoViewModel>>(tarjetaCreditoVm);
 
             var productList = await _repository.GetAllWithInclude(new List<string> { });
+
             return productList.Select(product => new ProductViewModel { 
                 Id = product.Id,
                 IdProduct = product.IdProduct,
