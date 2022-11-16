@@ -2,7 +2,9 @@
 using Core.Application.Helpers;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Middlewares;
 
 namespace Internet_Banking.Controllers
 {
@@ -14,7 +16,8 @@ namespace Internet_Banking.Controllers
         {
             _userService = userService;
         }
-
+        
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Index()
         {
             return View(new LoginViewModel());
@@ -50,11 +53,13 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Register()
         {
             return View(new SaveUserViewModel());
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> Register(SaveUserViewModel vm)
         {
@@ -77,6 +82,7 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             string response = await _userService.ConfirmEmailAsync(userId, token);
@@ -84,12 +90,13 @@ namespace Internet_Banking.Controllers
             return View("ConfirmEmail", response);
         }
 
-
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult ForgotPassword()
         {
             return View(new ForgotPasswordViewModel());
         }
 
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel vm)
         {
@@ -112,12 +119,13 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
-        
+        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult ResetPassword(string Token)
         {
             return View( new ResetPasswordViewModel { Token = Token});
         } 
         
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
         {
@@ -138,5 +146,9 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
+        public IActionResult AccesDenied()
+        {
+            return View();
+        }
     }
 }
