@@ -1,4 +1,6 @@
 using Core.Domain.Entities;
+using Infrastructure.Identity.Entities;
+using Infrastructure.Identity.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Contexts;
@@ -13,7 +15,6 @@ public class ApplicationContext : DbContext
     public DbSet<Prestamo> Prestamos { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<TarjetaCredito> TarjetaCreditos { get; set; }
-    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,17 +36,11 @@ public class ApplicationContext : DbContext
             modelBuilder.Entity<Prestamo>().HasKey(x => x.Id);
             modelBuilder.Entity<Product>().HasKey(x => x.Id);
             modelBuilder.Entity<TarjetaCredito>().HasKey(x => x.Id);
-            modelBuilder.Entity<User>().HasKey(x => x.Id);
+            
             
         #endregion
         
         #region RelationShips
-        
-            modelBuilder.Entity<User>()
-                .HasMany<Product>(user => user.Products)
-                .WithOne(P => P.User)
-                .HasForeignKey(product => product.IdUser)
-                .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Product>()
                 .HasMany<CuentaAhorro>( P => P.CuentaAhorros)
@@ -166,35 +161,6 @@ public class ApplicationContext : DbContext
             
             modelBuilder.Entity<TarjetaCredito>()
                 .Property(x => x.NumeroTarjeta)
-                .IsRequired();
-            
-            #endregion
-            
-            #region User
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.Name)
-                .IsRequired();
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.Username)
-                .IsRequired();
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.Phone)
-                .IsRequired();
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.Password)
-                .IsRequired();
-            
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.Status)
-                .IsRequired();
-            
-            modelBuilder.Entity<User>()
-                .Property(x => x.UserType)
                 .IsRequired();
             
             #endregion

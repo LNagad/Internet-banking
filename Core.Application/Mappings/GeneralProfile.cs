@@ -27,7 +27,6 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.CreatedBy, opt => opt.Ignore())
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
-                .ForMember(P => P.User, opt => opt.Ignore())
                 .ForMember(P => P.CuentaAhorros, opt => opt.Ignore())
                 .ForMember(P => P.TarjetaCreditos, opt => opt.Ignore())
                 .ForMember(P => P.Prestamos, opt => opt.Ignore());

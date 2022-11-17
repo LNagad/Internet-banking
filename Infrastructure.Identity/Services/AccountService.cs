@@ -172,6 +172,8 @@ namespace Infrastructure.Identity.Services
             {
                 response.HasError = true;
                 response.Error = $"No se encontro ninguna cuenta registrada con el correo {request.Email}";
+
+                return response;
             }
 
             var verificationUri = await SendForgotPasswordUri(user, origin);
