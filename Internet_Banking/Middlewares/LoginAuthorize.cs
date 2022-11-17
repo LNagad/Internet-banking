@@ -17,7 +17,7 @@ public class LoginAuthorize : IAsyncActionFilter
         if (_userSession.HasUser())
         {
             var controller = (UserController)context.Controller;
-            context.Result = controller.RedirectToAction("Index", "Home");
+            context.Result = controller.RedirectToAction("Index", "User");
         }
         else
         {

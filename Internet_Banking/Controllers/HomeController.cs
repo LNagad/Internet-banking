@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Internet_Banking.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin, Basic")]
     public class HomeController : Controller
     {
         private readonly IProductService _productService;

@@ -5,7 +5,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 @{
     var user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
-    var isAdmin = user != null ? user.Roles.Any(r => r == "Admin") : false;
+    var isAdmin = user != null ? user.Roles.Any(r => r == "SuperAdmin") : false;
     var isBasic = user != null ? user.Roles.Any(r => r == "Basic") : false;
 }
 <!DOCTYPE html>
@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="~/Internet_Banking.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header style="border: 2px solid red">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" >
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Internet_Banking</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Logo</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,23 +34,20 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Inicio</a>
                             </li>
-                            @if (isAdmin)
+                            if (isAdmin)
                             {
                                 @** Aqui iran las vistas para los usuiarios que son administradores**@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="ManageUser" asp-action="Index">Administrador de usuarios</a>
                                 </li>
                             }
-                            if(isBasic)
+                            if (isBasic)
                             {
                                 @** Aqui iran las vistas para los usuiarios que no son administradores**@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-controller="" asp-action="">Pagos</a>
                                 </li>
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="User" asp-action="LogOut">Cerrar sesion (@user.FirstName)</a>
-                            </li>
                         }
                         else
                         {
@@ -59,12 +56,18 @@
                             </li>
                         }
                     </ul>
+                    @if (user != null)
+                    {
+                        <div class="nav-item d-flex justify-content-end">
+                            <a class="nav-link text-dark" asp-controller="User" asp-action="LogOut">Cerrar sesion (@user.FirstName)</a>
+                        </div>
+                    }
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main" class="">
             @RenderBody()
         </main>
     </div>
