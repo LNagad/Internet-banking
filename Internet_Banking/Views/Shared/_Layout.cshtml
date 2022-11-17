@@ -5,6 +5,8 @@
 @inject IHttpContextAccessor httpContextAccessor
 @{
     var user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isAdmin = user != null ? user.Roles.Any(r => r == "Admin") : false;
+    var isBasic = user != null ? user.Roles.Any(r => r == "Basic") : false;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +29,35 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                        @if (user != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Inicio</a>
+                            </li>
+                            @if (isAdmin)
+                            {
+                                @** Aqui iran las vistas para los usuiarios que son administradores**@
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="ManageUser" asp-action="Index">Administrador de usuarios</a>
+                                </li>
+                            }
+                            if(isBasic)
+                            {
+                                @** Aqui iran las vistas para los usuiarios que no son administradores**@
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="" asp-action="">Pagos</a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="LogOut">Cerrar sesion (@user.FirstName)</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="User" asp-action="Register">Registrate Gratis!</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

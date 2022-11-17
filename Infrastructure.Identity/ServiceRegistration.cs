@@ -38,8 +38,14 @@ namespace Infrastructure.Identity
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/User";
+                options.AccessDeniedPath = "/User/AccesDenied";
+            });
+            
+            services.AddAuthentication();
             #endregion
 
             #region services

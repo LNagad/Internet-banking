@@ -60,6 +60,7 @@ namespace Infrastructure.Identity.Services
             response.Id = user.Id;
             response.Email = user.Email;
             response.UserName = user.UserName;
+            response.FirstName = user.FirstName;
 
             var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
