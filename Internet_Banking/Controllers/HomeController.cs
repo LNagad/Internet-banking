@@ -13,11 +13,13 @@ namespace Internet_Banking.Controllers
 
         public HomeController(IProductService productService)
         {
-            _productService = productService; 
+            _productService = productService;
         }
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.lista = await _productService.GetAllViewModelWithInclude();
+
             return View();
         }
     }

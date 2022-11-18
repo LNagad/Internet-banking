@@ -8,16 +8,19 @@ namespace Core.Application.ViewModels.Products
 {
     public class SaveProductViewModel
     {
-        //faltan verificaciones
-        public int Id { get; set; }
 
-        public int IdProduct { get; set; }
+        public string Id { get; set; }
 
-        public int IdProductType { get; set; }
+        public string? IdProductType { get; set; }
 
-        public int IdUser { get; set; }
+        public bool? isCuentaAhorro { get; set; }
 
-        public int Primary { get; set; } // 1 = True, 0 = False
+        public bool? isTarjetaCredito { get; set; }
 
+        public bool? isPrestamo { get; set; }
+
+        public string? IdUser { get; set; }
+
+        public bool? Primary { get; set; } // 1 = True, 0 = False
     }
 }

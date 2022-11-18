@@ -1,4 +1,8 @@
-﻿@{
+﻿
+@using Core.Application.ViewModels.Products
+@using Core.Application.ViewModels.CuentaAhorros
+
+@{
     ViewData["Title"] = "Inicio";
 }
 
@@ -27,5 +31,18 @@
 <div class="mt-5 d-flex justify-content-center border border-5">
     <div class="col-11" style="border: 1px solid red">
         <h2>Cuentas</h2>
+        
+        @foreach(ProductViewModel item in ViewBag.lista)
+        {
+            <h4>@($"{item.User.FirstName}")</h4>
+            @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
+            {
+                <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
+                <h4>Cuenta principal: @(ahorro.Principal  ? "Cuenta principal" : "Secundaria")</h4>
+                <h4>Balance: @ahorro.Balance</h4>
+            }
+
+            
+        }
     </div>
 </div>

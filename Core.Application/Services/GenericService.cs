@@ -36,7 +36,7 @@ namespace Core.Application.Services
             return SaveVm;
         }
 
-        public virtual async Task Update(SaveViewModel vm, int id)
+        public virtual async Task Update(SaveViewModel vm, string id)
         {
             Entity entity = _mapper.Map<Entity>(vm);            
 

@@ -105,6 +105,7 @@ namespace Infrastructure.Identity.Services
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
+                PhoneNumber = request.Phone,
                 UserName = request.UserName,
             };
 

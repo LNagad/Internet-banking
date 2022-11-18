@@ -12,5 +12,13 @@ namespace Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public override async Task<CuentaAhorro> AddAsync(CuentaAhorro entity)
+        {
+            Guid guid = Guid.NewGuid();
+            entity.Id = guid.ToString();
+
+            return await base.AddAsync(entity);
+        }
     }
 }

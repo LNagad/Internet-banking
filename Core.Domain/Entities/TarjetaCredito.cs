@@ -13,8 +13,8 @@ public class TarjetaCredito : AuditableBaseEntity
     public double Debe { get; set; } // 1, 0
     
     public double Balance { get; set; }
-    
+
     //navigation property
-    public int Idproduct { get; set; }
+    public string IdProduct { get; set; }
     public Product Product { get; set; }
 }

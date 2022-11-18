@@ -4,16 +4,19 @@ namespace Core.Domain.Entities;
 
 public class Product : AuditableBaseEntity
 { 
-    public int IdProduct { get; set; }
     
-    public int IdProductType { get; set; }
+    public string? IdProductType { get; set; }
+
+    public bool? isCuentaAhorro { get; set; }
+    public bool? isTarjetaCredito { get; set; }
+    public bool? isPrestamo { get; set; }
+
+    public string? IdUser { get; set; }
     
-    public int IdUser { get; set; }
-    
-    public int Primary { get; set; } // 1 = True, 0 = False
+    public bool? Primary { get; set; } // 1 = True, 0 = False
     
     //Navigation properties
-    public ICollection<CuentaAhorro> CuentaAhorros { get; set; }
-    public ICollection<TarjetaCredito> TarjetaCreditos { get; set; }
-    public ICollection<Prestamo> Prestamos { get; set; }
+    public ICollection<CuentaAhorro>? CuentaAhorros { get; set; }
+    public ICollection<TarjetaCredito>? TarjetaCreditos { get; set; }
+    public ICollection<Prestamo>? Prestamos { get; set; }
 }

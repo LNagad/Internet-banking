@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221117025506_init")]
+    [Migration("20221118014600_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,8 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Domain.Entities.Beneficiario", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -38,14 +35,17 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdAccount")
-                        .HasColumnType("int");
+                    b.Property<string>("IdAccount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("IdBeneficiario")
-                        .HasColumnType("int");
+                    b.Property<string>("IdBeneficiario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -53,25 +53,17 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedBy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdAccount");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Beneficiarios", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
@@ -82,8 +74,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
+                    b.Property<string>("IdProduct")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -95,8 +87,8 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Principal")
-                        .HasColumnType("int");
+                    b.Property<bool>("Principal")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -107,11 +99,8 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Domain.Entities.Prestamo", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
@@ -125,8 +114,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Debe")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
+                    b.Property<string>("IdProduct")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -153,11 +142,8 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Domain.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -165,14 +151,12 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("int");
+                    b.Property<string>("IdProductType")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdProductType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -180,26 +164,28 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("LastModifiedBy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Primary")
-                        .HasColumnType("int");
+                    b.Property<bool?>("Primary")
+                        .IsRequired()
+                        .HasColumnType("bit");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<bool?>("isCuentaAhorro")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("isPrestamo")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("isTarjetaCredito")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.TarjetaCredito", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Balance")
                         .HasColumnType("float");
@@ -213,8 +199,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<double>("Debe")
                         .HasColumnType("float");
 
-                    b.Property<int>("Idproduct")
-                        .HasColumnType("int");
+                    b.Property<string>("IdProduct")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -234,71 +221,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Idproduct");
+                    b.HasIndex("IdProduct");
 
                     b.ToTable("TarjetaCreditos", (string)null);
-                });
-
-            modelBuilder.Entity("Core.Domain.Entities.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ActivationKey")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IdCard")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("LastModifiedBy")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.Beneficiario", b =>
@@ -309,10 +234,6 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.Entities.User", null)
-                        .WithMany("Beneficiarios")
-                        .HasForeignKey("UserId");
-
                     b.Navigation("CuentaAhorro");
                 });
 
@@ -321,8 +242,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Core.Domain.Entities.Product", "Product")
                         .WithMany("CuentaAhorros")
                         .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Product");
                 });
@@ -332,24 +252,16 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Core.Domain.Entities.Product", "Product")
                         .WithMany("Prestamos")
                         .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
-                {
-                    b.HasOne("Core.Domain.Entities.User", null)
-                        .WithMany("Products")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.TarjetaCredito", b =>
                 {
                     b.HasOne("Core.Domain.Entities.Product", "Product")
                         .WithMany("TarjetaCreditos")
-                        .HasForeignKey("Idproduct")
+                        .HasForeignKey("IdProduct")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -368,13 +280,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Prestamos");
 
                     b.Navigation("TarjetaCreditos");
-                });
-
-            modelBuilder.Entity("Core.Domain.Entities.User", b =>
-                {
-                    b.Navigation("Beneficiarios");
-
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

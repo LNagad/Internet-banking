@@ -20,10 +20,10 @@ namespace Infrastructure.Persistence.Repositories
             return entity;
         }
 
-        public virtual async Task UpdateAsync(Entity entity, int id)
+        public virtual async Task UpdateAsync(Entity entity, string id)
         {
             Entity entry = await _dbContext.Set<Entity>().FindAsync(id);
-            _dbContext.Entry(entry).CurrentValues.SetValues(entry);
+            _dbContext.Entry(entry).CurrentValues.SetValues(entity);
 
             await _dbContext.SaveChangesAsync();
         }

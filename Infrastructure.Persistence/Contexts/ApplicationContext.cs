@@ -1,3 +1,4 @@
+using Core.Domain.Common;
 using Core.Domain.Entities;
 using Infrastructure.Identity.Entities;
 using Infrastructure.Identity.Seeds;
@@ -16,6 +17,28 @@ public class ApplicationContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<TarjetaCredito> TarjetaCreditos { get; set; }
 
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableBaseEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.Created = DateTime.Now;
+                    entry.Entity.CreatedBy = "DefaultAppUser";
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.LastModified = DateTime.Now;
+                    entry.Entity.LastModifiedBy = "DefaultAppUser";
+                    break;
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         #region Tables
@@ -25,7 +48,6 @@ public class ApplicationContext : DbContext
             modelBuilder.Entity<Prestamo>().ToTable("Prestamos");
             modelBuilder.Entity<Product>().ToTable("Products");
             modelBuilder.Entity<TarjetaCredito>().ToTable("TarjetaCreditos");
-            modelBuilder.Entity<User>().ToTable("Users");
 
         #endregion
         
@@ -51,7 +73,7 @@ public class ApplicationContext : DbContext
             modelBuilder.Entity<Product>()
                 .HasMany<TarjetaCredito>( P => P.TarjetaCreditos)
                 .WithOne( TC => TC.Product)
-                .HasForeignKey( TC => TC.Idproduct)
+                .HasForeignKey( TC => TC.IdProduct)
                 .OnDelete(DeleteBehavior.Cascade);
             
             modelBuilder.Entity<Product>()
@@ -95,11 +117,15 @@ public class ApplicationContext : DbContext
                 .Property(x => x.NumeroCuenta)
                 .IsRequired();
 
-            #endregion
-            
-            #region Prestamo
+        modelBuilder.Entity<CuentaAhorro>()
+                .Property(x => x.IdProduct)
+                .IsRequired(false);
 
-            modelBuilder.Entity<Prestamo>()
+        #endregion
+
+        #region Prestamo
+
+        modelBuilder.Entity<Prestamo>()
                 .Property(x => x.Balance)
                 .IsRequired();
             
@@ -127,9 +153,6 @@ public class ApplicationContext : DbContext
                 .Property(x => x.Primary)
                 .IsRequired();
             
-            modelBuilder.Entity<Product>()
-                .Property(x => x.IdProduct)
-                .IsRequired();
             
             modelBuilder.Entity<Product>()
                 .Property(x => x.IdUser)
@@ -137,7 +160,7 @@ public class ApplicationContext : DbContext
 
             modelBuilder.Entity<Product>()
                 .Property(x => x.IdProductType)
-                .IsRequired();
+                .IsRequired(false);
 
             #endregion
             

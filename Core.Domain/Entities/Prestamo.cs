@@ -18,9 +18,9 @@ namespace Core.Domain.Entities
         public int Debe { get; set; } //1 , 0
         
         public double Balance { get; set; }
-        
+
         //navigation property
-        public int IdProduct { get; set; }
+        public string? IdProduct { get; set; }
         public Product Product { get; set; }
     }
 }
