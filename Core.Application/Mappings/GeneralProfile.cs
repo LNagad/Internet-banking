@@ -111,6 +111,8 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore());
 
             CreateMap<Beneficiario, SaveBeneficiarioViewModel>()
+                .ForMember(P => P.HasError, opt => opt.Ignore())
+                .ForMember(P => P.Error, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
                 .ForMember(P => P.CreatedBy, opt => opt.Ignore())

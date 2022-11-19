@@ -1,6 +1,7 @@
 ﻿using Core.Domain.Entities;
 using Core.Application.Interfaces.Repositories;
 using Infrastructure.Persistence.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -19,6 +20,28 @@ namespace Infrastructure.Persistence.Repositories
             entity.Id = guid.ToString();
 
             return await base.AddAsync(entity);
+        }
+
+        public override async Task UpdateAsync(CuentaAhorro entity, string id)
+        {
+            CuentaAhorro entry = await _dbContext.Set<CuentaAhorro>().FindAsync(id);
+
+            entity.Created = entry.Created;
+            entity.CreatedBy = entry.CreatedBy;
+            entity.LastModifiedBy = entry.LastModifiedBy;
+            entity.LastModified= entry.LastModified;
+
+            await base.UpdateAsync(entity, id);
+        }
+
+
+        public async Task<CuentaAhorro> AccountExists(string NumeroCuenta)
+        {
+            CuentaAhorro cuenta = await _dbContext.Set<CuentaAhorro>()
+                .FirstOrDefaultAsync(p => p.NumeroCuenta == NumeroCuenta);
+
+            return cuenta;
+
         }
     }
 }

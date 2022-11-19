@@ -21,9 +21,9 @@ namespace Infrastructure.Persistence.Migrations
                     IdUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Primary = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,9 +40,9 @@ namespace Infrastructure.Persistence.Migrations
                     Principal = table.Column<bool>(type: "bit", nullable: false),
                     IdProduct = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -67,9 +67,9 @@ namespace Infrastructure.Persistence.Migrations
                     Balance = table.Column<double>(type: "float", nullable: false),
                     IdProduct = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,9 +94,9 @@ namespace Infrastructure.Persistence.Migrations
                     Balance = table.Column<double>(type: "float", nullable: false),
                     IdProduct = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,9 +118,9 @@ namespace Infrastructure.Persistence.Migrations
                     IdUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdBeneficiario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

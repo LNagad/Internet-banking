@@ -9,12 +9,19 @@ namespace Core.Application.ViewModels.Beneficiarios
 {
     public class SaveBeneficiarioViewModel
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir el numero de cuenta" )]
+        [DataType(DataType.Text)]
 
         public string IdAccount { get; set; }
 
-        public string IdUser { get; set; }
+        public string? IdUser { get; set; }
 
-        public string IdBeneficiario { get; set; }
+        public string? IdBeneficiario { get; set; }
+
+        public bool? HasError { get; set; }
+
+        public string? Error { get; set; }
     }
 }
