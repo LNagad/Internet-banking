@@ -11,10 +11,12 @@ namespace Internet_Banking.Controllers
     public class UserController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ValidateUserSession _validateUser;
 
-        public UserController(IUserService userService) 
+        public UserController(IUserService userService, ValidateUserSession validateUser) 
         {
             _userService = userService;
+            _validateUser = validateUser;
         }
         
         [ServiceFilter(typeof(LoginAuthorize))]
@@ -53,13 +55,18 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
-        [ServiceFilter(typeof(LoginAuthorize))]
+        //[ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Register()
         {
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+            
             return View(new SaveUserViewModel());
         }
 
-        [ServiceFilter(typeof(LoginAuthorize))]
+        //[ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> Register(SaveUserViewModel vm)
         {
@@ -79,7 +86,7 @@ namespace Internet_Banking.Controllers
                 return View(vm);
             }
 
-            return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            return RedirectToRoute(new { Controller = "Home", Action = "Index" });
         }
 
         [ServiceFilter(typeof(LoginAuthorize))]

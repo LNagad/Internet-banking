@@ -29,5 +29,12 @@ namespace SocialMedia.Middlewares
 
             return userViewModel;
         }
+
+        public bool IsAdmin()
+        {
+            AuthenticationResponse userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+            
+            return userViewModel.Roles.Any(s => s == "SuperAdmin");
+        }
     }
 }

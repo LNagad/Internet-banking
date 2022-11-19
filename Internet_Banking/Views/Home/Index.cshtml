@@ -1,48 +1,90 @@
 ﻿
 @using Core.Application.ViewModels.Products
 @using Core.Application.ViewModels.CuentaAhorros
-
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Core.Application.Dtos.Account
+@using Core.Application.Helpers
+@inject IHttpContextAccessor httpContextAccessor
 @{
     ViewData["Title"] = "Inicio";
+    var user = httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+    var isAdmin = user != null ? user.Roles.Any(r => r == "SuperAdmin") : false;
+    var isBasic = user != null ? user.Roles.Any(r => r == "Basic") : false;
 }
 
-<nav class="navbar navbar-expand-lg bg-dark" @*style="margin-top: -0.1rem"*@>
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Pagos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" asp-action="Index" asp-controller="Beneficiarios">Beneficiarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Avance de efectivo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Transferencia</a>
-                </li>
-            </ul>
+@if ( isBasic )
+{
+    <nav class="navbar navbar-expand-lg bg-dark" @*style="margin-top: -0.1rem"*@>
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-action="Index" asp-controller="Beneficiarios">Beneficiarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Avance de efectivo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Transferencia</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="mt-5 d-flex justify-content-center border border-5">
+        <div class="col-11" style="border: 1px solid red">
+            <h2>Cuentas</h2>
+            @foreach(ProductViewModel item in ViewBag.lista)
+            {
+                <h4>@($"{item.User.FirstName}")</h4>
+                @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
+                {
+                    <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
+                    <h4>Cuenta principal: @(ahorro.Principal  ? "Cuenta principal" : "Secundaria")</h4>
+                    <h4>Balance: @ahorro.Balance</h4>
+                }
+            }
         </div>
     </div>
-</nav>
-
-
-<div class="mt-5 d-flex justify-content-center border border-5">
-    <div class="col-11" style="border: 1px solid red">
-        <h2>Cuentas</h2>
-        
-        @foreach(ProductViewModel item in ViewBag.lista)
-        {
-            <h4>@($"{item.User.FirstName}")</h4>
-            @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
-            {
-                <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
-                <h4>Cuenta principal: @(ahorro.Principal  ? "Cuenta principal" : "Secundaria")</h4>
-                <h4>Balance: @ahorro.Balance</h4>
-            }
-
+}
+@if ( isAdmin )
+{
+    <nav class="navbar navbar-expand-lg bg-dark" @*style="margin-top: -0.1rem"*@>
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-action="Register" asp-controller="User">Administracion de usuario</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="mt-5 d-flex justify-content-center border border-5">
+        <div class="col-11" style="border: 1px solid red">
             
-        }
+            <h2>Cantidad de clientes activos y los inactivos</h2>
+            
+            <p>usuarios Registrados: @ViewBag.users</p>
+            
+            <p>usuarios activos: @ViewBag.usuariosActivos</p>
+            
+            <p>usuarios Inactivos: @ViewBag.usuariosInactivos</p>
+            
+        </div>
     </div>
-</div>
+    
+    <div class="mt-5 d-flex justify-content-center border border-5">
+        <div class="col-11" style="border: 1px solid red">
+            <h2>Cantidad de productos asignados a los clientes</h2>
+        </div>
+    </div>
+}

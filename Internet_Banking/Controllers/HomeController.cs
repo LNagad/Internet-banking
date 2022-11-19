@@ -1,4 +1,5 @@
-﻿using Core.Application.Enums;
+﻿using Core.Application.Dtos.Account;
+using Core.Application.Helpers;
 using Core.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,13 @@ namespace Internet_Banking.Controllers
     {
         private readonly IProductService _productService;
         private readonly ValidateUserSession _validateUserSession;
+        private readonly IAccountService _accountService; 
 
-        public HomeController(IProductService productService, ValidateUserSession validateUserSession)
+        public HomeController(IProductService productService, ValidateUserSession validateUserSession,IAccountService accountService)
         {
             _productService = productService;
             _validateUserSession = validateUserSession;
+            _accountService = accountService;
         }
 
         public async Task<IActionResult> Index()
@@ -26,6 +29,9 @@ namespace Internet_Banking.Controllers
             }
 
             ViewBag.lista = await _productService.GetAllViewModelWithInclude();
+            ViewBag.users = await _accountService.getAllUsers();
+            ViewBag.usuariosActivos = await _accountService.usersActives();
+            ViewBag.usuariosInactivos = await _accountService.usersInactives();
 
             return View();
         }
