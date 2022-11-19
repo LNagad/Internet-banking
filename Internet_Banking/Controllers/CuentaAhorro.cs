@@ -16,10 +16,13 @@ namespace Internet_Banking.Controllers
 
         private readonly IProductService _productService;
 
-        public CuentaAhorro(ICuentaAhorroService cuentaAhorro, IProductService productService)
+        private readonly ValidateUserSession validateUserSession;
+
+        public CuentaAhorro(ICuentaAhorroService cuentaAhorro, IProductService productService, ValidateUserSession validateUserSession)
         {
             _cuentaAhorro = cuentaAhorro;
             _productService = productService;
+            this.validateUserSession = validateUserSession;
         }
 
         public IActionResult Index()
@@ -67,7 +70,7 @@ namespace Internet_Banking.Controllers
                 productVM.isPrestamo = false;
 
                 //Reparar
-                productVM.IdUser = "232323";
+                productVM.IdUser = validateUserSession.UserLoggedIn().Id;
 
             }
 

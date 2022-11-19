@@ -22,5 +22,12 @@ namespace SocialMedia.Middlewares
 
             return true;
         }
+
+        public AuthenticationResponse UserLoggedIn()
+        {
+            AuthenticationResponse userViewModel = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+
+            return userViewModel;
+        }
     }
 }

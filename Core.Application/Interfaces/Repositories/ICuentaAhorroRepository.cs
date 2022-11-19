@@ -9,5 +9,6 @@ namespace Core.Application.Interfaces.Repositories
 {
     public interface ICuentaAhorroRepository : IGenericRepository<CuentaAhorro>
     {
+        Task<CuentaAhorro> AccountExists(string NumeroCuenta);
     }
 }

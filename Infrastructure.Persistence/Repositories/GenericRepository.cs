@@ -48,7 +48,9 @@ namespace Infrastructure.Persistence.Repositories
                 query = query.Include(property);
             }
 
-            return await query.ToListAsync();
+            List<Entity> lista = await query.ToListAsync();
+
+            return lista;
         }
 
         public virtual async Task<Entity> GetByIdAsync(int id)
