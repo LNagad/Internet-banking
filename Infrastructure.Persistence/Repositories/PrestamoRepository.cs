@@ -12,5 +12,13 @@ namespace Infrastructure.Persistence.Repositories
         {
             _dbContext = dbContext;
         }
+
+        public override async Task<Prestamo> AddAsync(Prestamo entity)
+        {
+            Guid guid = Guid.NewGuid();
+            entity.Id = guid.ToString();
+
+            return await base.AddAsync(entity);
+        }
     }
 }

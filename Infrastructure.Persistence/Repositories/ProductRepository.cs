@@ -47,5 +47,6 @@ namespace Infrastructure.Persistence.Repositories
 
             return lista;
         }
+
     }
 }

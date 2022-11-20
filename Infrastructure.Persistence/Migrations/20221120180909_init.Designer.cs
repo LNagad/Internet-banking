@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221119002249_init")]
+    [Migration("20221120180909_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,13 +36,13 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdAccount")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("IdBeneficiario")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdCuentaAhorro")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IdUser")
                         .IsRequired()
@@ -54,9 +54,13 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NumeroCuenta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdAccount");
+                    b.HasIndex("IdCuentaAhorro");
 
                     b.ToTable("Beneficiarios", (string)null);
                 });
@@ -235,7 +239,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Core.Domain.Entities.CuentaAhorro", "CuentaAhorro")
                         .WithMany("Beneficiarios")
-                        .HasForeignKey("IdAccount")
+                        .HasForeignKey("IdCuentaAhorro")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

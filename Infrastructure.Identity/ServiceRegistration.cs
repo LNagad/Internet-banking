@@ -44,7 +44,8 @@ namespace Infrastructure.Identity
                 options.LoginPath = "/User";
                 options.AccessDeniedPath = "/User/AccesDenied";
             });
-            
+           
+
             services.AddAuthentication();
             #endregion
 

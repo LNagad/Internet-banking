@@ -17,6 +17,7 @@ namespace Core.Application
             services.AddTransient<ICuentaAhorroService, CuantaAhorroService>();
             services.AddTransient<ITarjetaCreditoService, TarjetaCreditoService>();
             services.AddTransient<IPrestamoService, PrestamoService>();
+            services.AddTransient<IBeneficiarioService, BeneficiarioService>();
             #endregion
         }
     }

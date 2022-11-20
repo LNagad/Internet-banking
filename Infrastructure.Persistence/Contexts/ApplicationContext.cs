@@ -83,11 +83,11 @@ public class ApplicationContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            //beneficiarios
-            modelBuilder.Entity<CuentaAhorro>()
+        //beneficiarios
+        modelBuilder.Entity<CuentaAhorro>()
                 .HasMany<Beneficiario>(CA => CA.Beneficiarios)
                 .WithOne(B => B.CuentaAhorro)
-                .HasForeignKey(B => B.IdAccount)
+                .HasForeignKey(B => B.IdCuentaAhorro)
                 .OnDelete(DeleteBehavior.Cascade);
         #endregion
         
@@ -95,7 +95,7 @@ public class ApplicationContext : DbContext
 
             #region Beneficiario
             modelBuilder.Entity<Beneficiario>()
-                .Property(x => x.IdAccount)
+                .Property(x => x.NumeroCuenta)
                 .IsRequired();
 
             modelBuilder.Entity<Beneficiario>()
