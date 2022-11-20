@@ -14,8 +14,8 @@ namespace Core.Application.Interfaces.Services
     {
         Task<SaveViewModel> Add(SaveViewModel vm);
         Task Update(SaveViewModel vm, string id);
-        Task Delete(int id);
-        Task<SaveViewModel> GetByIdSaveViewModel(int id);
+        Task Delete(string id);
+        Task<SaveViewModel> GetByIdSaveViewModel(string id);
         Task<List<ViewModel>> GetAllViewModel();
 
     }

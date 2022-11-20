@@ -1,10 +1,13 @@
-﻿using Core.Application.Interfaces.Services;
+﻿using Core.Application.Enums;
+using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.Beneficiarios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Middlewares;
 
 namespace Internet_Banking.Controllers
 {
+    [Authorize(Roles = "Basic, SuperAdmin")]
     public class BeneficiariosController : Controller
     {
         private readonly IBeneficiarioService _beneficiarioService;
@@ -21,24 +24,43 @@ namespace Internet_Banking.Controllers
 
         public IActionResult Index()
         {
+            if (!_validateUserSession.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            string user = _validateUserSession.UserLoggedIn().Id;
+
+            ViewBag.BeneficiariosList =_beneficiarioService.GetAllViewModelWithInclude(user);
+
             return View();
         }
 
 
         public IActionResult AddBeneficiario()
         {
-            return View(new SaveBeneficiarioViewModel());
+            if (!_validateUserSession.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            return View("AddBeneficiario", new SaveBeneficiarioViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> AddBeneficiario(SaveBeneficiarioViewModel vm)
         {
-            if(!ModelState.IsValid)
+            if (!_validateUserSession.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!ModelState.IsValid)
             {
                 return View(vm);
             }
 
-            var cuentaExist = await _cuentaAhorroService.AccountExists(vm.IdAccount);
+            var cuentaExist = await _cuentaAhorroService.AccountExists(vm.NumeroCuenta);
 
 
             if (cuentaExist == null)
@@ -46,15 +68,25 @@ namespace Internet_Banking.Controllers
                 vm.HasError = true;
                 vm.Error = "Esta cuenta de ahorro no existe!";
 
-                return View(vm);
+                return View("AddBeneficiario", vm);
             };
 
 
             vm.IdUser = _validateUserSession.UserLoggedIn().Id;
+            vm.IdBeneficiario = cuentaExist.Product.IdUser;
+            vm.IdCuentaAhorro = cuentaExist.Id;
 
+            if(vm.IdUser == vm.IdBeneficiario)
+            {
+                vm.HasError = true;
+                vm.Error = "No puede agregar su propia cuenta como beneficiario!";
 
+                return View("AddBeneficiario", vm);
+            }
 
-            return View();
+            await _beneficiarioService.Add(vm);
+
+            return RedirectToRoute(new { Controller = "Home", Action = "Index" });
         }
     }
 }

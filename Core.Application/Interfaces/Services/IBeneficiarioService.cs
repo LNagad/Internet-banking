@@ -10,6 +10,6 @@ namespace Core.Application.Interfaces.Services
 {
     public interface IBeneficiarioService : IGenericService<SaveBeneficiarioViewModel, BeneficiarioViewModel ,Beneficiario>
     {
-        //custom
+        Task<List<BeneficiarioViewModel>> GetAllViewModelWithInclude(string _user);
     }
 }

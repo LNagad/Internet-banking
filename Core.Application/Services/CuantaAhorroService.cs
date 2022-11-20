@@ -11,11 +11,13 @@ namespace Core.Application.Services
     {
         private readonly ICuentaAhorroRepository _repository;
         private readonly IMapper _mapper;
-
-        public CuantaAhorroService(ICuentaAhorroRepository CuentaAhorroRepository, IMapper mapper) : base(CuentaAhorroRepository, mapper)
+        private readonly IProductRepository productService;
+        public CuantaAhorroService(ICuentaAhorroRepository CuentaAhorroRepository, IMapper mapper, IProductRepository productService) 
+            : base(CuentaAhorroRepository, mapper)
         {
             _repository = CuentaAhorroRepository;
             _mapper = mapper;
+            this.productService = productService;
         }
 
 
@@ -25,6 +27,8 @@ namespace Core.Application.Services
 
             if (cuenta != null)
             {
+                cuenta.Product = await productService.GetByIdAsync(cuenta.IdProduct);
+
                 return _mapper.Map<CuentaAhorroViewModel>(cuenta);
             }
 

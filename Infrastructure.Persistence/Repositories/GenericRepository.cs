@@ -53,7 +53,7 @@ namespace Infrastructure.Persistence.Repositories
             return lista;
         }
 
-        public virtual async Task<Entity> GetByIdAsync(int id)
+        public virtual async Task<Entity> GetByIdAsync(string id)
         {
             return await _dbContext.Set<Entity>().FindAsync(id);
         }

@@ -14,6 +14,8 @@ namespace Core.Application.Mappings
     {
         public GeneralProfile() 
         {
+            #region product
+
             CreateMap<Product, ProductViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
@@ -31,7 +33,10 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.TarjetaCreditos, opt => opt.Ignore())
                 .ForMember(P => P.Prestamos, opt => opt.Ignore());
 
-            //Account
+            #endregion
+
+            #region account
+          
             CreateMap<AuthenticationRequest, LoginViewModel>()
                 .ForMember(p => p.HasError, opt => opt.Ignore())
                 .ForMember(p => p.Error, opt => opt.Ignore())
@@ -52,8 +57,10 @@ namespace Core.Application.Mappings
                 .ForMember(p => p.Error, opt => opt.Ignore())
                 .ReverseMap();
 
+            #endregion
 
-            //Tarjeta de Credito
+            #region tarjeta_credito
+
             CreateMap<TarjetaCredito, TarjetaCreditoViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
@@ -69,7 +76,10 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(P => P.Product, opt => opt.Ignore());
 
-            //Prestamos
+            #endregion
+
+            #region prestamos
+
             CreateMap<Prestamo, PrestamoViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
@@ -85,7 +95,10 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(P => P.Product, opt => opt.Ignore());
 
-            //Cuenta de Ahorros
+            #endregion
+
+            #region cuentaAhorro
+
             CreateMap<CuentaAhorro, CuentaAhorroViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
@@ -102,7 +115,10 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.Product, opt => opt.Ignore())
                 .ForMember(P => P.Beneficiarios, opt => opt.Ignore());
 
-            //Beneficiario
+            #endregion
+
+            #region beneficiarios
+
             CreateMap<Beneficiario, BeneficiarioViewModel>()
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
@@ -119,6 +135,8 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(P => P.CuentaAhorro, opt => opt.Ignore());
+
+            #endregion
         }
     }
 }
