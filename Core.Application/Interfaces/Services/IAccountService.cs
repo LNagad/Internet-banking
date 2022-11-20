@@ -10,8 +10,5 @@ namespace Core.Application.Interfaces.Services
         Task<RegisterResponse> RegisterBasicUserAsync(RegisterRequest request, string origin);
         Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request);
         Task SignOutAsync();
-        Task<int> getAllUsers();
-        Task<int> usersActives();
-        Task<int> usersInactives();
     }
 }

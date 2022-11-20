@@ -1,2 +1,16 @@
+@using Core.Application.Dtos.Account
 
 <h2>Manage user Home page</h2>
+
+<a class="btn btn-primary" asp-controller="User" asp-action="Register">Crear usuario</a>
+
+<h4>Lista de usuarios</h4>
+<div>
+    @foreach ( AuthenticationResponse item in ViewBag.usersList)
+    {
+        <p>@item.FirstName</p>
+        <p>@item.UserName</p>
+        <p>@item.Email</p>
+        <p>@item.IsVerified</p>
+    }
+</div>

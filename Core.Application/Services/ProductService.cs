@@ -53,5 +53,19 @@ namespace Core.Application.Services
                 User = _user,
             }).ToList();
         }
+
+        public async Task<List<Product>> GetAllTransactions()
+        {
+            Product product = new();
+            var products = await _repository.GetAllAsync();
+            List<Product> listProducts = new List<Product>();
+
+            foreach ( var item in products.Where(x=>x.Created.ToString() == "2016-12-01 00:00:00.000"))
+            {
+                listProducts.Add( item );
+            }
+
+            return listProducts;
+        }
     }
 }

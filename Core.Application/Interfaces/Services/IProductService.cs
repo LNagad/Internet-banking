@@ -13,5 +13,6 @@ namespace Core.Application.Interfaces.Services
     {
 
         Task<List<ProductViewModel>> GetAllViewModelWithInclude();
+        Task<List<Product>> GetAllTransactions();
     }
 }

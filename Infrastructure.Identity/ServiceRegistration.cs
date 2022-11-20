@@ -50,6 +50,7 @@ namespace Infrastructure.Identity
 
             #region services
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IDashboradService, DashboardService>();
             #endregion
         }
     }
