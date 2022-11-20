@@ -7,7 +7,7 @@ using SocialMedia.Middlewares;
 
 namespace Internet_Banking.Controllers
 {
-    [Authorize(Roles = "Basic")]
+    [Authorize(Roles = "Basic, SuperAdmin")]
     public class BeneficiariosController : Controller
     {
         private readonly IBeneficiarioService _beneficiarioService;
@@ -28,6 +28,10 @@ namespace Internet_Banking.Controllers
             {
                 return RedirectToRoute(new { Controller = "User", Action = "Index" });
             }
+
+            string user = _validateUserSession.UserLoggedIn().Id;
+
+            ViewBag.BeneficiariosList =_beneficiarioService.GetAllViewModelWithInclude(user);
 
             return View();
         }
