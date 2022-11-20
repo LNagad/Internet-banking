@@ -35,7 +35,6 @@ namespace Core.Application.Services
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
 
             return await _accountService.RegisterBasicUserAsync(registerRequest, origin);
-
         }
 
         public async Task<string> ConfirmEmailAsync(string userId, string token)

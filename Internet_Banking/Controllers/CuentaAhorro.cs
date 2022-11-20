@@ -27,7 +27,7 @@ namespace Internet_Banking.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View("SaveCuentaAhorroViewModel");
         }
 
 
@@ -68,10 +68,8 @@ namespace Internet_Banking.Controllers
                 productVM.isTarjetaCredito = false;
                 productVM.Primary = false;
                 productVM.isPrestamo = false;
-
-                //Reparar
+                
                 productVM.IdUser = validateUserSession.UserLoggedIn().Id;
-
             }
 
             SaveProductViewModel productResult = await _productService.Add(productVM);

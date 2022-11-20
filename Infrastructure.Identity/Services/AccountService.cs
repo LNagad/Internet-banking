@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,7 +22,8 @@ namespace Infrastructure.Identity.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
 
-        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService)
+        public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -190,6 +192,7 @@ namespace Infrastructure.Identity.Services
 
             return response;
         }
+
         public async Task<ResetPasswordResponse> ResetPasswordAsync(ResetPasswordRequest request)
         {
             ResetPasswordResponse response = new()
@@ -253,6 +256,30 @@ namespace Infrastructure.Identity.Services
             var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "Token", code);
 
             return verificationUri;
+        }
+
+        public async Task<int> getAllUsers()
+        {
+            var users = _userManager.Users;
+            var userCount = users.Count();
+            
+            return userCount - 2;
+        }
+
+        public async Task<int> usersActives()
+        {
+            var usersActive = _userManager.Users;
+            var something = usersActive.Count(x => x.EmailConfirmed == true);
+
+            return something; 
+        }
+
+        public async Task<int> usersInactives()
+        {
+            var usersActive = _userManager.Users;
+            var something2 = usersActive.Count(x => x.EmailConfirmed == false);
+
+            return something2;
         }
     }
 }
