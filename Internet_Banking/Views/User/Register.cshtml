@@ -34,25 +34,44 @@
                         <label asp-for="LastName" class="form-label">Apellido</label>
                         <input asp-for="LastName" class="form-control" />
                     </div>
+                    
                     <!-- Phone input -->
                     <div class="form-outline mb-4">
                         <label asp-for="Phone" class="form-label">Telefono</label>
                         <input id="Phone" asp-for="Phone" class="form-control" />
-                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Cedula input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="Cedula" class="form-label">Cedula</label>
+                        <input type="number" id="Cedula" asp-for="Cedula" class="form-control" />
                     </div>
 
                     <!-- Username input -->
                     <div class="form-outline mb-4">
                         <label asp-for="UserName" class="form-label">Username</label>
                         <input asp-for="UserName" class="form-control" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <label asp-for="Email" class="form-label">Email</label>
                         <input asp-for="Email" type="email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Select for user type input -->
+                    <div class="form-outline mb-4">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <select class="form-select" asp-for="UserType" onchange="ShowDisplay('inputHidde','labelHidde',this)">
+                            <option value="1">Administrador</option>
+                            <option value="2">Cliente</option>
+                        </select>
+                    </div>
+                    
+                    <!-- input hidde -->
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="inputHidde" id="labelHidde" style="display: none;">Monto</label>
+                        <input asp-for="Monto" class="form-control" type="number" id="inputHidde" style="display: none;">
                     </div>
 
                     <!-- Password input -->
@@ -74,3 +93,13 @@
         </form>
     </div>
 </div>
+
+<!-- JS -->
+<script>
+    function ShowDisplay( id,id_label, elementValue){
+        document.getElementById(id).style.display = elementValue.value == 2 ? 'block' : 'none';
+        document.getElementById(id).value = elementValue.value == 1 ? null : 0;
+        
+        document.getElementById(id_label).style.display = elementValue.value == 2 ? 'block' : 'none';
+    }
+</script>

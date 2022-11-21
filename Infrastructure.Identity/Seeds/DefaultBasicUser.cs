@@ -20,6 +20,8 @@ namespace Infrastructure.Identity.Seeds
             defaultUser.FirstName = "Basic";
             defaultUser.LastName = "User";
             defaultUser.EmailConfirmed = true;
+            defaultUser.Cedula = "00000000000";
+            defaultUser.Status = true;
             defaultUser.PhoneNumberConfirmed = true;
 
             if(userManager.Users.All(p => p.Id != defaultUser.Id))

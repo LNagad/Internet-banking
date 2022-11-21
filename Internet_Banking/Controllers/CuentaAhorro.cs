@@ -44,43 +44,7 @@ namespace Internet_Banking.Controllers
                 return View("SaveCuentaAhorroViewModel",vm);
             }
 
-            string numeroCuenta = "";
-
-            for (int i = 1; i < 11; i++)
-            {
-                var randomNumeroCuenta = new Random();
-
-                numeroCuenta += String.Join("",randomNumeroCuenta.Next(0, 10).ToString());
-
-            }
-
-            vm.NumeroCuenta = numeroCuenta;
-            vm.Principal = true;
-
-            SaveCuentaAhorroViewModel resultado = await _cuentaAhorro.Add(vm);
-
-            var productVM = new SaveProductViewModel();
-
-            if (resultado != null)
-            {
-                productVM.IdProductType = resultado.Id;
-                productVM.isCuentaAhorro = true;
-                productVM.isTarjetaCredito = false;
-                productVM.Primary = false;
-                productVM.isPrestamo = false;
-                
-                productVM.IdUser = validateUserSession.UserLoggedIn().Id;
-            }
-
-            SaveProductViewModel productResult = await _productService.Add(productVM);
-
-            if (productResult != null)
-            {
-                resultado.IdProduct = productResult.Id;
-             
-                await _cuentaAhorro.Update(resultado, resultado.Id);
-            }
-
+            await _cuentaAhorro.Add(vm);
 
             return RedirectToRoute(new { Controller = "Home", Action = "Index" });
         }

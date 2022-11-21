@@ -13,6 +13,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Application.ViewModels.CuentaAhorros;
 
 namespace Infrastructure.Identity.Services
 {
@@ -21,13 +22,15 @@ namespace Infrastructure.Identity.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
+        private readonly ICuentaAhorroService _cuentaAhorro;
 
         public AccountService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            IEmailService emailService)
+            IEmailService emailService, ICuentaAhorroService cuentaAhorroService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _cuentaAhorro = cuentaAhorroService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -110,13 +113,27 @@ namespace Infrastructure.Identity.Services
                 Email = request.Email,
                 PhoneNumber = request.Phone,
                 UserName = request.UserName,
+                Cedula = request.Cedula,
+                Status = false
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Roles.Basic.ToString());
+
+                //dependiendo el tipo de usuario que se escogio en el formulario
+                if ( request.UserType == (int)UserType.Cliente )
+                {
+                    SaveCuentaAhorroViewModel cuentaVm = new SaveCuentaAhorroViewModel(); 
+                    cuentaVm.Balance = request.Monto.Value;
+                    await _cuentaAhorro.Add(cuentaVm, user.Id);
+                    await _userManager.AddToRoleAsync(user, Roles.Basic.ToString()); // se asigna el rol
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                }
 
                 var verificationUri = await SendVerificationEmailUrl(user, origin);
 
@@ -155,6 +172,9 @@ namespace Infrastructure.Identity.Services
 
             if (result.Succeeded)
             {
+                //AQUI ACTUALIZAR EL STATUS DEL USUARIO
+                user.Status = true;
+                await _userManager.UpdateAsync(user);
                 return $"La cuenta ha sido confirmada para el usuario {user.Email}. Ya puedes iniciar sesion";
             }
             else

@@ -19,8 +19,10 @@ namespace Infrastructure.Identity.Seeds
             defaultUser.Email = "superAdminUser@internetBanking.com";
             defaultUser.FirstName = "SuperAdmin";
             defaultUser.LastName = "User";
+            defaultUser.Cedula = "00000000000";
             defaultUser.EmailConfirmed = true;
             defaultUser.PhoneNumberConfirmed = true;
+            defaultUser.Status = true;
 
             if(userManager.Users.All(p => p.Id != defaultUser.Id))
             {
