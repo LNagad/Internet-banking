@@ -32,25 +32,24 @@ namespace Core.Application.Services
 
             List<BeneficiarioViewModel> beneficiarioMapped = _mapper.Map<List<BeneficiarioViewModel>>(beneficiariosList);
 
-            //beneficiarioMapped = beneficiarioMapped.Where(p => p.IdUser == _user).Select(beneficiaro => new BeneficiarioViewModel
-            //{
-            //    NumeroCuenta = beneficiaro.NumeroCuenta,
-            //    IdBeneficiario = beneficiaro.IdBeneficiario
-            //}).ToList();
-
             List<BeneficiarioViewModel> listX = new();
 
             foreach (var beneficiario in beneficiarioMapped)
             {
+
                 var userX = await _dashboradService.getUserAndInformation(beneficiario.IdBeneficiario);
 
                 var beneficiarioVM = new BeneficiarioViewModel();
 
+                beneficiarioVM.Id = beneficiario.Id;
                 beneficiarioVM.FirstName = userX.FirstName;
                 beneficiarioVM.LastName = userX.LastName;
                 beneficiarioVM.NumeroCuenta = beneficiario.NumeroCuenta;
 
-                listX.Add(beneficiarioVM);
+                if(beneficiario.IdUser == _user)
+                {
+                    listX.Add(beneficiarioVM);
+                }
             }
 
             return listX;
