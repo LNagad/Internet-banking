@@ -17,12 +17,13 @@ namespace Core.Application.Services
     {
         private readonly IBeneficiarioRepository _beneficiarioRepository;
         private readonly IMapper _mapper;
-        private readonly AuthenticationResponse _user;
+        private readonly IDashboradService _dashboradService;
 
-        public BeneficiarioService(IBeneficiarioRepository beneficiario, IMapper mapper) : base(beneficiario, mapper)
+        public BeneficiarioService(IBeneficiarioRepository beneficiario, IMapper mapper, IDashboradService dashboradService) : base(beneficiario, mapper)
         {
             _beneficiarioRepository = beneficiario;
             _mapper = mapper;
+            _dashboradService = dashboradService;
         }
 
         public async Task<List<BeneficiarioViewModel>> GetAllViewModelWithInclude(string _user)
@@ -31,29 +32,26 @@ namespace Core.Application.Services
 
             List<BeneficiarioViewModel> beneficiarioMapped = _mapper.Map<List<BeneficiarioViewModel>>(beneficiariosList);
 
-            beneficiarioMapped = beneficiarioMapped.Where(p => p.IdUser == _user).Select(beneficiaro => new BeneficiarioViewModel
-            {
-                NumeroCuenta = beneficiaro.NumeroCuenta,
-                IdBeneficiario = beneficiaro.IdBeneficiario
-            }).ToList();
+            //beneficiarioMapped = beneficiarioMapped.Where(p => p.IdUser == _user).Select(beneficiaro => new BeneficiarioViewModel
+            //{
+            //    NumeroCuenta = beneficiaro.NumeroCuenta,
+            //    IdBeneficiario = beneficiaro.IdBeneficiario
+            //}).ToList();
 
             List<BeneficiarioViewModel> listX = new();
 
             foreach (var beneficiario in beneficiarioMapped)
             {
-                //var accountUser =  _accountExtensionService.FindAccountUserById(beneficiario.IdBeneficiario);
+                var userX = await _dashboradService.getUserAndInformation(beneficiario.IdBeneficiario);
 
                 var beneficiarioVM = new BeneficiarioViewModel();
 
-                //beneficiarioVM.FirstName = accountUser.FirstName;
-                //beneficiarioVM.LastName = accountUser.UserName;
+                beneficiarioVM.FirstName = userX.FirstName;
+                beneficiarioVM.LastName = userX.LastName;
                 beneficiarioVM.NumeroCuenta = beneficiario.NumeroCuenta;
 
                 listX.Add(beneficiarioVM);
-
             }
-
-            
 
             return listX;
         }

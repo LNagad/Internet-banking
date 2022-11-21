@@ -1,5 +1,29 @@
-﻿
+﻿@using Core.Application.ViewModels.Beneficiarios
+
 @{
     ViewData["Tittle"] = "Beneficiarios";
 }
-<a class="btn btn-outline-primary" asp-action="AddBeneficiario" asp-controller="Beneficiarios">Agregar beneficiario</a>
+<div class="col-11 d-flex justify-content-end">
+    <a class="btn btn-outline-primary" asp-action="AddBeneficiario" asp-controller="Beneficiarios">Agregar beneficiario</a>
+</div>
+
+<div class="col-11 d-flex">
+
+    @foreach (BeneficiarioViewModel item in ViewBag.BeneficiariosList)
+    {
+        <div class="card me-1">
+            <div class="card-header d-flex">
+
+                <p class="me-1">@item.FirstName</p>
+                <p>@item.LastName</p>
+            </div>
+
+            <div class="card-body">
+                <p> @item.NumeroCuenta</p>
+
+            </div>
+
+        </div>
+    }
+
+</div>
