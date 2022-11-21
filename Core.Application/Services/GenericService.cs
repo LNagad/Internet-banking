@@ -37,7 +37,7 @@ namespace Core.Application.Services
             await _repository.UpdateAsync(entity, id);
         }
 
-        public virtual async Task Delete(int id)
+        public virtual async Task Delete(string id)
         {
             Entity entity = await _repository.GetByIdAsync(id);
             await _repository.DeleteAsync(entity);
@@ -50,7 +50,7 @@ namespace Core.Application.Services
             return _mapper.Map<List<ViewModel>>(entityList);
         }
 
-        public virtual async Task<SaveViewModel> GetByIdSaveViewModel(int id)
+        public virtual async Task<SaveViewModel> GetByIdSaveViewModel(string id)
         {
             Entity entity = await _repository.GetByIdAsync(id);
 

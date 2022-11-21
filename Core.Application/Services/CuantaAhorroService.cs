@@ -29,6 +29,7 @@ namespace Core.Application.Services
             _productService = service; 
             
             authenticationResponse = _accessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+
         }
 
 
@@ -38,6 +39,8 @@ namespace Core.Application.Services
 
             if (cuenta != null)
             {
+                cuenta.Product = await productService.GetByIdAsync(cuenta.IdProduct);
+
                 return _mapper.Map<CuentaAhorroViewModel>(cuenta);
             }
 

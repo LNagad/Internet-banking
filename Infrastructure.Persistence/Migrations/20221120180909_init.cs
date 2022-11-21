@@ -114,9 +114,10 @@ namespace Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdAccount = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NumeroCuenta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdBeneficiario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCuentaAhorro = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -126,17 +127,17 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_Beneficiarios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Beneficiarios_CuentaAhorros_IdAccount",
-                        column: x => x.IdAccount,
+                        name: "FK_Beneficiarios_CuentaAhorros_IdCuentaAhorro",
+                        column: x => x.IdCuentaAhorro,
                         principalTable: "CuentaAhorros",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Beneficiarios_IdAccount",
+                name: "IX_Beneficiarios_IdCuentaAhorro",
                 table: "Beneficiarios",
-                column: "IdAccount");
+                column: "IdCuentaAhorro");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CuentaAhorros_IdProduct",

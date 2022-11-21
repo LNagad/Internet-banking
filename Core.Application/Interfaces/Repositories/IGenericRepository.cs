@@ -12,7 +12,7 @@ namespace Core.Application.Interfaces.Repositories
         Task UpdateAsync(Entity entity, string id);
         Task DeleteAsync(Entity entity);
         Task<List<Entity>> GetAllAsync();
-        Task<Entity> GetByIdAsync(int id);
+        Task<Entity> GetByIdAsync(string id);
         Task<List<Entity>> GetAllWithInclude(List<string> properties);
     }
 }

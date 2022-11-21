@@ -67,4 +67,21 @@ public class DashboardService : IDashboradService
 
         return userList;
     }
+
+
+    public async Task<AuthenticationResponse> getUserAndInformation(string id)
+    {
+        AuthenticationResponse response = new();
+
+        var getUser = _userManager.Users.FirstOrDefault(p=> p.Id == id);
+
+        if (getUser != null)
+        {
+            response.Id= getUser.Id;
+            response.FirstName= getUser.FirstName;
+            response.LastName= getUser.LastName;
+        }
+
+        return response;
+    }
 }

@@ -12,9 +12,10 @@ namespace Core.Application.ViewModels.Beneficiarios
         public string? Id { get; set; }
 
         [Required(ErrorMessage = "Debe introducir el numero de cuenta" )]
-        [DataType(DataType.Text)]
 
-        public string IdAccount { get; set; }
+        public string NumeroCuenta { get; set; }
+
+        public string? IdCuentaAhorro { get; set; }
 
         public string? IdUser { get; set; }
 

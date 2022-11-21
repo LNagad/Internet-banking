@@ -6,11 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Infrastructure.Identity
 {
@@ -44,7 +40,8 @@ namespace Infrastructure.Identity
                 options.LoginPath = "/User";
                 options.AccessDeniedPath = "/User/AccesDenied";
             });
-            
+           
+
             services.AddAuthentication();
             #endregion
 
