@@ -5,12 +5,30 @@
 <a class="btn btn-primary" asp-controller="User" asp-action="Register">Crear usuario</a>
 
 <h4>Lista de usuarios</h4>
-<div>
-    @foreach ( AuthenticationResponse item in ViewBag.usersList)
-    {
-        <p>@item.FirstName</p>
-        <p>@item.UserName</p>
-        <p>@item.Email</p>
-        <p>@item.IsVerified</p>
-    }
+<div class="row">
+    <div class="w-50 mx-auto">
+        @foreach ( AuthenticationResponse item in ViewBag.usersList)
+        {
+            <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
+                <div>
+                    <p class="text-center font-weight-bold">@item?.FirstName</p>
+                    <p class="text-center font-weight-bold">@item?.UserName</p>
+                    <p class="text-center font-weight-bold">@item?.Email</p>
+                    <p class="text-center font-weight-bold">@item?.Status</p>
+                </div>
+
+                <div>
+                    @if ( @item.Status )
+                    {
+                        <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Desactivar</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Activar</a>
+                    }
+                    <a class="btn btn-primary">Editar</a>
+                </div>
+            </div>
+        }
+    </div>
 </div>

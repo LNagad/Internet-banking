@@ -32,7 +32,7 @@ public class DashboardService : IDashboradService
     {
         var usersActive = _userManager.Users;
         var something = usersActive.
-            Count(x => x.EmailConfirmed == true && x.FirstName != "SuperAdmin" && x.FirstName != "Basic");
+            Count(x => x.Status == true && x.FirstName != "SuperAdmin" && x.FirstName != "Basic");
 
         return something; 
     }
@@ -41,7 +41,7 @@ public class DashboardService : IDashboradService
     {
         var usersActive = _userManager.Users;
         var something2 = usersActive.
-            Count(x => x.EmailConfirmed == false && x.FirstName != "SuperAdmin" && x.FirstName != "Basic");
+            Count(x => x.Status == false && x.FirstName != "SuperAdmin" && x.FirstName != "Basic");
 
         return something2;
     }
@@ -57,10 +57,12 @@ public class DashboardService : IDashboradService
         {
             AuthenticationResponse userCast = new()
             {
+                Id = item.Id,
                 FirstName = item.FirstName,
                 Email = item.Email,
                 UserName = item.UserName,
-                IsVerified = item.EmailConfirmed
+                IsVerified = item.EmailConfirmed,
+                Status = item.Status
             };
             userList.Add( userCast );
         }
@@ -83,5 +85,31 @@ public class DashboardService : IDashboradService
         }
 
         return response;
+    }
+
+    public async Task<string> ActivateUser( string userId )
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if ( user != null)
+        {
+            user.Status = true;
+            await _userManager.UpdateAsync(user);
+        }
+
+        return "";
+    }
+    
+    public async Task<string> DesactiveUser( string userId )
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if ( user != null)
+        {
+            user.Status = false;
+            await _userManager.UpdateAsync(user);
+        }
+
+        return "";
     }
 }
