@@ -11,6 +11,7 @@
 
     @foreach (BeneficiarioViewModel item in ViewBag.BeneficiariosList)
     {
+
         <div class="card me-1">
             <div class="card-header d-flex">
 
@@ -23,7 +24,27 @@
 
             </div>
 
+            <div class="card-footer">
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">  Esta seguro que desea eliminar este beneficiario?</h1>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <a class="btn btn-danger" asp-action="EliminarBeneficiario" asp-controller="Beneficiarios" asp-route-id="@item.Id">Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</a>
+            </div>
         </div>
     }
-
 </div>
+

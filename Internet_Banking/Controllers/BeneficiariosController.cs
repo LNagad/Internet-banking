@@ -91,5 +91,12 @@ namespace Internet_Banking.Controllers
 
             return RedirectToRoute(new { Controller = "Home", Action = "Index" });
         }
+
+        public async Task<IActionResult> EliminarBeneficiario(string id)
+        {
+            await _beneficiarioService.Delete(id);
+
+            return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+        }
     }
 }

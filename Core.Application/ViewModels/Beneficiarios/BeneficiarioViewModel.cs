@@ -5,6 +5,7 @@ namespace Core.Application.ViewModels.Beneficiarios
 {
     public class BeneficiarioViewModel
     {
+        public string Id { get; set; }
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
