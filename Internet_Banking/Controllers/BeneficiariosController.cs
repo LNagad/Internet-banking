@@ -1,6 +1,7 @@
 ﻿using Core.Application.Enums;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.Beneficiarios;
+using Infrastructure.Identity.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMedia.Middlewares;
@@ -13,16 +14,18 @@ namespace Internet_Banking.Controllers
         private readonly IBeneficiarioService _beneficiarioService;
         private readonly ValidateUserSession _validateUserSession;
         private readonly ICuentaAhorroService _cuentaAhorroService;
+        private readonly IDashboradService _dashboradService;
 
         public BeneficiariosController(IBeneficiarioService beneficiarioService, ValidateUserSession validateUserSession,
-            ICuentaAhorroService cuentaAhorroService)
+            ICuentaAhorroService cuentaAhorroService, IDashboradService dashboradService)
         {
             _beneficiarioService = beneficiarioService;
             _validateUserSession = validateUserSession;
             _cuentaAhorroService = cuentaAhorroService;
+            _dashboradService = dashboradService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (!_validateUserSession.HasUser())
             {
@@ -31,9 +34,9 @@ namespace Internet_Banking.Controllers
 
             string user = _validateUserSession.UserLoggedIn().Id;
 
-            ViewBag.BeneficiariosList =_beneficiarioService.GetAllViewModelWithInclude(user);
+            ViewBag.BeneficiariosList = await _beneficiarioService.GetAllViewModelWithInclude(user);
 
-            return View();
+            return View("Index");
         }
 
 

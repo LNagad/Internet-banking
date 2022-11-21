@@ -8,4 +8,6 @@ public interface IDashboradService
     Task<int> usersActives();
     Task<int> usersInactives();
     Task<List<AuthenticationResponse>> getAllUsersAndInformation();
+
+    Task<AuthenticationResponse> getUserAndInformation(string id);
 }
