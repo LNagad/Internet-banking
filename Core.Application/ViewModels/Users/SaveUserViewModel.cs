@@ -23,6 +23,12 @@ namespace Core.Application.ViewModels.Users
         [Required(ErrorMessage = "Debe colocar el numero de telefono")]
         [DataType(DataType.Text)]
         public string Phone { get; set; }
+        
+        [RegularExpression(@"\d{11}", ErrorMessage = "Numero de cedula invalido (FORMATO RD)" )]
+        [Required]
+        public string Cedula { get; set; }
+        
+        public double? Monto { get; set; }
 
         [Required(ErrorMessage= "Debe colocar el nombre de usuario")]
         [DataType(DataType.Text)]
@@ -43,5 +49,6 @@ namespace Core.Application.ViewModels.Users
 
         public bool HasError { get; set; }
         public string? Error { get; set; }
+        public int UserType { get; set; }
     }
 }

@@ -5,9 +5,7 @@ namespace Core.Domain.Entities;
 public class CuentaAhorro : AuditableBaseEntity
 {
     public string NumeroCuenta { get; set; }
-    
     public double Balance { get; set; }
-
     public bool Principal { get; set; }
 
     //navigation property
