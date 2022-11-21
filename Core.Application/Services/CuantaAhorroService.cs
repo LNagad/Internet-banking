@@ -19,15 +19,16 @@ namespace Core.Application.Services
         private readonly IHttpContextAccessor _accessor;
         private readonly AuthenticationResponse authenticationResponse;
         private readonly IProductService _productService;
+        private readonly IProductRepository _productRepo;
 
         public CuantaAhorroService(ICuentaAhorroRepository CuentaAhorroRepository, IMapper mapper, 
-            IHttpContextAccessor contextAccessor, IProductService service) : base(CuentaAhorroRepository, mapper)
+            IHttpContextAccessor contextAccessor, IProductService service, IProductRepository productRepository) : base(CuentaAhorroRepository, mapper)
         {
             _repository = CuentaAhorroRepository;
             _mapper = mapper;
             _accessor = contextAccessor;
             _productService = service; 
-            
+            _productRepo = productRepository;
             authenticationResponse = _accessor.HttpContext.Session.Get<AuthenticationResponse>("user");
 
         }
@@ -39,7 +40,7 @@ namespace Core.Application.Services
 
             if (cuenta != null)
             {
-                cuenta.Product = await productService.GetByIdAsync(cuenta.IdProduct);
+                cuenta.Product = await _productRepo.GetByIdAsync(cuenta.IdProduct);
 
                 return _mapper.Map<CuentaAhorroViewModel>(cuenta);
             }
