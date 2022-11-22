@@ -112,4 +112,20 @@ public class DashboardService : IDashboradService
 
         return "";
     }
+
+    public async Task<AuthenticationResponse> GetUserByEmail( string email )
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        AuthenticationResponse userResponse = new AuthenticationResponse(); 
+        if ( user != null )
+        {
+            userResponse.Id = user.Id;
+            userResponse.FirstName = user.FirstName;
+            userResponse.LastName = user.LastName;
+            userResponse.Email = user.Email;
+            userResponse.Status = user.Status;
+        }
+
+        return userResponse;
+    }
 }

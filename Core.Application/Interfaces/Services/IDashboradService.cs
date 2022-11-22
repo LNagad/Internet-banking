@@ -12,4 +12,5 @@ public interface IDashboradService
     Task<AuthenticationResponse> getUserAndInformation(string id);
     Task<string> ActivateUser(string userId);
     Task<string> DesactiveUser(string userId);
+    Task<AuthenticationResponse> GetUserByEmail(string email);
 }

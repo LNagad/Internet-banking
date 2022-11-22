@@ -57,6 +57,8 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
+        //[ServiceFilter(typeof(LoginAuthorize))]
+
         public IActionResult Register()
         {
             if (!_validateUser.HasUser())
@@ -72,6 +74,8 @@ namespace Internet_Banking.Controllers
             return View(new SaveUserViewModel());
         }
 
+
+        //[ServiceFilter(typeof(LoginAuthorize))]
 
         [HttpPost]
         public async Task<IActionResult> Register(SaveUserViewModel vm)
