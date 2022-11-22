@@ -116,6 +116,12 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.Product, opt => opt.Ignore())
                 .ForMember(P => P.Beneficiarios, opt => opt.Ignore());
 
+
+            CreateMap<CuentaAhorroViewModel, SaveCuentaAhorroViewModel>()
+                .ReverseMap()
+                .ForMember(P => P.Product, opt => opt.Ignore())
+                .ForMember(P => P.Beneficiarios, opt => opt.Ignore());
+
             #endregion
 
             #region beneficiarios
