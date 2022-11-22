@@ -25,6 +25,8 @@ namespace Internet_Banking.Controllers
             return View(new LoginViewModel());
         }
 
+
+        [ServiceFilter(typeof(LoginAuthorize))]
         [HttpPost]
         public async Task<IActionResult> Index(LoginViewModel vm)
         {
@@ -55,21 +57,35 @@ namespace Internet_Banking.Controllers
             return RedirectToRoute(new { Controller = "User", Action = "Index" });
         }
 
-        [ServiceFilter(typeof(LoginAuthorize))]
         public IActionResult Register()
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
             if (!_validateUser.IsAdmin())
             {
                 return RedirectToRoute(new { Controller = "Home", Action = "Index" });
             }
-            
+
             return View(new SaveUserViewModel());
         }
 
-        [ServiceFilter(typeof(LoginAuthorize))]
+
         [HttpPost]
         public async Task<IActionResult> Register(SaveUserViewModel vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(vm);

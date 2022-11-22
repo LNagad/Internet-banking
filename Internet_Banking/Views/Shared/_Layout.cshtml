@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Internet_Banking.styles.css" asp-append-version="true" />
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
 </head>
 <body>
     <header style="border: 2px solid red">
@@ -45,9 +47,7 @@
                             if (isBasic)
                             {
                                 @** Aqui iran las vistas para los usuiarios que no son administradores**@
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="" asp-action="">Pagos</a>
-                                </li>
+
                             }
                         }
                         else

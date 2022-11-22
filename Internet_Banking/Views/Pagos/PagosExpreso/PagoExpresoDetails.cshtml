@@ -1,0 +1,51 @@
+﻿@using Core.Application.Dtos.Pagos
+@model PagoExpressResponse
+@{
+    ViewData["Title"] = "Pagos Expresos detalles";
+}
+
+<div class="col-12 d-flex justify-content-center">
+    <div class="col-5 mt-5">
+        <form method="post" asp-action="PagosExpresoConfirm" asp-controller="Pagos">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Esta seguro que desea enviar esta transaccion?</h4>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-outline mb-4">
+                        <h3>Destino</h3>
+
+                        <label>@Model.FirstNameOrigen @Model.LastNameOrigen</label>
+                        <label>@Model.NumeroCuentaOrigen</label>
+                        <input hidden readonly asp-for="FirstNameOrigen" value="@Model.FirstNameOrigen" class="form-control" />
+                        <input hidden readonly asp-for="LastNameOrigen" value="@Model.LastNameOrigen" class="form-control" />
+                        <input hidden readonly type="number" asp-for="NumeroCuentaOrigen" value="@Model.NumeroCuentaOrigen" class="form-control" />
+                    </div>
+
+
+                    <div class="form-outline mb-4">
+                        <h3>Origen</h3>
+
+                        <label>@Model.FirstNameDestino @Model.LastNameDestino</label>
+                        <label>@Model.NumeroCuentaDestino</label>
+                        <input hidden readonly asp-for="FirstNameDestino" value="@Model.FirstNameDestino" class="form-control" />
+                        <input hidden readonly asp-for="LastNameDestino" value="@Model.LastNameDestino" class="form-control" />
+                        <input hidden readonly type="number" asp-for="NumeroCuentaDestino" value="@Model.NumeroCuentaDestino" class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h4 class="me-2">Monto a enviar</h4>
+                        <label>@Model.Monto</label>
+                    </div>
+
+                    <input hidden readonly type="number" asp-for="Monto" value="@Model.Monto" class="form-control" />
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-success btn-block mb-3">Enviar pago</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

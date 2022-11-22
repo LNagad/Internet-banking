@@ -49,6 +49,40 @@ namespace Core.Application.Services
 
         }
 
+        public async Task<List<CuentaAhorroViewModel>> GetAllViewModelWithInclude(string user = null)
+        {
+            var cuentasList = await _repository.GetAllWithInclude(new List<string> { "Product", "Beneficiarios" });
+
+            List<CuentaAhorroViewModel> cuentasMapped = _mapper.Map<List<CuentaAhorroViewModel>>(cuentasList);
+
+            if (user != null )
+            {
+                return cuentasMapped = cuentasMapped.Where(p => p.Product.IdUser == user).Select(cuenta => new CuentaAhorroViewModel
+                {
+                   Id = cuenta.Id,
+                   NumeroCuenta = cuenta.NumeroCuenta,
+                   Balance = cuenta.Balance,
+                   Principal = cuenta.Principal,
+                   IdProduct = cuenta.IdProduct,
+                   Product = cuenta.Product,
+                   Beneficiarios = cuenta.Beneficiarios
+                }).ToList();
+
+            }
+
+            return cuentasMapped = cuentasMapped.Select(cuenta => new CuentaAhorroViewModel
+            {
+                Id = cuenta.Id,
+                NumeroCuenta = cuenta.NumeroCuenta,
+                Balance = cuenta.Balance,
+                Principal = cuenta.Principal,
+                IdProduct = cuenta.IdProduct,
+                Product = cuenta.Product,
+                Beneficiarios = cuenta.Beneficiarios
+            }).ToList();
+
+        }
+
         public async Task<SaveCuentaAhorroViewModel> Add( SaveCuentaAhorroViewModel vm, string userId )
         {
             string numeroCuenta = "";

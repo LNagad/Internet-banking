@@ -18,7 +18,7 @@
                 </div>
 
                 <div>
-                    @if ( @item.Status )
+                    @if (@item.Status )
                     {
                         <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Desactivar</a>
                     }
