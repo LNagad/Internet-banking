@@ -1,0 +1,21 @@
+<h2>Selecciona el producto que quieres agregar al usuario</h2>
+
+<div class="mx-auto">
+    <div style="max-width: 400px" class="border border-1 border-dark d-flex justify-content-center align-items-center p-2 m-2">
+        <a class="btn btn-primary m-1" asp-controller="ManageUser" 
+           asp-action="ManageClientProducts" 
+           asp-route-status="@ViewBag.Status"
+           asp-route-name="@ViewBag.UserName"
+           asp-route-Id="@ViewBag.UserId">Cuenta de Ahorros</a>
+        
+        <a class="btn btn-primary m-1" asp-controller="ManageUser"
+           asp-action="ManageTarjetaCredito"
+           asp-route-Id="@ViewBag.UserId">Tarjeta de creditos</a>
+        
+        <a class="btn btn-primary m-1">Prestamo</a>
+    </div>
+</div>
+
+<div class="border border-dark border-1 m-1 p1">
+    
+</div>

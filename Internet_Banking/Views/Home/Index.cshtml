@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Core.Application.Dtos.Account
 @using Core.Application.Helpers
+@using Core.Application.ViewModels.TarjetaCreditos
 @using Core.Domain.Entities
 @inject IHttpContextAccessor httpContextAccessor
 @{
@@ -48,6 +49,12 @@
                     <h4>Cuenta principal: @(ahorro.Principal == true  ? "Si" : "No")</h4>
                     <h4>Balance: @ahorro.Balance</h4>
                 }
+                @foreach (TarjetaCreditoViewModel tarjeta in item.TarjetaCreditos)
+                {
+                    <h4>Numero de tarjeta: @tarjeta.NumeroTarjeta</h4>
+                    <h4>Limite de la tarjeta: @tarjeta.Limite</h4>
+                    <h4>Balance: @tarjeta.Monto</h4>
+                }
             }
         </div>
     </div>
@@ -83,10 +90,7 @@
     <div class="mt-5 d-flex justify-content-center border border-5">
         <div class="col-11" style="border: 1px solid red">
             <h2>Cantidad de productos asignados a los clientes</h2>
-            @foreach ( Product item in ViewBag.Products)
-            {
-                <p> @item.Created  </p>
-            }
+
         </div>
     </div>
 }

@@ -167,7 +167,7 @@ public class ApplicationContext : DbContext
             #region TarjetaCredito
             
             modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.Balance)
+                .Property(x => x.Monto)
                 .IsRequired();
             
             modelBuilder.Entity<TarjetaCredito>()

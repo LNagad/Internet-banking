@@ -17,5 +17,7 @@ namespace Core.Application.ViewModels.CuentaAhorros
         public bool? Principal { get; set; }
 
         public string? IdProduct { get; set; }
+        
+        public string? UserId { get; set; }
     }
 }

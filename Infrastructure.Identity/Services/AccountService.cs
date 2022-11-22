@@ -127,7 +127,8 @@ namespace Infrastructure.Identity.Services
                 {
                     SaveCuentaAhorroViewModel cuentaVm = new SaveCuentaAhorroViewModel(); 
                     cuentaVm.Balance = request.Monto.Value;
-                    await _cuentaAhorro.Add(cuentaVm, user.Id);
+                    bool primary = true;
+                    await _cuentaAhorro.Add(cuentaVm, user.Id, primary);
                     await _userManager.AddToRoleAsync(user, Roles.Basic.ToString()); // se asigna el rol
                 }
                 else

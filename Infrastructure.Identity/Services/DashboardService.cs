@@ -23,6 +23,7 @@ public class DashboardService : IDashboradService
     {
         var users = _userManager.Users.
             Where(x => x.FirstName != "SuperAdmin" && x.FirstName != "Basic");
+
         var userCount = users.Count();
             
         return userCount;
@@ -50,11 +51,15 @@ public class DashboardService : IDashboradService
     {
         var getUser = _userManager.
             Users.Where(x => x.FirstName != "SuperAdmin" && x.FirstName != "Basic").ToList();
+
+        
         
         List<AuthenticationResponse> userList = new();
         
         foreach ( var item in getUser)
         {
+            var Roles = await _userManager.GetRolesAsync(item);
+            
             AuthenticationResponse userCast = new()
             {
                 Id = item.Id,
@@ -62,7 +67,8 @@ public class DashboardService : IDashboradService
                 Email = item.Email,
                 UserName = item.UserName,
                 IsVerified = item.EmailConfirmed,
-                Status = item.Status
+                Status = item.Status,
+                Roles = Roles.ToList()
             };
             userList.Add( userCast );
         }
@@ -115,15 +121,25 @@ public class DashboardService : IDashboradService
 
     public async Task<AuthenticationResponse> GetUserByEmail( string email )
     {
-        var user = await _userManager.FindByEmailAsync(email);
+        
         AuthenticationResponse userResponse = new AuthenticationResponse(); 
-        if ( user != null )
+        
+        if( email != null || email != "" )
         {
-            userResponse.Id = user.Id;
-            userResponse.FirstName = user.FirstName;
-            userResponse.LastName = user.LastName;
-            userResponse.Email = user.Email;
-            userResponse.Status = user.Status;
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if ( user != null )
+            {
+                var role = await _userManager.GetRolesAsync(user);
+            
+                userResponse.Id = user.Id;
+                userResponse.FirstName = user.FirstName;
+                userResponse.LastName = user.LastName;
+                userResponse.Email = user.Email;
+                userResponse.Status = user.Status;
+                userResponse.Roles = role.ToList();
+            }
+            
         }
 
         return userResponse;
