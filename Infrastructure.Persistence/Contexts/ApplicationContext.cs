@@ -124,10 +124,6 @@ public class ApplicationContext : DbContext
         #endregion
 
         #region Prestamo
-
-        modelBuilder.Entity<Prestamo>()
-                .Property(x => x.Balance)
-                .IsRequired();
             
             modelBuilder.Entity<Prestamo>()
                 .Property(x => x.Debe)
@@ -165,10 +161,6 @@ public class ApplicationContext : DbContext
             #endregion
             
             #region TarjetaCredito
-            
-            modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.Monto)
-                .IsRequired();
             
             modelBuilder.Entity<TarjetaCredito>()
                 .Property(x => x.Debe)

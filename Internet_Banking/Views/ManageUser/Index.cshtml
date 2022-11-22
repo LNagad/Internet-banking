@@ -20,9 +20,9 @@
 
 <div class="row">
     <div class="w-50 mx-auto">
-        @if ( Model.Id == null || Model.Id == "" )
+        @if (Model.Id == null || Model.Id == "")
         {
-            @foreach ( AuthenticationResponse item in ViewBag.usersList)
+            @foreach (AuthenticationResponse item in ViewBag.usersList)
             {
                 <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
                     <div>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div>
-                        @if ( @item.Status )
+                        @if (@item.Status)
                         {
                             <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Desactivar</a>
                         }
@@ -57,32 +57,33 @@
         else
         {
             <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
-                    <div>
-                        <p class="text-center font-weight-bold">Nombre: @Model?.FirstName</p>
-                        <p class="text-center font-weight-bold">Usuario: @Model?.UserName</p>
-                        <p class="text-center font-weight-bold">Email: @Model?.Email</p>
-                        <p class="text-center font-weight-bold">Estado: @(Model?.Status == false ? "Desactivado" : "Activo")</p>
-                        @if (Model?.Roles != null)
+                <div>
+                    <p class="text-center font-weight-bold">Nombre: @Model?.FirstName</p>
+                    <p class="text-center font-weight-bold">Usuario: @Model?.UserName</p>
+                    <p class="text-center font-weight-bold">Email: @Model?.Email</p>
+                    <p class="text-center font-weight-bold">Estado: @(Model?.Status == false ? "Desactivado" : "Activo")</p>
+                    @if (Model?.Roles != null)
+                    {
+                        foreach (var item in Model?.Roles)
                         {
-                            foreach (var item in Model?.Roles)
-                            {
-                                <p class="text-center">Tipo de usuario: @(item == "Basic" ? "Basico" : "Administrador")</p>
-                            }
+                            <p class="text-center">Tipo de usuario: @(item == "Basic" ? "Basico" : "Administrador")</p>
                         }
-                    </div>
+                    }
+                </div>
 
-                    <div>
-                        @if ( Model.Status )
-                        {
-                            <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Desactivar</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Activar</a>
-                        }
-                        <a class="btn btn-primary">Editar</a>
-                    </div>
+                <div>
+                    @if (Model.Status)
+                    {
+                        <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Desactivar</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Activar</a>
+                    }
+                    <a class="btn btn-primary">Editar</a>
+                </div>
 
-            }
+            </div>
+        }
     </div>
 </div>

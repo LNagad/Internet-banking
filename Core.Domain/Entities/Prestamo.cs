@@ -16,8 +16,6 @@ namespace Core.Domain.Entities
         public double Pago { get; set; }
         
         public double Debe { get; set; } //1 , 0
-        
-        public double Balance { get; set; }
 
         //navigation property
         public string IdProduct { get; set; }
