@@ -1,5 +1,4 @@
-﻿
-@using Core.Application.ViewModels.Products
+﻿@using Core.Application.ViewModels.Products
 @using Core.Application.ViewModels.CuentaAhorros
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Core.Application.Dtos.Account
@@ -14,7 +13,7 @@
     var isBasic = user != null ? user.Roles.Any(r => r == "Basic") : false;
 }
 
-@if ( isBasic )
+@if (isBasic)
 {
     <nav class="navbar navbar-expand-lg bg-dark" @*style="margin-top: -0.1rem"*@>
         <div class="container-fluid">
@@ -36,30 +35,46 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="mt-5 d-flex justify-content-center border border-5">
         <div class="col-11" style="border: 1px solid red">
             <h2>Cuentas</h2>
-            @foreach(ProductViewModel item in ViewBag.lista)
-            {
-                <h4>@($"{item.User.FirstName}")</h4>
-                @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
+            <div class="d-flex">
+                @foreach (ProductViewModel item in ViewBag.lista)
                 {
-                    <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
-                    <h4>Cuenta principal: @(ahorro.Principal == true  ? "Si" : "No")</h4>
-                    <h4>Balance: @ahorro.Balance</h4>
+                    @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
+                    {
+                        <div class="me-3 card">
+                            <div class="card-header bg-dark">
+                                <h4 class="text-white">Cuenta de ahorro</h4>
+                            </div>
+                            <div class="card-body">
+                                <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
+                                <h4>Cuenta principal: @(ahorro.Principal == true ? "Si" : "No")</h4>
+                                <h4>Balance: @ahorro.Balance</h4>
+                            </div>
+                        </div>
+                    }
+
+                    @foreach (TarjetaCreditoViewModel tarjeta in item.TarjetaCreditos)
+                    {
+                        <div class="me-3 card">
+                            <div class="card-header bg-dark">
+                                <h4 class="text-white">Tarjeta de credito</h4>
+                            </div>
+                            <div class="card-body">
+                                <h4>Numero de tarjeta: @tarjeta.NumeroTarjeta</h4>
+                                <h4>Limite de la tarjeta: @tarjeta.Limite</h4>
+                            </div>
+                        </div>
+                    }
+
                 }
-                @foreach (TarjetaCreditoViewModel tarjeta in item.TarjetaCreditos)
-                {
-                    <h4>Numero de tarjeta: @tarjeta.NumeroTarjeta</h4>
-                    <h4>Limite de la tarjeta: @tarjeta.Limite</h4>
-                    <h4>Balance: @tarjeta.Monto</h4>
-                }
-            }
+            </div>
         </div>
     </div>
 }
-@if ( isAdmin )
+@if (isAdmin)
 {
     <nav class="navbar navbar-expand-lg bg-dark" @*style="margin-top: -0.1rem"*@>
         <div class="container-fluid">
@@ -72,21 +87,21 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="mt-5 d-flex justify-content-center border border-5">
         <div class="col-11" style="border: 1px solid red">
-            
+
             <h2>Cantidad de clientes activos y los inactivos</h2>
-            
+
             <p>usuarios Registrados: @ViewBag.users</p>
-            
+
             <p>usuarios activos: @ViewBag.usuariosActivos</p>
-            
+
             <p>usuarios Inactivos: @ViewBag.usuariosInactivos</p>
-            
+
         </div>
     </div>
-    
+
     <div class="mt-5 d-flex justify-content-center border border-5">
         <div class="col-11" style="border: 1px solid red">
             <h2>Cantidad de productos asignados a los clientes</h2>

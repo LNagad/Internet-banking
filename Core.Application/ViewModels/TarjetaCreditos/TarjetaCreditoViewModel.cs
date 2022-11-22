@@ -18,8 +18,6 @@ namespace Core.Application.ViewModels.TarjetaCreditos
 
         public double Debe { get; set; } // 1, 0
 
-        public double Monto { get; set; }
-
         //navigation property
         public string Idproduct { get; set; }
         public ProductViewModel Product { get; set; }
