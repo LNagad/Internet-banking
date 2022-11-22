@@ -1,3 +1,4 @@
+using Core.Application.Dtos.Account;
 using Core.Application.Interfaces.Services;
 using Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,7 @@ namespace Internet_Banking.Controllers
         {
             ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
             
-            return View();
+            return View(new AuthenticationResponse());
         }
         
         public async Task<IActionResult> ActivateUser(string Id)
@@ -37,6 +38,21 @@ namespace Internet_Banking.Controllers
             ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
 
             return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserByEmail( AuthenticationResponse userResponse )
+        {
+            AuthenticationResponse userGot = new();
+
+            if (userResponse.Email != null)
+            {
+                userGot = await _dashboradService.GetUserByEmail(userResponse.Email);
+            }
+
+            ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
+
+            return View("Index", userGot);
         }
     }    
 }

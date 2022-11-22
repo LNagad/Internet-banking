@@ -1,34 +1,73 @@
 @using Core.Application.Dtos.Account
+@model AuthenticationResponse
 
 <h2>Manage user Home page</h2>
 
 <a class="btn btn-primary" asp-controller="User" asp-action="Register">Crear usuario</a>
 
 <h4>Lista de usuarios</h4>
+
+<h5>Buscar usuario por correo:</h5>
+<form method="post" asp-controller="ManageUser" asp-action="GetUserByEmail">
+    <div>
+        <label asp-for="Email" class="form form-label">Email</label>
+        <input class="form from-control" type="text" asp-for="Email">
+    </div>
+    <button class="btn btn-primary" type="submit">Buscar</button>
+</form>
+
+<a asp-action="Index" asp-controller="ManageUser" class="btn btn-primary">Limpiar busqueda</a>
+
 <div class="row">
     <div class="w-50 mx-auto">
-        @foreach ( AuthenticationResponse item in ViewBag.usersList)
+        @if ( Model.Id == null )
         {
-            <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
+            @foreach ( AuthenticationResponse item in ViewBag.usersList)
+            {
+                <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
+                    <div>
+                        <p class="text-center font-weight-bold">@item?.FirstName</p>
+                        <p class="text-center font-weight-bold">@item?.UserName</p>
+                        <p class="text-center font-weight-bold">@item?.Email</p>
+                        <p class="text-center font-weight-bold">@item?.Status</p>
+                    </div>
+
+                    <div>
+                        @if ( @item.Status )
+                        {
+                            <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Desactivar</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Activar</a>
+                        }
+                        <a class="btn btn-primary">Editar</a>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+        <div class="border border-2 border-red rounded m-2 p-2 d-flex justify-content-center align-items-center flex-column" style="max-width: 400px;">
                 <div>
-                    <p class="text-center font-weight-bold">@item?.FirstName</p>
-                    <p class="text-center font-weight-bold">@item?.UserName</p>
-                    <p class="text-center font-weight-bold">@item?.Email</p>
-                    <p class="text-center font-weight-bold">@item?.Status</p>
+                    <p class="text-center font-weight-bold">@Model?.FirstName</p>
+                    <p class="text-center font-weight-bold">@Model?.UserName</p>
+                    <p class="text-center font-weight-bold">@Model?.Email</p>
+                    <p class="text-center font-weight-bold">@Model?.Status</p>
                 </div>
 
                 <div>
-                    @if ( @item.Status )
+                    @if ( Model.Status )
                     {
-                        <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Desactivar</a>
+                        <a class="btn btn-primary" asp-action="DesactivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Desactivar</a>
                     }
                     else
                     {
-                        <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Activar</a>
+                        <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@Model?.Id">Activar</a>
                     }
                     <a class="btn btn-primary">Editar</a>
                 </div>
             </div>
-        }
+            }
     </div>
 </div>
