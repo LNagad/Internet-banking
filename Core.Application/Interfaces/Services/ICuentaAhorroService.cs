@@ -12,5 +12,7 @@ namespace Core.Application.Interfaces.Services
     {
         Task<CuentaAhorroViewModel> AccountExists(string NumeroCuenta);
         Task<SaveCuentaAhorroViewModel> Add(SaveCuentaAhorroViewModel vm, string userId);
+
+        Task<List<CuentaAhorroViewModel>> GetAllViewModelWithInclude(string user = null);
     }
 }

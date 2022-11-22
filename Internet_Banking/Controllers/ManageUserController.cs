@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Internet_Banking.Controllers
 {
-    //[Authorize(Roles = "SuperAdmin, Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public class ManageUserController : Controller
     {
         private readonly IDashboradService _dashboradService;

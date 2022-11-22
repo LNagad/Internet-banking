@@ -9,15 +9,17 @@ public class LoginAuthorize : IAsyncActionFilter
 
     public LoginAuthorize(ValidateUserSession userSession)
     {
-        _userSession = userSession; 
+        _userSession = userSession;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         if (_userSession.HasUser())
         {
+
             var controller = (UserController)context.Controller;
-            context.Result = controller.RedirectToAction("Index", "User");
+            context.Result = controller.RedirectToAction("index", "home");
+   
         }
         else
         {

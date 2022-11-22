@@ -1,0 +1,50 @@
+﻿@using Core.Application.ViewModels.Pagos
+@model PagoConfirmedViewModel
+@{
+    ViewData["Title"] = "Confirmacion de pago";
+}
+@section scripts {
+    <script>
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Transaccion confirmada!',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    </script>
+}
+
+<div class="col-12 d-flex justify-content-center">
+    <div class="col-5 mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h4>Numero de transaccion #</h4>
+            </div>
+            <div class="card-body">
+
+                @if (Model.isCuentaAhorro == true)
+                {
+                    <div class="form-outline mb-4">
+                        <h3>Enviado desde</h3>
+                        <label>@Model.FirstNameOrigen @Model.LastNameOrigen</label>
+                        <label>@Model.NumeroCuentaOrigen</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h3>Origen</h3>
+                        <label>@Model.FirstNameDestino @Model.LastNameDestino</label>
+                        <label>@Model.NumeroCuentaDestino</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h4 class="me-2">Monto enviado</h4>
+                        <label>$@Model.Monto</label>
+                    </div>
+                }
+
+                <a asp-action="Index" asp-controller="Home" class="btn btn-secondary btn-block mb-3">Volver al home</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Internet_Banking", "Internet_Banking\Internet_Banking.csproj", "{164A3397-F7A1-46CA-90C4-E73B1DE8A492}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Internet_Banking", "Internet_Banking\Internet_Banking.csproj", "{164A3397-F7A1-46CA-90C4-E73B1DE8A492}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{B0D495D3-C260-479E-AC08-95A9F29C4EE0}"
 EndProject
@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{96F9B5F9-2A55-4BAE-B2FD-AD044D4B741E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Application", "Core.Application\Core.Application.csproj", "{3CDACEA5-2552-46AC-9E4A-97649E8B7F0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Application", "Core.Application\Core.Application.csproj", "{3CDACEA5-2552-46AC-9E4A-97649E8B7F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{077CA6E6-0C83-4CEE-ADD0-6FE6D2AD7ECA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{077CA6E6-0C83-4CEE-ADD0-6FE6D2AD7ECA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Persistence", "Infrastructure.Persistence\Infrastructure.Persistence.csproj", "{21F77D8E-C801-4D0D-A600-1BCA135216B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Persistence", "Infrastructure.Persistence\Infrastructure.Persistence.csproj", "{21F77D8E-C801-4D0D-A600-1BCA135216B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Shared", "Infrastructure.Shared\Infrastructure.Shared.csproj", "{055C386F-CB13-4673-A59B-6AA602BF5EC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Shared", "Infrastructure.Shared\Infrastructure.Shared.csproj", "{055C386F-CB13-4673-A59B-6AA602BF5EC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{A87ADAFB-141F-43DE-98E6-CAD027438214}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{A87ADAFB-141F-43DE-98E6-CAD027438214}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
