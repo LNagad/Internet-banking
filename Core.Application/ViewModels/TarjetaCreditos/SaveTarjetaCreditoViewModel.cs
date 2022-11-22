@@ -19,6 +19,8 @@ namespace Core.Application.ViewModels.TarjetaCreditos
 
         public double Balance { get; set; }
 
-        public int IdProduct { get; set; }
+        public string? IdProduct { get; set; }
+
+        public string UserId { get; set; }
     }
 }

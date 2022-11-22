@@ -17,13 +17,14 @@ namespace Core.Application.Mappings
             #region product
 
             CreateMap<Product, ProductViewModel>()
+                .ForMember(P => P.User, opt => opt.Ignore())
                 .ReverseMap()
                 .ForMember(P => P.Created, opt => opt.Ignore())
                 .ForMember(P => P.CreatedBy, opt => opt.Ignore())
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore());
 
-            CreateMap<Product, SaveProductViewModel>()
+            CreateMap<Product, SaveProductViewModel>() 
                 .ReverseMap()
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.CreatedBy, opt => opt.Ignore())

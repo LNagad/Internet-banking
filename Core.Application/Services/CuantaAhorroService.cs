@@ -49,7 +49,7 @@ namespace Core.Application.Services
 
         }
 
-        public async Task<SaveCuentaAhorroViewModel> Add( SaveCuentaAhorroViewModel vm, string userId )
+        public async Task<SaveCuentaAhorroViewModel> Add( SaveCuentaAhorroViewModel vm, string userId, bool primary )
         {
             string numeroCuenta = "";
 
@@ -62,7 +62,15 @@ namespace Core.Application.Services
             }
 
             vm.NumeroCuenta = numeroCuenta;
-            vm.Principal = true;
+            
+            if (primary)
+            {
+                vm.Principal = true;
+            }
+            else
+            {
+                vm.Principal = false;
+            }
 
             CuentaAhorro cuenta = _mapper.Map<CuentaAhorro>(vm);
             

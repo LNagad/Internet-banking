@@ -11,6 +11,6 @@ namespace Core.Application.Interfaces.Services
     public interface ICuentaAhorroService : IGenericService<SaveCuentaAhorroViewModel, CuentaAhorroViewModel ,CuentaAhorro>
     {
         Task<CuentaAhorroViewModel> AccountExists(string NumeroCuenta);
-        Task<SaveCuentaAhorroViewModel> Add(SaveCuentaAhorroViewModel vm, string userId);
+        Task<SaveCuentaAhorroViewModel> Add(SaveCuentaAhorroViewModel vm, string userId, bool primary);
     }
 }

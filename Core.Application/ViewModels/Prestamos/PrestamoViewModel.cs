@@ -11,12 +11,12 @@ namespace Core.Application.ViewModels.Prestamos
 
         public double Pago { get; set; }
 
-        public int Debe { get; set; } //1 , 0
+        public double Debe { get; set; } //1 , 0
 
         public double Balance { get; set; }
 
         //navigation property
-        public int IdProduct { get; set; }
+        public string IdProduct { get; set; }
         public ProductViewModel Product { get; set; }
     }
 }

@@ -36,8 +36,7 @@ namespace Internet_Banking.Controllers
             ViewBag.users = await _dashboradService.getAllUsers();
             ViewBag.usuariosActivos = await _dashboradService.usersActives();
             ViewBag.usuariosInactivos = await _dashboradService.usersInactives();
-            ViewBag.Products = await _productService.GetAllTransactions();
-            
+
             return View();
         }
     }

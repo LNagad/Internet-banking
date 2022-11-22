@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Application.Dtos.Account;
 
 namespace Core.Application.Interfaces.Services
 {
@@ -13,6 +14,6 @@ namespace Core.Application.Interfaces.Services
     {
 
         Task<List<ProductViewModel>> GetAllViewModelWithInclude();
-        Task<List<Product>> GetAllTransactions();
+        Task<List<ProductViewModel>> GetAllViewModelWithIncludeById(AuthenticationResponse user);
     }
 }
