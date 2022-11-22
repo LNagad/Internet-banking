@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221120180909_init")]
+    [Migration("20221122215844_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,9 +108,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
@@ -118,10 +115,11 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Debe")
-                        .HasColumnType("int");
+                    b.Property<double>("Debe")
+                        .HasColumnType("float");
 
                     b.Property<string>("IdProduct")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastModified")
@@ -195,9 +193,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
@@ -261,7 +256,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasOne("Core.Domain.Entities.Product", "Product")
                         .WithMany("Prestamos")
                         .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });

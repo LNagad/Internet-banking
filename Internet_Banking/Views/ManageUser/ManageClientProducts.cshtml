@@ -27,7 +27,7 @@
             @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
             {
                 <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
-                <h4>Cuenta principal: @(ahorro.Principal  ? "Cuenta principal" : "Secundaria")</h4>
+                <h4>Cuenta principal: @(ahorro.Principal == true ? "Si" : "No")</h4>
                 <h4>Balance: @ahorro.Balance</h4>
                 @if (@ahorro.Principal==false)
                 {
