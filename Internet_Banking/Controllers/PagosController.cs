@@ -44,7 +44,7 @@ namespace Internet_Banking.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(vm);
+                return View("PagosExpreso/PagosExpresos", vm);
             }
 
             PagoExpressResponse response = await pagosService.PagoExpress(vm);
@@ -54,7 +54,7 @@ namespace Internet_Banking.Controllers
                 vm.HasError= true;
                 vm.Error= response.Error;
 
-                return View(vm); 
+                return View("PagosExpreso/PagosExpresos", vm);
             }
 
             return RedirectToAction("PagoExpresoDetails", response);
@@ -71,12 +71,13 @@ namespace Internet_Banking.Controllers
 
             PagoConfirmedViewModel response = await pagosService.PagosExpresoConfirmed(vm);
 
+
             if (response.HasError)
             {
                 vm.HasError = true;
                 vm.Error = vm.Error;
 
-                return View("PagosExpreso/PagoExpresoDetails", response);
+                return View("PagosExpreso/PagoExpresoDetails", vm);
             }
 
          return RedirectToAction("PagoConfirmed", response);
