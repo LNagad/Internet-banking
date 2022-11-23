@@ -85,12 +85,16 @@ namespace Internet_Banking.Controllers
             {
                 return View("ManageClientProducts");
             }
-            
-            ViewBag.IdUser = Id;
+
+            var cuenta = new SaveCuentaAhorroViewModel();
+
+            cuenta.UserId = Id;
+
+            //ViewBag.IdUser = ""+Id;
             ViewBag.UserName = name;
             ViewBag.lista = await _manageUserService.gettinProductsById(Id);
 
-            return View(new SaveCuentaAhorroViewModel());
+            return View(cuenta);
         }
         
         [HttpPost]
@@ -131,7 +135,7 @@ namespace Internet_Banking.Controllers
             
             await _manageUserService.ManageTarjetaCredito(tarjetaVm);
 
-            return View(new SaveTarjetaCreditoViewModel());
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ErrorMessage()

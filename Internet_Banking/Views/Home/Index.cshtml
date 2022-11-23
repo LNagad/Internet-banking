@@ -39,7 +39,7 @@
     <div class="mt-5 d-flex justify-content-center border border-5">
         <div class="col-11" style="border: 1px solid red">
             <h2>Cuentas</h2>
-            <div class="d-flex">
+            <div class="d-flex flex-wrap">
                 @foreach (ProductViewModel item in ViewBag.lista)
                 {
                     @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
                                 <h4>Cuenta principal: @(ahorro.Principal == true ? "Si" : "No")</h4>
-                                <h4>Balance: @ahorro.Balance</h4>
+                                <h4>Balance: $@ahorro.Balance</h4>
                             </div>
                         </div>
                     }
@@ -64,7 +64,9 @@
                             </div>
                             <div class="card-body">
                                 <h4>Numero de tarjeta: @tarjeta.NumeroTarjeta</h4>
-                                <h4>Limite de la tarjeta: @tarjeta.Limite</h4>
+                                <h4>Limite de la tarjeta: $@tarjeta.Limite</h4>
+                                <h4>Debe: $@tarjeta.Debe</h4>
+                                <h4>Pago: $@tarjeta.Pago</h4>
                             </div>
                         </div>
                     }

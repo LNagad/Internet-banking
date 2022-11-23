@@ -4,7 +4,7 @@
 @model SaveCuentaAhorroViewModel
 
 @{
-    var userId = ViewBag.IdUser;
+  
     var userName = ViewBag.UserName;
 }
 
@@ -13,7 +13,7 @@
     <div>
         <label asp-for="Balance" class="form form-label">Monto de la cuenta de ahorro:</label>
         <input type="number" required class="form form-control" asp-for="Balance" value="">
-        <input type="hidden" asp-for="UserId" value="@userId">
+        <input type="hidden" asp-for="UserId" value="@Model.UserId">
     </div>
     <button type="submit" class="btn btn-primary">Crear</button>
 </form>
@@ -23,7 +23,6 @@
         <h2>Cuentas que tiene el usuario @userName :</h2>
         @foreach(ProductViewModel item in ViewBag.lista)
         {
-            <h4>@($"{item.User.FirstName}")</h4>
             @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
             {
                 <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>

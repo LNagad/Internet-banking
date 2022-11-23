@@ -51,6 +51,8 @@ public class ManageUserService : IManageUserService
     {
         var userGot = await _userManager.FindByIdAsync(tarjetaVm.UserId);
 
+        tarjetaVm.Debe = tarjetaVm.Limite;
+
         var something = await _tarjetaCreditoService.AddTarjetaCredito(tarjetaVm);
     
         return ""; 
