@@ -1,6 +1,8 @@
 ﻿using Core.Application.Dtos.Pagos;
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
+using Core.Application.ViewModels.Products;
+using Core.Application.ViewModels.TarjetaCreditos;
 
 namespace Core.Application.Interfaces.Services
 {
@@ -8,5 +10,7 @@ namespace Core.Application.Interfaces.Services
     {
         Task<PagoExpressResponse> PagoExpress(SavePagoExpresoViewModel vm);
         Task<PagoConfirmedViewModel> PagosExpresoConfirmed(PagoExpressResponse vm);
+
+        Task<List<TarjetaCreditoViewModel>> GetAllTarjetasProductViewModel(string id);
     }
 }

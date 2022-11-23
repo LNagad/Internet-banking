@@ -16,7 +16,7 @@ public class Product : AuditableBaseEntity
     public bool? Primary { get; set; } // 1 = True, 0 = False
     
     //Navigation properties
-    public ICollection<CuentaAhorro>? CuentaAhorros { get; set; }
-    public ICollection<TarjetaCredito>? TarjetaCreditos { get; set; }
-    public ICollection<Prestamo>? Prestamos { get; set; }
+    public CuentaAhorro? CuentaAhorros { get; set; }
+    public TarjetaCredito? TarjetaCreditos { get; set; }
+    public Prestamo? Prestamos { get; set; }
 }

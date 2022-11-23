@@ -10,6 +10,8 @@ namespace Core.Application.ViewModels.TarjetaCreditos
 {
     public class TarjetaCreditoViewModel
     {
+        public string Id { get; set; }
+
         public string NumeroTarjeta { get; set; }
 
         public double Limite { get; set; }

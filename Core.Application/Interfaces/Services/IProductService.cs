@@ -14,6 +14,6 @@ namespace Core.Application.Interfaces.Services
     {
 
         Task<List<ProductViewModel>> GetAllViewModelWithInclude();
-        Task<List<ProductViewModel>> GetAllViewModelWithIncludeById(AuthenticationResponse user);
+        Task<List<ProductViewModel>> GetAllViewModelWithIncludeById(string id);
     }
 }

@@ -4,6 +4,8 @@ using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
+using Core.Application.ViewModels.Products;
+using Core.Application.ViewModels.TarjetaCreditos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,20 +16,21 @@ namespace Core.Application.Services
 {
     public class PagosService : IPagosService
     {
-        private readonly ICuentaAhorroService cuentaAhorroService;
-        private readonly IProductService productService;
-        private readonly IDashboradService userService;
+        private readonly ICuentaAhorroService _cuentaAhorroService;
+        private readonly IProductService _productService;
+        private readonly IDashboradService _userService;
         private readonly IMapper _mapper;
 
         public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, IDashboradService userService, IMapper mapper)
         {
-            this.cuentaAhorroService = cuentaAhorroService;
-            this.productService = productService;
-            this.userService = userService;
+            _cuentaAhorroService = cuentaAhorroService;
+            _productService = productService;
+            _userService = userService;
             _mapper = mapper;
         }
 
-
+        #region pagosExpresosos
+        
         public async Task<PagoExpressResponse> PagoExpress(SavePagoExpresoViewModel vm)
         {
             PagoExpressResponse response = new();
@@ -37,7 +40,7 @@ namespace Core.Application.Services
             parsedMonto = Math.Round(parsedMonto, 2);
 
 
-            CuentaAhorroViewModel cuentaOrigen = await cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
 
             if (cuentaOrigen == null)
             {
@@ -46,7 +49,7 @@ namespace Core.Application.Services
                 return response;
             }
 
-            CuentaAhorroViewModel cuentaDestino = await cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
+            CuentaAhorroViewModel cuentaDestino = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
 
 
             if (cuentaDestino == null)
@@ -63,8 +66,8 @@ namespace Core.Application.Services
                 return response;
             }
 
-            var userOrigen = await userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
-            var userDestino = await userService.getUserAndInformation(cuentaDestino.Product.IdUser);
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+            var userDestino = await _userService.getUserAndInformation(cuentaDestino.Product.IdUser);
 
 
             response.FirstNameOrigen = userOrigen.FirstName;
@@ -85,7 +88,7 @@ namespace Core.Application.Services
             PagoConfirmedViewModel response = new();
             response.HasError = false;
 
-            CuentaAhorroViewModel cuentaOrigen = await cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
 
 
             if (cuentaOrigen == null)
@@ -97,7 +100,7 @@ namespace Core.Application.Services
 
             var cuentaOrigenVM = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
 
-            CuentaAhorroViewModel cuentaDestino = await cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
+            CuentaAhorroViewModel cuentaDestino = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
 
             if (cuentaDestino == null)
             {
@@ -112,11 +115,11 @@ namespace Core.Application.Services
 
             cuentaOrigenVM.Balance -= vm.Monto;
 
-            await cuentaAhorroService.Update(cuentaOrigenVM, cuentaOrigenVM.Id);
+            await _cuentaAhorroService.Update(cuentaOrigenVM, cuentaOrigenVM.Id);
 
             cuentaDestinoVM.Balance += vm.Monto;
 
-            await cuentaAhorroService.Update(cuentaDestinoVM, cuentaDestinoVM.Id);
+            await _cuentaAhorroService.Update(cuentaDestinoVM, cuentaDestinoVM.Id);
 
 
             //Transaction Create transactin Id
@@ -138,6 +141,27 @@ namespace Core.Application.Services
             return response;
         }
 
+        #endregion
+
+        #region PagosTarjeta
+
+        public async Task<List<TarjetaCreditoViewModel>> GetAllTarjetasProductViewModel(string id)
+        {
+            var products = await _productService.GetAllViewModelWithIncludeById(id);
+
+            return products.Where(p => p.isTarjetaCredito == true).Select(p => new TarjetaCreditoViewModel
+            {
+                Id = p.TarjetaCreditos.Id,
+                NumeroTarjeta = p.TarjetaCreditos.NumeroTarjeta,
+                Limite = p.TarjetaCreditos.Limite,
+                Pago = p.TarjetaCreditos.Pago,
+                Debe = p.TarjetaCreditos.Debe,
+                Idproduct = p.TarjetaCreditos.Idproduct,
+                Product = p.TarjetaCreditos.Product
+            }).ToList();
+        }
+
+        #endregion
     }
-  
+
 }
