@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Core.Application.Dtos.Pagos;
+using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
+using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.TarjetaCreditos;
 using System;
@@ -17,16 +19,22 @@ namespace Core.Application.Services
     public class PagosService : IPagosService
     {
         private readonly ICuentaAhorroService _cuentaAhorroService;
+        private readonly ITarjetaCreditoService _tarjetaCreditoService;
         private readonly IProductService _productService;
         private readonly IDashboradService _userService;
         private readonly IMapper _mapper;
 
-        public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, IDashboradService userService, IMapper mapper)
+        private readonly ITarjetaCreditoRepository _tarjetaRepo;
+
+        public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, 
+            IDashboradService userService, IMapper mapper, ITarjetaCreditoService tarjetaCreditoService, ITarjetaCreditoRepository tarjetaRepo)
         {
             _cuentaAhorroService = cuentaAhorroService;
             _productService = productService;
             _userService = userService;
             _mapper = mapper;
+            _tarjetaCreditoService= tarjetaCreditoService;
+            _tarjetaRepo = tarjetaRepo;
         }
 
         #region pagosExpresosos
@@ -160,6 +168,80 @@ namespace Core.Application.Services
                 Product = p.TarjetaCreditos.Product
             }).ToList();
         }
+
+        public async Task<PagoTarjetaResponse> ValidationPaymentTarjeta(SavePagoTarjetaViewModel pagoVm)
+        {
+            PagoTarjetaResponse response = new();
+            response.HasError = false;
+
+            var getTarjeta = await _tarjetaRepo.TarjetaExist(pagoVm.idProduct);
+
+            double parsedMonto = double.Parse(pagoVm.Monto);
+
+
+            if (getTarjeta == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta seleccionada no existe";
+
+                return response;
+            }
+
+            double debeTarjeta = getTarjeta.Debe;
+
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(pagoVm.NumeroCuentaOrigen);
+            double cuentaBalance = cuentaOrigen.Balance;
+
+            if (parsedMonto > cuentaBalance)
+            {
+                response.HasError = true;
+                response.Error = "Usted no cuenta con los fondos suficientes para esta transaccion";
+
+                return response;
+            }
+
+            if (parsedMonto > debeTarjeta)
+            {
+                parsedMonto = debeTarjeta;
+
+                cuentaBalance -= debeTarjeta;
+
+                debeTarjeta = 0;
+
+                
+            } else
+            {
+                cuentaBalance -= parsedMonto;
+
+                debeTarjeta -= parsedMonto;
+            }
+
+            //updating
+
+            cuentaOrigen.Balance = cuentaBalance;
+
+            var cuentaOrigenVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
+
+            await _cuentaAhorroService.Update(cuentaOrigenVm, cuentaOrigenVm.Id);
+
+            SaveTarjetaCreditoViewModel tarjeta = new();
+            tarjeta.Id = getTarjeta.Id;
+            tarjeta.Debe = debeTarjeta;
+            tarjeta.Pago = getTarjeta.Pago + parsedMonto;
+
+
+            await _tarjetaCreditoService.Update(tarjeta, tarjeta.Id);
+
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+            response.FirstNameOrigen = userOrigen.FirstName;
+            response.LastNameOrigen = userOrigen.LastName;
+            response.LastTarjetaCredito = getTarjeta.NumeroTarjeta;
+            response.Monto= parsedMonto;
+            response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
+
+            return response;
+        }
+
 
         #endregion
     }

@@ -79,5 +79,19 @@ namespace Core.Application.Services
                 isPrestamo = product.isPrestamo
             }).ToList();
         }
+
+
+        public async Task<ProductViewModel> ProductExist(string productId)
+        {
+            Product cuenta = await _repository.AccountExists(productId);
+
+            if (cuenta != null)
+            {
+                return _mapper.Map<ProductViewModel>(cuenta);
+            }
+
+            return null;
+
+        }
     }
 }

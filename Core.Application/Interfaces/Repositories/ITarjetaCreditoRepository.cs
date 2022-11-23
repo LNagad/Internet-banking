@@ -9,5 +9,6 @@ namespace Core.Application.Interfaces.Repositories
 {
     public interface ITarjetaCreditoRepository : IGenericRepository<TarjetaCredito>
     {
+        Task<TarjetaCredito> TarjetaExist(string productId);
     }
 }

@@ -2,6 +2,7 @@
 using Core.Application.Dtos.Account;
 using Core.Application.ViewModels.Beneficiarios;
 using Core.Application.ViewModels.CuentaAhorros;
+using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.TarjetaCreditos;
@@ -75,7 +76,16 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.CreatedBy, opt => opt.Ignore())
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
-                .ForMember(P => P.Product, opt => opt.Ignore());
+                .ForMember(P => P.Product, opt => opt.Ignore()); 
+
+
+            //CreateMap<SaveTarjetaCreditoViewModel, SavePagoTarjetaViewModel>()
+            //    .ReverseMap()
+            //    .ForMember(P => P.Created, opt => opt.Ignore())
+            //    .ForMember(P => P.CreatedBy, opt => opt.Ignore())
+            //    .ForMember(P => P.LastModified, opt => opt.Ignore())
+            //    .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
+            //    .ForMember(P => P.Product, opt => opt.Ignore()); 
 
             #endregion
 

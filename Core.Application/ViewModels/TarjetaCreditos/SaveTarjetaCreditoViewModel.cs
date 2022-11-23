@@ -9,6 +9,7 @@ namespace Core.Application.ViewModels.TarjetaCreditos
     public class SaveTarjetaCreditoViewModel
     {
         //faltan verificaciones ( en espera )
+        public string? Id { get; set; }
         public string NumeroTarjeta { get; set; }
 
         public double Limite { get; set; }

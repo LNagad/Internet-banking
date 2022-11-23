@@ -128,9 +128,27 @@ namespace Internet_Banking.Controllers
                 return View("PagoTarjetaCredito/EnvioPagoTarjeta", vm);
             }
 
+            var response = await _pagosService.ValidationPaymentTarjeta(vm);
 
+            if (response.HasError == true)
+            {
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+                return View("PagoTarjetaCredito/EnvioPagoTarjeta", vm);
+            }
 
-            return null;
+            PagoConfirmedViewModel resultado = new();
+
+            resultado.isTarjetaCredito = true;
+            resultado.isCuentaAhorro = false;
+            resultado.isPrestamo = false;
+
+            resultado.FirstNameOrigen = response.FirstNameOrigen;
+            resultado.LastNameOrigen = response.LastNameOrigen;
+            resultado.LastTarjetaCredito = response.LastTarjetaCredito;
+            resultado.Monto = response.Monto;
+            resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+
+            return RedirectToAction("PagoConfirmed", resultado);
         }
 
         #endregion

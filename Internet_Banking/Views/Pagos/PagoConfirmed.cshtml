@@ -32,9 +32,29 @@
                     </div>
 
                     <div class="form-outline mb-4">
-                        <h3>Origen</h3>
+                        <h3>Destino</h3>
                         <label>@Model.FirstNameDestino @Model.LastNameDestino</label>
                         <label>@Model.NumeroCuentaDestino</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h4 class="me-2">Monto enviado</h4>
+                        <label>$@Model.Monto</label>
+                    </div>
+                }
+
+                 @if (Model.isTarjetaCredito == true)
+                {
+                    <div class="form-outline mb-4">
+                        <h3>Enviado desde</h3>
+                        <label>@Model.FirstNameOrigen @Model.LastNameOrigen</label>
+                        <label>@Model.NumeroCuentaOrigen</label>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <h3>Destino</h3>
+                        <label>@Model.FirstNameDestino @Model.LastNameDestino</label>
+                        <label>Tarjeta: @Model.LastTarjetaCredito</label>
                     </div>
 
                     <div class="form-outline mb-4">
