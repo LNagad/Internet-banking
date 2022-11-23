@@ -1,0 +1,17 @@
+@using Core.Application.ViewModels.Prestamos;
+@model SavePrestamoViewModel
+@{
+    var userId = ViewBag.UserId;
+}
+
+<h2> Prestamos Clientes </h2>
+
+<form method="post" asp-action="ManagePrestamo" asp-controller="ManageUser" asp-route-UserId="@userId">
+    
+    <div>
+        <label asp-for="Monto" class="form form-label">Monto del prestamo</label>
+        <input class="form form-control" type="number" required value="" asp-for="Monto">
+    </div> 
+   
+    <button class="btn btn-primary">Obtener prestamo</button> 
+</form>

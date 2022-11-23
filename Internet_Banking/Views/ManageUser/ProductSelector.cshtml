@@ -1,3 +1,5 @@
+@using Core.Application.ViewModels.Products
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 <h2>Selecciona el producto que quieres agregar al usuario</h2>
 
 <div class="mx-auto">
@@ -12,10 +14,68 @@
            asp-action="ManageTarjetaCredito"
            asp-route-Id="@ViewBag.UserId">Tarjeta de creditos</a>
         
-        <a class="btn btn-primary m-1">Prestamo</a>
+        <a class="btn btn-primary m-1" asp-controller="ManageUser"
+           asp-action="ManagePrestamo"
+           asp-route-UserId="@ViewBag.UserId">Prestamo</a>
     </div>
 </div>
 
 <div class="border border-dark border-1 m-1 p1">
+    <h4>Lista de productos de @ViewBag.UserName</h4>
     
+    
+    <div class="d-flex justify-content-center border border-5">
+        
+        @foreach (ProductViewModel item in ViewBag.lista)
+        {
+            if (item.CuentaAhorros != null)
+            {
+                <div class="text-white d-flex flex-column align-items-center justify-content-center border border-1 border-danger m-2 p-2 rounded bg-dark">
+                    <h2><strong>Cuenta de ahorro</strong></h2>
+                    <div>
+                        <h4>Numero de cuenta: @item.CuentaAhorros.NumeroCuenta</h4>
+                        <h4>@(item.CuentaAhorros.Principal == true ? "Cuenta Principal" : "Cuenta Secundaria")</h4>
+                        <h4>Balance: @item.CuentaAhorros.Balance</h4>
+                    </div>
+                    @if (@item.CuentaAhorros.Principal == false)
+                    {
+                        <a class="btn btn-danger" asp-action="DeleteCuentaById" asp-controller="ManageUser" asp-route-Id="@item.Id" asp-route-CuentaMonto="@item.CuentaAhorros.Balance" asp-route-tipo="@item.isCuentaAhorro">Eliminar</a>
+                    }
+                </div>
+            }
+        }
+        @foreach (ProductViewModel item in ViewBag.lista)
+        {
+            if (item.TarjetaCreditos != null)
+            {
+                <div class="text-white d-flex flex-column align-items-center justify-content-center border border-1 border-danger m-2 p-2 rounded bg-dark">
+                    <h2><strong>Tarjeta de credito</strong></h2>
+                    <div>
+                        <h4>Numero de terjeta: @item.TarjetaCreditos.NumeroTarjeta</h4>
+                        <h4>Limite: @item.TarjetaCreditos.Limite</h4>
+                        <h4>Debe: @item.TarjetaCreditos.Debe</h4>
+                        <h4>Pago: @item.TarjetaCreditos.Pago</h4>
+                    </div>
+                    <a class="btn btn-danger" asp-action="DeleteCuentaById" asp-controller="ManageUser" asp-route-Id="@item.Id" asp-route-CuentaMonto="@item.TarjetaCreditos.Limite" asp-route-tipo="@false">Eliminar</a>
+                </div>
+            }
+        }
+        @foreach (ProductViewModel item in ViewBag.lista)
+        {
+            if (item.Prestamos != null)
+            {
+                <div class="text-white d-flex flex-column align-items-center justify-content-center border border-1 border-danger m-2 p-2 rounded bg-dark">
+                    <h2><strong>Prestamos</strong></h2>
+                    <div>
+                        <h4>Numero de prestamo: @item.Prestamos.NumeroPrestamo</h4>
+                        <h4>Monto: @item.Prestamos.Monto</h4>
+                        <h4>Debe: @item.Prestamos.Debe</h4>
+                        <h4>Pago: @item.Prestamos.Pago</h4>
+                    </div>
+                    <a class="btn btn-danger" asp-action="DeleteCuentaById" asp-controller="ManageUser" asp-route-Id="@item.Id" asp-route-CuentaMonto="@item.Prestamos.Balance" asp-route-tipo="@false">Eliminar</a>
+                </div>
+            }
+        }
+
+    </div>
 </div>

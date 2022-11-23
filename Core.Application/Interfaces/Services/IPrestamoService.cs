@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Application.ViewModels.CuentaAhorros;
 
 namespace Core.Application.Interfaces.Services
 {
-    internal interface IPrestamoService : IGenericService<SavePrestamoViewModel, PrestamoViewModel ,Prestamo>
+    public interface IPrestamoService : IGenericService<SavePrestamoViewModel, PrestamoViewModel ,Prestamo>
     {
-
+        Task<SavePrestamoViewModel> AddCuentaAhorro(SavePrestamoViewModel prestamoVm, string userId); 
     }
 }

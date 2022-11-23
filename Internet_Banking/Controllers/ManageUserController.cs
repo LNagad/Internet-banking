@@ -1,6 +1,7 @@
 using Core.Application.Dtos.Account;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.CuentaAhorros;
+using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.TarjetaCreditos;
 using Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -15,15 +16,17 @@ namespace Internet_Banking.Controllers
         private readonly IDashboradService _dashboradService;
         private readonly ICuentaAhorroService _cuentaAhorro;
         private readonly IProductService _productService;
-        private readonly IManageUserService _manageUserService; 
+        private readonly IManageUserService _manageUserService;
+        private readonly IPrestamoService _prestamoService;
 
         public ManageUserController( IDashboradService dashboradService, ICuentaAhorroService cuentaAhorro,
-            IProductService service, IManageUserService manageUserService)
+            IProductService service, IManageUserService manageUserService, IPrestamoService servicePrestamo)
         {
             _dashboradService = dashboradService;
             _cuentaAhorro = cuentaAhorro;
             _productService = service;
-            _manageUserService = manageUserService; 
+            _manageUserService = manageUserService;
+            _prestamoService = servicePrestamo;
         }
         
         public async Task<IActionResult> Index()
@@ -70,6 +73,8 @@ namespace Internet_Banking.Controllers
             ViewBag.UserName = name;
             ViewBag.Status = status;
             
+            ViewBag.lista = await _manageUserService.gettinProductsById(Id);
+            
             return View();
         }
 
@@ -89,10 +94,7 @@ namespace Internet_Banking.Controllers
             var cuenta = new SaveCuentaAhorroViewModel();
 
             cuenta.UserId = Id;
-
-            //ViewBag.IdUser = ""+Id;
             ViewBag.UserName = name;
-            ViewBag.lista = await _manageUserService.gettinProductsById(Id);
 
             return View(cuenta);
         }
@@ -107,11 +109,11 @@ namespace Internet_Banking.Controllers
             return View("Index", new AuthenticationResponse());
         }
 
-        public async Task<IActionResult> DeleteCuentaById( string Id )
+        public async Task<IActionResult> DeleteCuentaById( string Id, double CuentaMonto, bool tipo) //DELETE PRODUCT* BY ID
         {
             ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
-
-            await _productService.Delete(Id);
+            
+            await _manageUserService.DeletingCuentaAhorro(Id, CuentaMonto, tipo);
             
             return View("Index", new AuthenticationResponse());
         }
@@ -138,6 +140,27 @@ namespace Internet_Banking.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> ManagePrestamo( string UserId )
+        {
+            var prestamoObj = new SavePrestamoViewModel();
+
+            ViewBag.UserId = UserId;
+            
+            return View(prestamoObj);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ManagePrestamo( SavePrestamoViewModel prestamoVm, string UserId )
+        {
+            var prestamoObj = new SavePrestamoViewModel();
+
+            var prestamoFinal = await _prestamoService.AddCuentaAhorro(prestamoVm, UserId);
+
+            await _manageUserService.addPrestamoToUser(prestamoFinal, UserId);
+            
+            return View(prestamoObj);
+        }
+        
         public async Task<IActionResult> ErrorMessage()
         {
             return View("Index", new AuthenticationResponse());

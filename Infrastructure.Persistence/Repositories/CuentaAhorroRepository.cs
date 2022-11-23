@@ -41,7 +41,6 @@ namespace Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(p => p.NumeroCuenta == NumeroCuenta);
 
             return cuenta;
-
         }
     }
 }
