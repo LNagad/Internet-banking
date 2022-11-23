@@ -12,7 +12,7 @@ namespace Core.Application.Interfaces.Services
 {
     public interface IProductService : IGenericService<SaveProductViewModel, ProductViewModel ,Product>
     {
-
+        Task<ProductViewModel> ProductExist(string productId);
         Task<List<ProductViewModel>> GetAllViewModelWithInclude();
         Task<List<ProductViewModel>> GetAllViewModelWithIncludeById(string id);
     }

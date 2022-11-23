@@ -48,5 +48,12 @@ namespace Infrastructure.Persistence.Repositories
             return lista;
         }
 
+        public async Task<Product> AccountExists(string productId)
+        {
+            Product cuenta = await _dbContext.Set<Product>()
+                .FirstOrDefaultAsync(p => p.Id == productId);
+
+            return cuenta;
+        }
     }
 }
