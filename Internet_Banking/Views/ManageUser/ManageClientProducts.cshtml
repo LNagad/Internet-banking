@@ -2,9 +2,7 @@
 @using Core.Application.ViewModels.CuentaAhorros;
 @using Core.Application.ViewModels.Products
 @model SaveCuentaAhorroViewModel
-
 @{
-  
     var userName = ViewBag.UserName;
 }
 
@@ -17,22 +15,3 @@
     </div>
     <button type="submit" class="btn btn-primary">Crear</button>
 </form>
-
-<div class="mt-5 d-flex justify-content-center border border-5">
-    <div class="col-11" style="border: 1px solid red">
-        <h2>Cuentas que tiene el usuario @userName :</h2>
-        @foreach(ProductViewModel item in ViewBag.lista)
-        {
-            if (item.CuentaAhorros != null)
-            {
-                <h4>Numero de cuenta: @item.CuentaAhorros.NumeroCuenta</h4>
-                <h4>Cuenta principal: @(item.CuentaAhorros.Principal == true ? "Si" : "No")</h4>
-                <h4>Balance: @item.CuentaAhorros.Balance</h4>
-                @if (@item.CuentaAhorros.Principal == false)
-                {
-                    <a class="btn btn-danger" asp-action="DeleteCuentaById" asp-controller="ManageUser" asp-route-Id="@item.Id">Eliminar</a>
-                }
-            }
-        }
-    </div>
-</div>
