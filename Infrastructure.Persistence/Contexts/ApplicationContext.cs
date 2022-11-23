@@ -9,7 +9,7 @@ namespace Infrastructure.Persistence.Contexts;
 public class ApplicationContext : DbContext
 {
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
-    
+
     //Entities
     public DbSet<Beneficiario> Beneficiarios { get; set; }
     public DbSet<CuentaAhorro> CuentaAhorros { get; set; }
@@ -43,44 +43,44 @@ public class ApplicationContext : DbContext
     {
         #region Tables
 
-            modelBuilder.Entity<Beneficiario>().ToTable("Beneficiarios");
-            modelBuilder.Entity<CuentaAhorro>().ToTable("CuentaAhorros");
-            modelBuilder.Entity<Prestamo>().ToTable("Prestamos");
-            modelBuilder.Entity<Product>().ToTable("Products");
-            modelBuilder.Entity<TarjetaCredito>().ToTable("TarjetaCreditos");
+        modelBuilder.Entity<Beneficiario>().ToTable("Beneficiarios");
+        modelBuilder.Entity<CuentaAhorro>().ToTable("CuentaAhorros");
+        modelBuilder.Entity<Prestamo>().ToTable("Prestamos");
+        modelBuilder.Entity<Product>().ToTable("Products");
+        modelBuilder.Entity<TarjetaCredito>().ToTable("TarjetaCreditos");
 
         #endregion
-        
+
         #region PrimaryKeys
-        
-            modelBuilder.Entity<Beneficiario>().HasKey(x => x.Id);
-            modelBuilder.Entity<CuentaAhorro>().HasKey(x => x.Id);
-            modelBuilder.Entity<Prestamo>().HasKey(x => x.Id);
-            modelBuilder.Entity<Product>().HasKey(x => x.Id);
-            modelBuilder.Entity<TarjetaCredito>().HasKey(x => x.Id);
-            
-            
+
+        modelBuilder.Entity<Beneficiario>().HasKey(x => x.Id);
+        modelBuilder.Entity<CuentaAhorro>().HasKey(x => x.Id);
+        modelBuilder.Entity<Prestamo>().HasKey(x => x.Id);
+        modelBuilder.Entity<Product>().HasKey(x => x.Id);
+        modelBuilder.Entity<TarjetaCredito>().HasKey(x => x.Id);
+
+
         #endregion
-        
+
         #region RelationShips
-            
-            modelBuilder.Entity<Product>()
-                .HasMany<CuentaAhorro>( P => P.CuentaAhorros)
-                .WithOne( CA => CA.Product)
-                .HasForeignKey( CA => CA.IdProduct)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<Product>()
-                .HasMany<TarjetaCredito>( P => P.TarjetaCreditos)
-                .WithOne( TC => TC.Product)
-                .HasForeignKey( TC => TC.IdProduct)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<Product>()
-                .HasMany<Prestamo>( P => P.Prestamos)
-                .WithOne( PS => PS.Product)
-                .HasForeignKey( PS => PS.IdProduct) 
-                .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Product>()
+            .HasOne(P => P.CuentaAhorros)
+            .WithOne(CA => CA.Product)
+            .HasForeignKey<CuentaAhorro>(CA => CA.IdProduct)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Product>()
+            .HasOne(P => P.TarjetaCreditos)
+            .WithOne(TC => TC.Product)
+            .HasForeignKey<TarjetaCredito>(TC => TC.IdProduct)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Product>()
+            .HasOne(P => P.Prestamos)
+            .WithOne(PS => PS.Product)
+            .HasForeignKey<Prestamo>(PS => PS.IdProduct)
+            .OnDelete(DeleteBehavior.Cascade);
 
 
         //beneficiarios
@@ -90,32 +90,32 @@ public class ApplicationContext : DbContext
                 .HasForeignKey(B => B.IdCuentaAhorro)
                 .OnDelete(DeleteBehavior.Cascade);
         #endregion
-        
+
         #region PropertyConfigurations
 
-            #region Beneficiario
-            modelBuilder.Entity<Beneficiario>()
-                .Property(x => x.NumeroCuenta)
-                .IsRequired();
+        #region Beneficiario
+        modelBuilder.Entity<Beneficiario>()
+            .Property(x => x.NumeroCuenta)
+            .IsRequired();
 
-            modelBuilder.Entity<Beneficiario>()
-                .Property(x => x.IdUser)
-                .IsRequired();
-            #endregion
-            
-            #region CuentaAhorro
+        modelBuilder.Entity<Beneficiario>()
+            .Property(x => x.IdUser)
+            .IsRequired();
+        #endregion
 
-            modelBuilder.Entity<CuentaAhorro>()
-                .Property(x => x.Balance)
-                .IsRequired();
+        #region CuentaAhorro
 
-            modelBuilder.Entity<CuentaAhorro>()
-                .Property(x => x.Principal)
-                .IsRequired();
-            
-            modelBuilder.Entity<CuentaAhorro>()
-                .Property(x => x.NumeroCuenta)
-                .IsRequired();
+        modelBuilder.Entity<CuentaAhorro>()
+            .Property(x => x.Balance)
+            .IsRequired();
+
+        modelBuilder.Entity<CuentaAhorro>()
+            .Property(x => x.Principal)
+            .IsRequired();
+
+        modelBuilder.Entity<CuentaAhorro>()
+            .Property(x => x.NumeroCuenta)
+            .IsRequired();
 
         modelBuilder.Entity<CuentaAhorro>()
                 .Property(x => x.IdProduct)
@@ -124,62 +124,62 @@ public class ApplicationContext : DbContext
         #endregion
 
         #region Prestamo
-            
-            modelBuilder.Entity<Prestamo>()
-                .Property(x => x.Debe)
-                .IsRequired();
-            
-            modelBuilder.Entity<Prestamo>()
-                .Property(x => x.Monto)
-                .IsRequired();
-            
-            modelBuilder.Entity<Prestamo>()
-                .Property(x => x.Pago)
-                .IsRequired();
 
-            modelBuilder.Entity<Prestamo>()
-                .Property(x => x.NumeroPrestamo)
-                .IsRequired();
-            
-            #endregion
-            
-            #region Product
+        modelBuilder.Entity<Prestamo>()
+            .Property(x => x.Debe)
+            .IsRequired();
 
-            modelBuilder.Entity<Product>()
-                .Property(x => x.Primary)
-                .IsRequired();
-            
-            
-            modelBuilder.Entity<Product>()
-                .Property(x => x.IdUser)
-                .IsRequired();
+        modelBuilder.Entity<Prestamo>()
+            .Property(x => x.Monto)
+            .IsRequired();
 
-            modelBuilder.Entity<Product>()
-                .Property(x => x.IdProductType)
-                .IsRequired(false);
+        modelBuilder.Entity<Prestamo>()
+            .Property(x => x.Pago)
+            .IsRequired();
 
-            #endregion
-            
-            #region TarjetaCredito
-            
-            modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.Debe)
-                .IsRequired();
-            
-            modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.Limite)
-                .IsRequired();
-            
-            modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.Pago)
-                .IsRequired();
-            
-            modelBuilder.Entity<TarjetaCredito>()
-                .Property(x => x.NumeroTarjeta)
-                .IsRequired();
-            
-            #endregion
+        modelBuilder.Entity<Prestamo>()
+            .Property(x => x.NumeroPrestamo)
+            .IsRequired();
 
-            #endregion
+        #endregion
+
+        #region Product
+
+        modelBuilder.Entity<Product>()
+            .Property(x => x.Primary)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Product>()
+            .Property(x => x.IdUser)
+            .IsRequired();
+
+        modelBuilder.Entity<Product>()
+            .Property(x => x.IdProductType)
+            .IsRequired(false);
+
+        #endregion
+
+        #region TarjetaCredito
+
+        modelBuilder.Entity<TarjetaCredito>()
+            .Property(x => x.Debe)
+            .IsRequired();
+
+        modelBuilder.Entity<TarjetaCredito>()
+            .Property(x => x.Limite)
+            .IsRequired();
+
+        modelBuilder.Entity<TarjetaCredito>()
+            .Property(x => x.Pago)
+            .IsRequired();
+
+        modelBuilder.Entity<TarjetaCredito>()
+            .Property(x => x.NumeroTarjeta)
+            .IsRequired();
+
+        #endregion
+
+        #endregion
     }
 }

@@ -25,14 +25,16 @@ namespace Core.Application.Services
         private readonly IMapper _mapper;
         private IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationResponse _user;
+        private readonly IDashboradService _dashboardService;
 
         public ProductService(IProductRepository repository, 
-            IHttpContextAccessor httpContextAccessor, IMapper mapper) : base(repository, mapper)
+            IHttpContextAccessor httpContextAccessor, IMapper mapper, IDashboradService dashboardService) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.Get<AuthenticationResponse>("user");
+            _dashboardService = dashboardService;
         }
 
         public async Task<List<ProductViewModel>> GetAllViewModelWithInclude()
@@ -54,9 +56,11 @@ namespace Core.Application.Services
             }).ToList();
         }
         
-        public async Task<List<ProductViewModel>> GetAllViewModelWithIncludeById( AuthenticationResponse user )
+        public async Task<List<ProductViewModel>> GetAllViewModelWithIncludeById( string id )
         {
             var productListX = await _repository.GetAllWithInclude(new List<string> { "CuentaAhorros", "TarjetaCreditos", "Prestamos" });
+
+            var user = await _dashboardService.getUserAndInformation(id);
 
             List<ProductViewModel> productMapped = _mapper.Map<List<ProductViewModel>>(productListX);
 
@@ -70,6 +74,9 @@ namespace Core.Application.Services
                 Prestamos = product.Prestamos,
                 TarjetaCreditos = product.TarjetaCreditos,
                 User = user,
+                isCuentaAhorro = product.isCuentaAhorro,
+                isTarjetaCredito = product.isTarjetaCredito,
+                isPrestamo = product.isPrestamo
             }).ToList();
         }
     }

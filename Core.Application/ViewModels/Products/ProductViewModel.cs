@@ -26,8 +26,8 @@ namespace Core.Application.ViewModels.Products
         public AuthenticationResponse User { get; set; }
 
         //Navigation properties
-        public List<CuentaAhorroViewModel> CuentaAhorros { get; set; }
-        public List<TarjetaCreditoViewModel> TarjetaCreditos { get; set; }
-        public List<PrestamoViewModel> Prestamos { get; set; }
+        public CuentaAhorroViewModel CuentaAhorros { get; set; }
+        public TarjetaCreditoViewModel TarjetaCreditos { get; set; }
+        public PrestamoViewModel Prestamos { get; set; }
     }
 }

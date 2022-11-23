@@ -42,7 +42,7 @@ public class ManageUserService : IManageUserService
             Status = userGot.Status,
         };
 
-        List<ProductViewModel> getList = await _product.GetAllViewModelWithIncludeById(userAuth);
+        List<ProductViewModel> getList = await _product.GetAllViewModelWithIncludeById(userAuth.Id);
 
         return getList; 
     }

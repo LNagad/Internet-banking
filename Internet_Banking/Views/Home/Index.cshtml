@@ -42,31 +42,31 @@
             <div class="d-flex flex-wrap">
                 @foreach (ProductViewModel item in ViewBag.lista)
                 {
-                    @foreach (CuentaAhorroViewModel ahorro in item.CuentaAhorros)
+                    if(item.CuentaAhorros != null)
                     {
                         <div class="me-3 card">
                             <div class="card-header bg-dark">
                                 <h4 class="text-white">Cuenta de ahorro</h4>
                             </div>
                             <div class="card-body">
-                                <h4>Numero de cuenta: @ahorro.NumeroCuenta</h4>
-                                <h4>Cuenta principal: @(ahorro.Principal == true ? "Si" : "No")</h4>
-                                <h4>Balance: $@ahorro.Balance</h4>
+                                <h4>Numero de cuenta: @item.CuentaAhorros.NumeroCuenta</h4>
+                                <h4>Cuenta principal: @(item.CuentaAhorros.Principal == true ? "Si" : "No")</h4>
+                                <h4>Balance: $@item.CuentaAhorros.Balance</h4>
                             </div>
                         </div>
                     }
 
-                    @foreach (TarjetaCreditoViewModel tarjeta in item.TarjetaCreditos)
+                    if (item.TarjetaCreditos != null)
                     {
                         <div class="me-3 card">
                             <div class="card-header bg-dark">
                                 <h4 class="text-white">Tarjeta de credito</h4>
                             </div>
                             <div class="card-body">
-                                <h4>Numero de tarjeta: @tarjeta.NumeroTarjeta</h4>
-                                <h4>Limite de la tarjeta: $@tarjeta.Limite</h4>
-                                <h4>Debe: $@tarjeta.Debe</h4>
-                                <h4>Pago: $@tarjeta.Pago</h4>
+                                <h4>Numero de tarjeta: @item.TarjetaCreditos.NumeroTarjeta</h4>
+                                <h4>Limite de la tarjeta: $@item.TarjetaCreditos.Limite</h4>
+                                <h4>Debe: $@item.TarjetaCreditos.Debe</h4>
+                                <h4>Pago: $@item.TarjetaCreditos.Pago</h4>
                             </div>
                         </div>
                     }
