@@ -2,6 +2,7 @@
 using Core.Application.Dtos.Pagos;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.Pagos;
+using Core.Application.ViewModels.Pagos.PagosBeneficiarios;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Products;
@@ -18,15 +19,18 @@ namespace Internet_Banking.Controllers
         private readonly ValidateUserSession _validateUserSession;
         private readonly ITarjetaCreditoService _tarjetaCreditoService;
         private readonly IPagosService _pagosService;
+        private readonly IBeneficiarioService _beneficiarioService;
 
         AuthenticationResponse _user;
         public PagosController(ICuentaAhorroService cuentaAhorro, ValidateUserSession validateUserSession, 
-            IPagosService pagosService, IPrestamoService prestamoService, ITarjetaCreditoService tarjetaCreditoService)
+            IPagosService pagosService, IPrestamoService prestamoService, ITarjetaCreditoService tarjetaCreditoService,
+            IBeneficiarioService beneficiarioService)
         {
             _cuentaAhorroService = cuentaAhorro;
             _validateUserSession = validateUserSession;
             _pagosService = pagosService;
             _prestamoService = prestamoService;
+            _beneficiarioService = beneficiarioService;
 
             _user = _validateUserSession.UserLoggedIn();
             _tarjetaCreditoService = tarjetaCreditoService;
@@ -39,6 +43,8 @@ namespace Internet_Banking.Controllers
             ViewBag.listaTarjetas = await _tarjetaCreditoService.GetAllTarjetaById(_user.Id);
 
             ViewBag.listaPrestamos = await _prestamoService.GetAllPrestamosById(_user.Id);
+
+            ViewBag.listaBeneficiarios = await _beneficiarioService.GetAllViewModelWithInclude(_user.Id);
 
             return View();
         }
@@ -193,6 +199,57 @@ namespace Internet_Banking.Controllers
             return RedirectToAction("PagoConfirmed", resultado);
         }
 
+        #endregion
+        
+        #region Beneficiarios
+        
+        public async Task<IActionResult> GetAllBeneficiarios(string numeroCuenta, string BeneficiarioName, string BeneficiarioLastname)
+        {
+            ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+            SavePagoBeneficiariosViewModel vm = new();
+            vm.NumeroCuentaDestino = numeroCuenta;
+            vm.BeneficiarioName = BeneficiarioName;
+            vm.BeneficiarioLastName = BeneficiarioLastname;
+
+            return View("PagosBeneficiario/EnvioPagoBeneficiario", vm);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> EnvioPagoBeneficiario(SavePagoBeneficiariosViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosBeneficiario/EnvioPagoBeneficiario", vm);
+            }
+
+            var response = await _pagosService.SendPaymentBeneficiario(vm);
+
+            if (response.HasError == true)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosBeneficiario/EnvioPagoBeneficiario", vm);
+            }
+
+            PagoConfirmedViewModel resultado = new();
+
+            resultado.isPrestamo = true;
+
+            resultado.FirstNameOrigen = response.FirstNameOrigen;
+            resultado.LastNameOrigen = response.LastNameOrigen;
+            resultado.NumeroPrestamo = response.NumeroPrestamo;
+            resultado.Monto = response.Monto;
+            resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+
+            return RedirectToAction("PagoConfirmed", resultado);
+        }
+        
         #endregion
 
         public IActionResult PagoConfirmed(PagoConfirmedViewModel response)

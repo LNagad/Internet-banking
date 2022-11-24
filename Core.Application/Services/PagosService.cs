@@ -4,6 +4,7 @@ using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Pagos;
+using Core.Application.ViewModels.Pagos.PagosBeneficiarios;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Prestamos;
@@ -19,6 +20,7 @@ namespace Core.Application.Services
         private readonly IProductService _productService;
         private readonly IDashboradService _userService;
         private readonly IPrestamoService _prestamoService;
+        private readonly IBeneficiarioService _beneficiarioService;
 
         private readonly IMapper _mapper;
 
@@ -27,13 +29,15 @@ namespace Core.Application.Services
 
         public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, 
             IDashboradService userService, IMapper mapper, ITarjetaCreditoService tarjetaCreditoService, 
-            ITarjetaCreditoRepository tarjetaRepo, IPrestamoRepository prestamoRepo, IPrestamoService prestamoService)
+            ITarjetaCreditoRepository tarjetaRepo, IPrestamoRepository prestamoRepo, IPrestamoService prestamoService,
+            IBeneficiarioService beneficiarioService)
         {
             _cuentaAhorroService = cuentaAhorroService;
             _productService = productService;
             _userService = userService;
             _tarjetaCreditoService = tarjetaCreditoService;
             _prestamoService = prestamoService;
+            _beneficiarioService = beneficiarioService;
 
             _tarjetaRepo = tarjetaRepo;
             _prestamoRepo = prestamoRepo;
@@ -307,6 +311,86 @@ namespace Core.Application.Services
             response.LastNameOrigen = userOrigen.LastName;
             response.NumeroPrestamo = getPrestamo.NumeroPrestamo;
             response.Monto = prestamoVm.Monto;
+
+            return response;
+        }
+
+        #endregion
+        
+        
+        #region Beneficiario
+
+        public async Task<PagoPrestamoResponse> SendPaymentBeneficiario(SavePagoBeneficiariosViewModel beneficiarioVm)
+        {
+            var response = new PagoPrestamoResponse();
+            response.HasError = false;
+
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(beneficiarioVm.NumeroCuentaOrigen);
+            
+            if (cuentaOrigen == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta seleccionada no existe!";
+
+                return response;
+            }
+
+            CuentaAhorroViewModel cuentaDestino = await _cuentaAhorroService.AccountExists(beneficiarioVm.NumeroCuentaDestino);
+            
+            
+            if (cuentaDestino == null)
+            {
+                response.HasError = true;
+                response.Error = "Cuenta de destino no encontrada.";
+                return response;
+            }
+            
+            if (cuentaOrigen.Balance < beneficiarioVm.Monto)
+            {
+                response.HasError = true;
+                response.Error = "Usted no cuenta con los fondos suficientes para esta transaccion.";
+                return response;
+            }
+
+            if (cuentaOrigen.Balance == 100 && cuentaOrigen.Principal == true)
+            {
+                response.HasError = true;
+                response.Error = "Tu cuenta principal no puede quedar sin dinero.";
+                return response;
+            }
+            
+            if (beneficiarioVm.Monto == cuentaOrigen.Balance)
+            {
+                beneficiarioVm.Monto -= 100;
+
+                cuentaOrigen.Balance -= beneficiarioVm.Monto;
+
+                cuentaDestino.Balance += beneficiarioVm.Monto;
+            }
+            else
+            {
+                cuentaOrigen.Balance -= beneficiarioVm.Monto;
+
+                cuentaDestino.Balance += beneficiarioVm.Monto;
+            }
+            
+            
+            //updating
+
+            var cuentaOrigenVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
+
+            await _cuentaAhorroService.Update(cuentaOrigenVm, cuentaOrigenVm.Id);
+
+            var cuentaDestinoVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaDestino);
+
+            await _cuentaAhorroService.Update(cuentaDestinoVm, cuentaDestino.Id);
+
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+            response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
+            response.FirstNameOrigen = userOrigen.FirstName;
+            response.LastNameOrigen = userOrigen.LastName;
+            response.Monto = beneficiarioVm.Monto;
+            response.LastNameOrigen = beneficiarioVm.BeneficiarioLastName;
 
             return response;
         }

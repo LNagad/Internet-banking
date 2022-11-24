@@ -20,7 +20,7 @@
                     <a class="nav-link text-white onHoverLink" onclick="abrir(3)">Pagos de Préstamo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Pagos Beneficiarios</a>
+                    <a class="nav-link text-white onHoverLink" onclick="abrir(4)">Pagos Beneficiarios</a>
                 </li>
             </ul>
         </div>
@@ -135,29 +135,30 @@
     <div class="modal-xl modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-center">
-                <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Seleccione la tarjeta que desea pagar</h1>
+                <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Seleccione al beneficiario al que desea pagar</h1>
             </div>
             <div class="modal-body d-flex">
-                @foreach (TarjetaCreditoViewModel tarjeta in @ViewBag.listaTarjetas)
+                @foreach (BeneficiarioViewModel beneficiario in @ViewBag.listaBeneficiarios)
                 {
-                    <form asp-action="GetAllTarjetas" asp-controller="Pagos" method="post">
+                    <form asp-action="GetAllBeneficiarios" asp-controller="Pagos" method="post">
                         <div class="card">
                             <div class="card-header">
-                                <p>Numero de tarjeta: @tarjeta.NumeroTarjeta</p>
+                                <p>Nombre: @beneficiario.FirstName</p>
                             </div>
                             <div class="card-body">
-                                <p>Limite: $@tarjeta.Limite</p>
-                                <p>Debe: $@tarjeta.Debe</p>
-                                <p>Pago: $@tarjeta.Pago</p>
+                                <p>Apllido: @beneficiario.LastName</p>
+                                <p>Numero de cuenta: @beneficiario.NumeroCuenta</p>
                             </div>
-                            <input hidden value="@tarjeta.Idproduct" name="productId">
+                            <input hidden value="@beneficiario.NumeroCuenta" name="numeroCuenta">
+                            <input hidden value="@beneficiario.LastName" name="BeneficiarioLastname">
+                            <input hidden value="@beneficiario.FirstName" name="BeneficiarioName">
                             <button class="btn btn-success" type="submit">Seleccionar</button>
                         </div>
                     </form>
                 }
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-target="#tarjetas" data-bs-toggle="modal">
+                <button class="btn btn-secondary" data-bs-target="#beneficiarios" data-bs-toggle="modal">
                     Cancelar
                 </button>
             </div>
@@ -185,6 +186,11 @@
             else if (numero == 3) {
 
                 $("#prestamos").modal('show')
+
+            }
+            else if (numero == 4) {
+
+                $("#beneficiarios").modal('show')
 
             }
         }
