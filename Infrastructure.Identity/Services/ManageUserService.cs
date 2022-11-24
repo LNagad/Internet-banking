@@ -6,6 +6,7 @@ using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.TarjetaCreditos;
+using Core.Application.ViewModels.Users;
 using Core.Domain.Entities;
 using Infrastructure.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,8 @@ public class ManageUserService : IManageUserService
     
     public ManageUserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
         IEmailService emailService, ICuentaAhorroService service,  IMapper mapper, IProductService product
-        ,ITarjetaCreditoService serviceTarjeta, IProductRepository productRepository, ICuentaAhorroRepository ahorroRepository, IPrestamoService servicePrestamo)
+        ,ITarjetaCreditoService serviceTarjeta, IProductRepository productRepository, 
+        ICuentaAhorroRepository ahorroRepository, IPrestamoService servicePrestamo)
     {
         _userManager = userManager;
         _cuentaAhorro = service;
@@ -66,7 +68,7 @@ public class ManageUserService : IManageUserService
         return ""; 
     }
 
-    public async Task<string> DeletingCuentaAhorro( string Id, double MontoCuenta, bool tipo)
+    public async Task<string> DeletingCuentaAhorro( string Id, double MontoCuenta, string tipo)
     {
         var productGot = await _productRepository.GetByIdAsync(Id); //busca el producto por Id
         var userGot = await _userManager.FindByIdAsync( productGot.IdUser ); //obtenemos el usuario al que pertence el producto
@@ -76,7 +78,7 @@ public class ManageUserService : IManageUserService
         SaveTarjetaCreditoViewModel tarjetaVm = new();
         SaveCuentaAhorroViewModel ahorro = new SaveCuentaAhorroViewModel();
         
-        if (tipo)
+        if (tipo == "Ahorro")
         {
             foreach (ProductViewModel item in getList)
             {
@@ -98,41 +100,42 @@ public class ManageUserService : IManageUserService
             
             await _product.Delete(Id);
         }
-        else
+        else if ( tipo == "Tarjeta")
         {
-            foreach (var item in getList)
+            foreach( ProductViewModel item in getList )
             {
-                if (item.Prestamos != null)
+                if ( item.TarjetaCreditos != null )
                 {
-                    if (item.isPrestamo == true && item.IdProductType == Id)
-                    {
-                        prestamoVm = _mapper.Map<SavePrestamoViewModel>(item.Prestamos);
-                        
-                        if (prestamoVm.Debe < 0)
-                        {
-                            await _product.Delete(prestamoVm.IdProduct);
-                        }
-                        else
-                        {
-                            return "No puede eliminar este producto, aun se debe balance en el";
-                        }
-                    }
-                }
-
-                if (item.TarjetaCreditos != null)
-                {
-                    if (item.isTarjetaCredito == true && item.IdProductType == Id )
+                    if ( item.TarjetaCreditos.Id == productGot.IdProductType )
                     {
                         tarjetaVm = _mapper.Map<SaveTarjetaCreditoViewModel>(item.TarjetaCreditos);
-                        
-                        if ( tarjetaVm.Debe < 0 )
+
+                        if (tarjetaVm.Debe == 0)
                         {
-                            await _product.Delete(tarjetaVm.IdProduct);
+                            await _product.Delete(productGot.Id);
                         }
-                        else
+
+                        return "";
+                    }
+                }
+            }
+        }
+        else if ( tipo == "Prestamo")
+        {
+            foreach (ProductViewModel item in getList)
+            {
+                if ( item.Prestamos != null )
+                {
+                    if ( item.Prestamos.Id == productGot.IdProductType )
+                    {
+                        prestamoVm = _mapper.Map<SavePrestamoViewModel>(item.Prestamos);
+
+                        if ( prestamoVm.Debe == 0 )
                         {
-                            return "No puede eliminar este producto, aun se debe balance en el";
+                            await _product.Delete(productGot.Id);
                         }
+
+                        return "";
                     }
                 }
             }
@@ -172,5 +175,48 @@ public class ManageUserService : IManageUserService
         }
         
         return prestamo;
+    }
+
+    public async Task<SaveUserViewModel> GetSaveuserViewModelById(string id)
+    {
+        var user = new SaveUserViewModel();
+        var userGot = await _userManager.FindByIdAsync(id);
+
+        if ( userGot.Id != null)
+        {
+            user.Id = userGot.Id;
+            user.Cedula = userGot.Cedula;
+            user.Email = userGot.Email;
+            user.Phone = userGot.PhoneNumber;
+            user.LastName = userGot.LastName;
+            user.FirstName = userGot.FirstName;
+            user.UserName = userGot.UserName;
+        }
+
+        return user;
+    }
+
+    public async Task<string> UpdateUser(SaveUserViewModel vm)
+    {
+        var userApplication = new ApplicationUser();
+        var userGot = await _userManager.FindByIdAsync(vm.Id);
+
+        if (vm.Id != null)
+        {
+            userGot.Id = vm.Id;
+            userGot.FirstName = vm.FirstName;
+            userGot.Cedula = vm.Cedula;
+            userGot.LastName = vm.LastName;
+            userGot.Email = vm.Email;
+            userGot.PhoneNumber = vm.Phone;
+            userGot.UserName = vm.UserName;
+        }
+
+        if ( userApplication.Id != null)
+        {
+            await _userManager.UpdateAsync(userGot);
+        }
+
+        return "";
     }
 }
