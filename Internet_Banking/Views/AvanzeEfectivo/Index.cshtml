@@ -1,0 +1,29 @@
+@using Core.Application.ViewModels.TarjetaCreditos; 
+@model TarjetaCreditoViewModel
+@{
+    
+}
+
+<div class="col-11 d-flex m-4">
+
+    @foreach (TarjetaCreditoViewModel item in ViewBag.GetAllTarjetaCreditos)
+    {
+        <div class="card me-1">
+            <div class="card-header d-flex">
+                <p class="me-1">@item.NumeroTarjeta</p>
+            </div>
+
+            <div class="card-body">
+                <p><strong>Monto establecido para la tarjeta: </strong> @item.Limite</p>
+                <p><strong>Debe: </strong> @item.Debe</p>
+                <p><strong>Pagos: </strong> @item.Pago</p>
+            </div>
+
+            <div class="card-footer">
+
+                <!-- Modal -->
+                <a class="btn btn-warning">Avanze de efectivo</a>
+            </div>
+        </div>
+    }
+</div>

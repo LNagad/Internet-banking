@@ -1,7 +1,7 @@
 ﻿@using Core.Application.ViewModels.Users;
 @model SaveUserViewModel
 @{
-    bool editMode = Model.Id != "";
+    bool editMode = Model.Id != null;
     ViewData["Title"] = "Registrarse";
 }
 
