@@ -71,6 +71,21 @@
                         </div>
                     }
 
+                    if (item.Prestamos != null)
+                    {
+                        <div class="me-3 card">
+                            <div class="card-header bg-dark">
+                                <h4 class="text-white">Prestamo</h4>
+                            </div>
+                            <div class="card-body">
+                                <h4>Numero de prestamo: @item.Prestamos.NumeroPrestamo</h4>
+                                <h4>Monto prestamo: $@item.Prestamos.Monto</h4>
+                                <h4>Debe: $@item.Prestamos.Debe</h4>
+                                <h4>Pago: $@item.Prestamos.Pago</h4>
+                            </div>
+                        </div>
+                    }
+
                 }
             </div>
         </div>

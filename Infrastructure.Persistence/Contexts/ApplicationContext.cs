@@ -83,6 +83,12 @@ public class ApplicationContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
 
+        modelBuilder.Entity<TarjetaCredito>()
+           .HasOne(P => P.Product)
+           .WithOne(TC => TC.TarjetaCreditos)
+           .HasForeignKey<Product>(TC => TC.IdProductType)
+           .OnDelete(DeleteBehavior.Cascade);
+
         //beneficiarios
         modelBuilder.Entity<CuentaAhorro>()
                 .HasMany<Beneficiario>(CA => CA.Beneficiarios)
