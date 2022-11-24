@@ -1,7 +1,5 @@
 using Core.Domain.Common;
 using Core.Domain.Entities;
-using Infrastructure.Identity.Entities;
-using Infrastructure.Identity.Seeds;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Contexts;
@@ -16,7 +14,7 @@ public class ApplicationContext : DbContext
     public DbSet<Prestamo> Prestamos { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<TarjetaCredito> TarjetaCreditos { get; set; }
-
+    public DbSet<Transaction> Transactions { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
@@ -48,6 +46,7 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<Prestamo>().ToTable("Prestamos");
         modelBuilder.Entity<Product>().ToTable("Products");
         modelBuilder.Entity<TarjetaCredito>().ToTable("TarjetaCreditos");
+        modelBuilder.Entity<Transaction>().ToTable("Transactions");
 
         #endregion
 
@@ -58,7 +57,7 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<Prestamo>().HasKey(x => x.Id);
         modelBuilder.Entity<Product>().HasKey(x => x.Id);
         modelBuilder.Entity<TarjetaCredito>().HasKey(x => x.Id);
-
+        modelBuilder.Entity<Transaction>().HasKey(x => x.Id);
 
         #endregion
 
@@ -95,6 +94,7 @@ public class ApplicationContext : DbContext
                 .WithOne(B => B.CuentaAhorro)
                 .HasForeignKey(B => B.IdCuentaAhorro)
                 .OnDelete(DeleteBehavior.Cascade);
+
         #endregion
 
         #region PropertyConfigurations
@@ -184,6 +184,42 @@ public class ApplicationContext : DbContext
             .Property(x => x.NumeroTarjeta)
             .IsRequired();
 
+        #endregion
+
+
+        #region Transaction
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.UserId)
+            .IsRequired();
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.FromId)
+            .IsRequired();
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.ProductFromId)
+            .IsRequired();
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.ToId)
+            .IsRequired();
+
+        modelBuilder.Entity<Transaction>()
+         .Property(x => x.ProductToId)
+         .IsRequired();
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.isCuentaAhorro)
+            .IsRequired(false);
+
+        modelBuilder.Entity<Transaction>()
+            .Property(x => x.isTarjetaCredito)
+            .IsRequired(false);
+
+        modelBuilder.Entity<Transaction>()
+          .Property(x => x.isPrestamo)
+          .IsRequired(false);
         #endregion
 
         #endregion

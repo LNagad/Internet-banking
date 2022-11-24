@@ -10,11 +10,54 @@ namespace Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "TarjetaCreditos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NumeroTarjeta = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Limite = table.Column<double>(type: "float", nullable: false),
+                    Pago = table.Column<double>(type: "float", nullable: false),
+                    Debe = table.Column<double>(type: "float", nullable: false),
+                    IdProduct = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TarjetaCreditos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductFromId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ToId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductToId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isCuentaAhorro = table.Column<bool>(type: "bit", nullable: true),
+                    isTarjetaCredito = table.Column<bool>(type: "bit", nullable: true),
+                    isPrestamo = table.Column<bool>(type: "bit", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdProductType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdProductType = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     isCuentaAhorro = table.Column<bool>(type: "bit", nullable: true),
                     isTarjetaCredito = table.Column<bool>(type: "bit", nullable: true),
                     isPrestamo = table.Column<bool>(type: "bit", nullable: true),
@@ -28,6 +71,12 @@ namespace Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_TarjetaCreditos_IdProductType",
+                        column: x => x.IdProductType,
+                        principalTable: "TarjetaCreditos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,32 +131,6 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TarjetaCreditos",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    NumeroTarjeta = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Limite = table.Column<double>(type: "float", nullable: false),
-                    Pago = table.Column<double>(type: "float", nullable: false),
-                    Debe = table.Column<double>(type: "float", nullable: false),
-                    IdProduct = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TarjetaCreditos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TarjetaCreditos_Products_IdProduct",
-                        column: x => x.IdProduct,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Beneficiarios",
                 columns: table => new
                 {
@@ -140,17 +163,22 @@ namespace Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CuentaAhorros_IdProduct",
                 table: "CuentaAhorros",
-                column: "IdProduct");
+                column: "IdProduct",
+                unique: true,
+                filter: "[IdProduct] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prestamos_IdProduct",
                 table: "Prestamos",
-                column: "IdProduct");
+                column: "IdProduct",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_TarjetaCreditos_IdProduct",
-                table: "TarjetaCreditos",
-                column: "IdProduct");
+                name: "IX_Products_IdProductType",
+                table: "Products",
+                column: "IdProductType",
+                unique: true,
+                filter: "[IdProductType] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -162,13 +190,16 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Prestamos");
 
             migrationBuilder.DropTable(
-                name: "TarjetaCreditos");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "CuentaAhorros");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "TarjetaCreditos");
         }
     }
 }
