@@ -1,6 +1,7 @@
 ﻿using Core.Application.Dtos.Account;
 using Core.Application.Helpers;
 using Core.Application.Interfaces.Services;
+using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +13,13 @@ namespace Internet_Banking.Controllers
     {
         private readonly IUserService _userService;
         private readonly ValidateUserSession _validateUser;
+        private readonly IManageUserService _manageUserService;
 
-        public UserController(IUserService userService, ValidateUserSession validateUser) 
+        public UserController(IUserService userService, ValidateUserSession validateUser, IManageUserService manageService) 
         {
             _userService = userService;
             _validateUser = validateUser;
+            _manageUserService = manageService;
         }
         
         [ServiceFilter(typeof(LoginAuthorize))]
@@ -59,7 +62,7 @@ namespace Internet_Banking.Controllers
 
         //[ServiceFilter(typeof(LoginAuthorize))]
 
-        public IActionResult Register()
+        public IActionResult Register(bool editing)
         {
             if (!_validateUser.HasUser())
             {
@@ -71,9 +74,35 @@ namespace Internet_Banking.Controllers
                 return RedirectToRoute(new { Controller = "Home", Action = "Index" });
             }
 
+            ViewBag.Editing = editing;
+
             return View(new SaveUserViewModel());
         }
+        
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { controller = "User", action = "Index" });
+            }
 
+            SaveUserViewModel vm = await _manageUserService.GetSaveuserViewModelById(id);
+
+            return View("Register", vm);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Edit(SaveUserViewModel vm)
+        {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { controller = "User", action = "Index" });
+            }
+
+            await _manageUserService.UpdateUser(vm);
+                
+            return RedirectToRoute(new { controller = "User", action = "Index" });
+        }
 
         //[ServiceFilter(typeof(LoginAuthorize))]
 

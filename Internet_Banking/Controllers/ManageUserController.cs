@@ -109,7 +109,7 @@ namespace Internet_Banking.Controllers
             return View("Index", new AuthenticationResponse());
         }
 
-        public async Task<IActionResult> DeleteCuentaById( string Id, double CuentaMonto, bool tipo) //DELETE PRODUCT* BY ID
+        public async Task<IActionResult> DeleteCuentaById( string Id, double CuentaMonto, string tipo) //DELETE PRODUCT* BY ID
         {
             ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
             

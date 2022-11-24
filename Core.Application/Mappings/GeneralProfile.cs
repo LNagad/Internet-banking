@@ -87,6 +87,10 @@ namespace Core.Application.Mappings
             //    .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
             //    .ForMember(P => P.Product, opt => opt.Ignore()); 
 
+            CreateMap<TarjetaCreditoViewModel, SaveTarjetaCreditoViewModel>()
+                .ReverseMap()
+                .ForMember(p => p.Product, opt => opt.Ignore());
+
             #endregion
 
             #region prestamos
@@ -106,6 +110,10 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(P => P.Product, opt => opt.Ignore());
 
+            CreateMap<PrestamoViewModel, SavePrestamoViewModel>()
+                .ReverseMap()
+                .ForMember(p => p.Product, opt => opt.Ignore());
+            
             #endregion
 
             #region cuentaAhorro
