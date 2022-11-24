@@ -9,6 +9,7 @@ namespace Core.Application.ViewModels.Prestamos
     public class SavePrestamoViewModel
     {
         //faltan verificaciones
+        public string? Id { get; set; }
         public string NumeroPrestamo { get; set; }
 
         public double Monto { get; set; }

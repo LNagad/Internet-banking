@@ -1,12 +1,13 @@
 ﻿@using Core.Application.ViewModels.Users;
 @model SaveUserViewModel
 @{
+    bool editMode = Model.Id != "";
     ViewData["Title"] = "Registrarse";
 }
 
 <div class="col-12 d-flex justify-content-center">
     <div class="col-5 mt-5">
-        <form method="post" asp-action="Register" asp-controller="User">
+        <form method="post" asp-action="@(editMode ? "Edit" : "Register")" asp-controller="User">
 
             <div class="card">
                 <div class="card-header">
@@ -59,21 +60,24 @@
                         <input asp-for="Email" type="email" class="form-control" />
                     </div>
                     
-                    <!-- Select for user type input -->
-                    <div class="form-outline mb-4">
-                        <label asp-for="Email" class="form-label">Email</label>
-                        <select class="form-select" asp-for="UserType" onchange="ShowDisplay('inputHidde','labelHidde',this)">
-                            <option value="1">Administrador</option>
-                            <option value="2">Cliente</option>
-                        </select>
-                    </div>
+                    @if (editMode == false)
+                    {
+                        <!-- Select for user type input -->
+                        <div class="form-outline mb-4">
+                            <label asp-for="Email" class="form-label">Tipo de usuario</label>
+                            <select class="form-select" asp-for="UserType" onchange="ShowDisplay('inputHidde','labelHidde',this)">
+                                <option value="1">Administrador</option>
+                                <option value="2">Cliente</option>
+                            </select>
+                        </div>
                     
-                    <!-- input hidde -->
-                    <div class="form-outline mb-4">
-                        <label class="form-label" for="inputHidde" id="labelHidde" style="display: none;">Monto</label>
-                        <input asp-for="Monto" class="form-control" type="number" id="inputHidde" style="display: none;">
-                    </div>
-
+                        <!-- input hidde -->
+                        <div class="form-outline mb-4">
+                            <label class="form-label" for="inputHidde" id="labelHidde" style="display: none;">Monto</label>
+                            <input asp-for="Monto" class="form-control" type="number" id="inputHidde" style="display: none;">
+                        </div>
+                    }
+                    
                     <!-- Password input -->
                     <div class="form-outline mb-4">
                         <label asp-for="Password" class="form-label">Password</label>

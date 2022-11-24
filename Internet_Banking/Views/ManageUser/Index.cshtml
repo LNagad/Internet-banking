@@ -3,7 +3,7 @@
 
 <h2>Manage user Home page</h2>
 
-<a class="btn btn-primary" asp-controller="User" asp-action="Register">Crear usuario</a>
+<a class="btn btn-primary" asp-controller="User" asp-action="Register" asp-route-editing="@false">Crear usuario</a>
 
 <h4>Lista de usuarios</h4>
 
@@ -48,7 +48,7 @@
                         {
                             <a class="btn btn-primary" asp-action="ActivateUser" asp-controller="ManageUser" asp-route-Id="@item?.Id">Activar</a>
                         }
-                        <a class="btn btn-primary">Editar</a>
+                        <a class="btn btn-primary" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
                         <a class="btn btn-primary" asp-action="ProductSelector" asp-controller="ManageUser" asp-route-Id="@item?.Id" asp-route-name="@item?.FirstName" asp-route-status="@item?.Status">Productos</a>
                     </div>
                 </div>
