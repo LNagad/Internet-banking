@@ -1,6 +1,8 @@
 ﻿@using Core.Application.ViewModels.CuentaAhorros;
 @using Core.Application.ViewModels.CuentaAhorros;
 @using Core.Application.ViewModels.TarjetaCreditos;
+@using Core.Application.ViewModels.Prestamos;
+@using Core.Application.ViewModels.Beneficiarios;
 @{
 }
 
@@ -15,7 +17,7 @@
                     <a class="nav-link text-white onHoverLink" onclick="abrir(2)">Pagos Tarjeta de crédito</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Pagos de Préstamo</a>
+                    <a class="nav-link text-white onHoverLink" onclick="abrir(3)">Pagos de Préstamo</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="#">Pagos Beneficiarios</a>
@@ -66,7 +68,79 @@
             <div class="modal-body d-flex">
                 @foreach (TarjetaCreditoViewModel tarjeta in @ViewBag.listaTarjetas)
                 {
-                    <form asp-action="GetTarjetas" asp-controller="Pagos" method="post">
+                    <form asp-action="GetAllTarjetas" asp-controller="Pagos" method="post">
+                        <div class="card">
+                            <div class="card-header">
+                                <p>Numero de tarjeta: @tarjeta.NumeroTarjeta</p>
+                            </div>
+                            <div class="card-body">
+                                <p>Limite: $@tarjeta.Limite</p>
+                                <p>Debe: $@tarjeta.Debe</p>
+                                <p>Pago: $@tarjeta.Pago</p>
+                            </div>
+                            <input hidden value="@tarjeta.Idproduct" name="productId">
+                            <button class="btn btn-success" type="submit">Seleccionar</button>
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-target="#tarjetas" data-bs-toggle="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*----------------------------------------------- prestamos*@
+
+<div class="modal fade" id="prestamos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-xl modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Seleccione el prestamo que desea pagar</h1>
+            </div>
+            <div class="modal-body d-flex">
+                @foreach (PrestamoViewModel prestamo in @ViewBag.listaPrestamos)
+                {
+                    <form asp-action="GetAllPrestamos" asp-controller="Pagos" method="post">
+                        <div class="card">
+                            <div class="card-header">
+                                <p>Numero de prestamo: @prestamo.NumeroPrestamo</p>
+                            </div>
+                            <div class="card-body">
+                                <p>Limite: $@prestamo.Monto</p>
+                                <p>Debe: $@prestamo.Debe</p>
+                                <p>Pago: $@prestamo.Pago</p>
+                            </div>
+                            <input hidden value="@prestamo.IdProduct" name="productId">
+                            <button class="btn btn-success" type="submit">Seleccionar</button>
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-target="#prestamos" data-bs-toggle="modal">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="beneficiarios" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-xl modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-center">
+                <h1 class="modal-title fs-5 text-center" id="staticBackdropLabel">Seleccione la tarjeta que desea pagar</h1>
+            </div>
+            <div class="modal-body d-flex">
+                @foreach (TarjetaCreditoViewModel tarjeta in @ViewBag.listaTarjetas)
+                {
+                    <form asp-action="GetAllTarjetas" asp-controller="Pagos" method="post">
                         <div class="card">
                             <div class="card-header">
                                 <p>Numero de tarjeta: @tarjeta.NumeroTarjeta</p>
@@ -92,6 +166,7 @@
 </div>
 
 
+
 @section scripts{
     <script>
         function abrir(numero) {
@@ -105,6 +180,11 @@
             {
 
                 $("#tarjetas").modal('show')
+
+            }
+            else if (numero == 3) {
+
+                $("#prestamos").modal('show')
 
             }
         }

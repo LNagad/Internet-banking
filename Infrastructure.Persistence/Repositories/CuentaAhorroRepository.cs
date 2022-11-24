@@ -28,8 +28,6 @@ namespace Infrastructure.Persistence.Repositories
 
             entity.Created = entry.Created;
             entity.CreatedBy = entry.CreatedBy;
-            entity.LastModifiedBy = entry.LastModifiedBy;
-            entity.LastModified= entry.LastModified;
 
             await base.UpdateAsync(entity, id);
         }

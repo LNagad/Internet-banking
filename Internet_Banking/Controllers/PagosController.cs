@@ -14,26 +14,31 @@ namespace Internet_Banking.Controllers
     public class PagosController : Controller
     {
         private readonly ICuentaAhorroService _cuentaAhorroService;
+        private readonly IPrestamoService _prestamoService;
         private readonly ValidateUserSession _validateUserSession;
-
+        private readonly ITarjetaCreditoService _tarjetaCreditoService;
         private readonly IPagosService _pagosService;
 
         AuthenticationResponse _user;
-        public PagosController(ICuentaAhorroService cuentaAhorro, ValidateUserSession validateUserSession, IPagosService pagosService)
+        public PagosController(ICuentaAhorroService cuentaAhorro, ValidateUserSession validateUserSession, 
+            IPagosService pagosService, IPrestamoService prestamoService, ITarjetaCreditoService tarjetaCreditoService)
         {
             _cuentaAhorroService = cuentaAhorro;
             _validateUserSession = validateUserSession;
             _pagosService = pagosService;
+            _prestamoService = prestamoService;
 
             _user = _validateUserSession.UserLoggedIn();
+            _tarjetaCreditoService = tarjetaCreditoService;
         }
 
         public async Task<IActionResult> Index()
         {
-           
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
-            ViewBag.listaTarjetas = await _pagosService.GetAllTarjetasProductViewModel(_user.Id);
+            ViewBag.listaTarjetas = await _tarjetaCreditoService.GetAllTarjetaById(_user.Id);
+
+            ViewBag.listaPrestamos = await _prestamoService.GetAllPrestamosById(_user.Id);
 
             return View();
         }
@@ -97,18 +102,8 @@ namespace Internet_Banking.Controllers
 
 
         #region pagoTarjetaCredito
-
-
-        public async Task<IActionResult> GetTarjetas(string productId)
-        {
-
-            var tarjetas = await _pagosService.GetAllTarjetasProductViewModel(_user.Id);
-
-            return RedirectToAction("EnvioPagoTarjeta", new { productId = productId });
-        }
-
         
-        public async Task<IActionResult> EnvioPagoTarjeta(string productId)
+        public async Task<IActionResult> GetAllTarjetas(string productId)
         {
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
@@ -128,7 +123,7 @@ namespace Internet_Banking.Controllers
                 return View("PagoTarjetaCredito/EnvioPagoTarjeta", vm);
             }
 
-            var response = await _pagosService.ValidationPaymentTarjeta(vm);
+            var response = await _pagosService.SendPaymentTarjeta(vm);
 
             if (response.HasError == true)
             {
@@ -139,12 +134,59 @@ namespace Internet_Banking.Controllers
             PagoConfirmedViewModel resultado = new();
 
             resultado.isTarjetaCredito = true;
-            resultado.isCuentaAhorro = false;
-            resultado.isPrestamo = false;
 
             resultado.FirstNameOrigen = response.FirstNameOrigen;
             resultado.LastNameOrigen = response.LastNameOrigen;
             resultado.LastTarjetaCredito = response.LastTarjetaCredito;
+            resultado.Monto = response.Monto;
+            resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+
+            return RedirectToAction("PagoConfirmed", resultado);
+        }
+
+        #endregion
+
+        #region pagoPrestamo
+
+        public async Task<IActionResult> GetAllPrestamos(string productId)
+        {
+            ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+            SavePagoPrestamoViewModel vm = new();
+            vm.idProduct = productId;
+
+            return View("PagosPrestamo/EnvioPagoPrestamo", vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnvioPagoPrestamoPost(SavePagoPrestamoViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosPrestamo/EnvioPagoPrestamo", vm);
+            }
+
+            var response = await _pagosService.SendPaymentPrestamo(vm);
+
+            if (response.HasError == true)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosPrestamo/EnvioPagoPrestamo", vm);
+            }
+
+            PagoConfirmedViewModel resultado = new();
+
+            resultado.isPrestamo = true;
+
+            resultado.FirstNameOrigen = response.FirstNameOrigen;
+            resultado.LastNameOrigen = response.LastNameOrigen;
+            resultado.NumeroPrestamo = response.NumeroPrestamo;
             resultado.Monto = response.Monto;
             resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
 

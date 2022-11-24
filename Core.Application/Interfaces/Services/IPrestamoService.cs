@@ -11,6 +11,8 @@ namespace Core.Application.Interfaces.Services
 {
     public interface IPrestamoService : IGenericService<SavePrestamoViewModel, PrestamoViewModel ,Prestamo>
     {
-        Task<SavePrestamoViewModel> AddCuentaAhorro(SavePrestamoViewModel prestamoVm, string userId); 
+        Task<SavePrestamoViewModel> AddCuentaAhorro(SavePrestamoViewModel prestamoVm, string userId);
+
+        Task<List<PrestamoViewModel>> GetAllPrestamosById(string id);
     }
 }
