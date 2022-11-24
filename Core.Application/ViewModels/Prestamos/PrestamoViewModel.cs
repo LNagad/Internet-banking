@@ -5,7 +5,9 @@ namespace Core.Application.ViewModels.Prestamos
 {
     public class PrestamoViewModel
     {
+
         public string? Id { get; set; }
+
         public string NumeroPrestamo { get; set; }
 
         public double Monto { get; set; }

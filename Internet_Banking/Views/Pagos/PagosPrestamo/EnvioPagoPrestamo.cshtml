@@ -1,0 +1,86 @@
+﻿@using Core.Application.ViewModels.Pagos;
+@using Core.Application.ViewModels.CuentaAhorros;
+
+@model SavePagoPrestamoViewModel
+@{
+    ViewData["Title"] = "Pagos prestamo";
+}
+
+<div class="col-12 d-flex justify-content-center">
+    <div class="col-5 mt-5">
+        <form method="post" asp-action="EnvioPagoPrestamoPost" asp-controller="Pagos">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Pagos Prestamos</h4>
+                </div>
+                <div class="card-body">
+                    @Html.ValidationSummary(false, "", new{@class = "text-danger"})
+
+                    @if (Model.HasError == true)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <p>@Model.Error</p>
+                            <a class="btn btn-close" data-bs-dismiss="alert" arial-label="Close"></a>
+                        </div>
+                    }
+
+                    <div class="form-outline mb-4">
+                        <input hidden asp-for="idProduct" value="@Model.idProduct" class="form-control" />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label asp-for="NumeroCuentaOrigen" class="form-label">Cuenta Origen:</label>
+                        <select class="form-select" asp-for="NumeroCuentaOrigen">
+                            @foreach (CuentaAhorroViewModel item in ViewBag.listaCuentasAhorro)
+                            {
+                                <option value="@item.NumeroCuenta">@item.NumeroCuenta || $@item.Balance</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label asp-for="Monto" class="form-label">Monto:</label>
+                        <input class="form-control" asp-for="Monto" step="any" min="100" id="montoInput" placeholder="Monto">
+                    </div>
+
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-success btn-block mb-3">Enviar pago</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+
+        function commaOnly(input) {
+
+            var value = input.val();
+            var values = value.split("");
+            var update = "";
+            var transition = "";
+
+            var expression = /(^\d+$)|(^\d+\.\d+$)|[,\.]/;
+            var finalExpression = /^([1-9][0-9]*[,\.]?\d{0,3})$/;
+
+            for (id in values) {
+                if (expression.test(values[id]) == true && values[id] != '') {
+                    transition += '' + values[id].replace('.', ',');
+                    if (finalExpression.test(transition) == true) {
+                        update += '' + values[id].replace('.', ',');
+                    }
+                }
+            }
+            input.val(update);
+        }
+
+        $('#montoInput').keyup(function (e) {
+            commaOnly($(this));
+        });
+
+    </script>
+
+
+}

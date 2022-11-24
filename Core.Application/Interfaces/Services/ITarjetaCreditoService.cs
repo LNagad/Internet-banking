@@ -11,5 +11,7 @@ namespace Core.Application.Interfaces.Services
     public interface ITarjetaCreditoService : IGenericService<SaveTarjetaCreditoViewModel, TarjetaCreditoViewModel, TarjetaCredito>
     {
         Task<SaveTarjetaCreditoViewModel> AddTarjetaCredito(SaveTarjetaCreditoViewModel vm);
+
+        Task<List<TarjetaCreditoViewModel>> GetAllTarjetaById(string id);
     }
 }

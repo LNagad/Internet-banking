@@ -6,13 +6,9 @@ using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
-using Core.Application.ViewModels.Products;
+using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.TarjetaCreditos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Core.Application.Services
 {
@@ -22,19 +18,26 @@ namespace Core.Application.Services
         private readonly ITarjetaCreditoService _tarjetaCreditoService;
         private readonly IProductService _productService;
         private readonly IDashboradService _userService;
+        private readonly IPrestamoService _prestamoService;
+
         private readonly IMapper _mapper;
 
         private readonly ITarjetaCreditoRepository _tarjetaRepo;
+        private readonly IPrestamoRepository _prestamoRepo;
 
         public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, 
-            IDashboradService userService, IMapper mapper, ITarjetaCreditoService tarjetaCreditoService, ITarjetaCreditoRepository tarjetaRepo)
+            IDashboradService userService, IMapper mapper, ITarjetaCreditoService tarjetaCreditoService, 
+            ITarjetaCreditoRepository tarjetaRepo, IPrestamoRepository prestamoRepo, IPrestamoService prestamoService)
         {
             _cuentaAhorroService = cuentaAhorroService;
             _productService = productService;
             _userService = userService;
-            _mapper = mapper;
-            _tarjetaCreditoService= tarjetaCreditoService;
+            _tarjetaCreditoService = tarjetaCreditoService;
+            _prestamoService = prestamoService;
+
             _tarjetaRepo = tarjetaRepo;
+            _prestamoRepo = prestamoRepo;
+            _mapper = mapper;
         }
 
         #region pagosExpresosos
@@ -153,23 +156,7 @@ namespace Core.Application.Services
 
         #region PagosTarjeta
 
-        public async Task<List<TarjetaCreditoViewModel>> GetAllTarjetasProductViewModel(string id)
-        {
-            var products = await _productService.GetAllViewModelWithIncludeById(id);
-
-            return products.Where(p => p.isTarjetaCredito == true).Select(p => new TarjetaCreditoViewModel
-            {
-                Id = p.TarjetaCreditos.Id,
-                NumeroTarjeta = p.TarjetaCreditos.NumeroTarjeta,
-                Limite = p.TarjetaCreditos.Limite,
-                Pago = p.TarjetaCreditos.Pago,
-                Debe = p.TarjetaCreditos.Debe,
-                Idproduct = p.TarjetaCreditos.Idproduct,
-                Product = p.TarjetaCreditos.Product
-            }).ToList();
-        }
-
-        public async Task<PagoTarjetaResponse> ValidationPaymentTarjeta(SavePagoTarjetaViewModel pagoVm)
+        public async Task<PagoTarjetaResponse> SendPaymentTarjeta(SavePagoTarjetaViewModel pagoVm)
         {
             PagoTarjetaResponse response = new();
             response.HasError = false;
@@ -182,7 +169,7 @@ namespace Core.Application.Services
             if (getTarjeta == null)
             {
                 response.HasError = true;
-                response.Error = "La cuenta seleccionada no existe";
+                response.Error = "La tarjeta seleccionada no existe!";
 
                 return response;
             }
@@ -190,6 +177,15 @@ namespace Core.Application.Services
             double debeTarjeta = getTarjeta.Debe;
 
             CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(pagoVm.NumeroCuentaOrigen);
+
+            if (cuentaOrigen == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta seleccionada no existe!";
+
+                return response;
+            }
+
             double cuentaBalance = cuentaOrigen.Balance;
 
             if (parsedMonto > cuentaBalance)
@@ -207,9 +203,8 @@ namespace Core.Application.Services
                 cuentaBalance -= debeTarjeta;
 
                 debeTarjeta = 0;
-
-                
-            } else
+            } 
+            else
             {
                 cuentaBalance -= parsedMonto;
 
@@ -242,6 +237,79 @@ namespace Core.Application.Services
             return response;
         }
 
+     
+        public async Task<PagoPrestamoResponse> SendPaymentPrestamo(SavePagoPrestamoViewModel prestamoVm)
+        {
+            var response = new PagoPrestamoResponse();
+            response.HasError = false;
+
+            var getPrestamo = await _prestamoRepo.PrestamoExist(prestamoVm.idProduct);
+
+
+            if (getPrestamo == null)
+            {
+                response.HasError = true;
+                response.Error = "El Prestamo a pagar no existe!";
+
+                return response;
+            }
+
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(prestamoVm.NumeroCuentaOrigen);
+
+            if (cuentaOrigen == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta seleccionada no existe!";
+
+                return response;
+            }
+
+            if (prestamoVm.Monto > cuentaOrigen.Balance)
+            {
+                response.HasError = true;
+                response.Error = "Usted no cuenta con los fondos suficientes para esta transaccion";
+
+                return response;
+            }
+
+            if (prestamoVm.Monto > getPrestamo.Debe)
+            {
+                prestamoVm.Monto = getPrestamo.Debe;
+
+                cuentaOrigen.Balance -= getPrestamo.Debe;
+
+                getPrestamo.Debe = 0;
+            }
+            else
+            {
+                cuentaOrigen.Balance -= prestamoVm.Monto;
+
+                getPrestamo.Debe -= prestamoVm.Monto;
+            }
+
+
+            //updating
+
+            var cuentaOrigenVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
+
+            await _cuentaAhorroService.Update(cuentaOrigenVm, cuentaOrigenVm.Id);
+
+            SavePrestamoViewModel prestamo = new();
+            prestamo.Id = getPrestamo.Id;
+            prestamo.Debe = getPrestamo.Debe;
+            prestamo.Pago = getPrestamo.Pago + prestamoVm.Monto;
+
+            await _prestamoService.Update(prestamo, prestamo.Id);
+
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+            response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
+            response.FirstNameOrigen = userOrigen.FirstName;
+            response.LastNameOrigen = userOrigen.LastName;
+            response.NumeroPrestamo = getPrestamo.NumeroPrestamo;
+            response.Monto = prestamoVm.Monto;
+
+            return response;
+        }
 
         #endregion
     }

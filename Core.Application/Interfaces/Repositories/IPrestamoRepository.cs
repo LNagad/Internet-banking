@@ -9,5 +9,6 @@ namespace Core.Application.Interfaces.Repositories
 {
     public interface IPrestamoRepository : IGenericRepository<Prestamo>
     {
+        Task<Prestamo> PrestamoExist(string productId);
     }
 }

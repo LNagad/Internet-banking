@@ -44,6 +44,7 @@ namespace Core.Application.ViewModels.Pagos
 
         public bool? isCuentaAhorro { get; set; }
         public bool? isTarjetaCredito { get; set; }
+        public bool? isBeneficiario { get; set; }
         public bool? isPrestamo { get; set; }
     }
 }

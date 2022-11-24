@@ -35,6 +35,23 @@ namespace Core.Application.Services
             authenticationResponse = _accessor.HttpContext.Session.Get<AuthenticationResponse>("user");
         }
 
+        public async Task<List<TarjetaCreditoViewModel>> GetAllTarjetaById(string id)
+        {
+            var products = await _productService.GetAllViewModelWithIncludeById(id);
+
+            return products.Where(p => p.isTarjetaCredito == true).Select(p => new TarjetaCreditoViewModel
+            {
+                Id = p.TarjetaCreditos.Id,
+                NumeroTarjeta = p.TarjetaCreditos.NumeroTarjeta,
+                Limite = p.TarjetaCreditos.Limite,
+                Pago = p.TarjetaCreditos.Pago,
+                Debe = p.TarjetaCreditos.Debe,
+                Idproduct = p.TarjetaCreditos.Idproduct,
+                Product = p.TarjetaCreditos.Product
+            }).ToList();
+        }
+
+
         public async Task<SaveTarjetaCreditoViewModel> AddTarjetaCredito(SaveTarjetaCreditoViewModel vm)
         {
             string numeroCuenta = "";

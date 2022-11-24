@@ -2,7 +2,7 @@
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
-using Core.Application.ViewModels.Products;
+using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.TarjetaCreditos;
 
 namespace Core.Application.Interfaces.Services
@@ -11,9 +11,8 @@ namespace Core.Application.Interfaces.Services
     {
         Task<PagoExpressResponse> PagoExpress(SavePagoExpresoViewModel vm);
         Task<PagoConfirmedViewModel> PagosExpresoConfirmed(PagoExpressResponse vm);
+        Task<PagoTarjetaResponse> SendPaymentTarjeta(SavePagoTarjetaViewModel pagoVm);
+        Task<PagoPrestamoResponse> SendPaymentPrestamo(SavePagoPrestamoViewModel prestamoVm);
 
-        Task<List<TarjetaCreditoViewModel>> GetAllTarjetasProductViewModel(string id);
-
-        Task<PagoTarjetaResponse> ValidationPaymentTarjeta(SavePagoTarjetaViewModel pagoVm);
     }
 }

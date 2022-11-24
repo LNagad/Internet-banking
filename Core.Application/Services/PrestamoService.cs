@@ -71,5 +71,24 @@ namespace Core.Application.Services
 
             return _mapper.Map<SavePrestamoViewModel>(resultado);
         }
+
+
+        public async Task<List<PrestamoViewModel>> GetAllPrestamosById(string id)
+        {
+            var products = await _productService.GetAllViewModelWithIncludeById(id);
+
+            return products.Where(p => p.isPrestamo == true).Select(p => new PrestamoViewModel
+            {
+                Id = p.Prestamos.Id,
+                NumeroPrestamo = p.Prestamos.NumeroPrestamo,
+                Monto = p.Prestamos.Monto,
+                Pago = p.Prestamos.Pago,
+                Debe = p.Prestamos.Debe,
+                Balance = p.Prestamos.Balance,
+                IdProduct = p.Prestamos.IdProduct,
+                Product = p.Prestamos.Product
+            }).ToList();
+        }
+
     }
 }
