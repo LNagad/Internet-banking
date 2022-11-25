@@ -15,7 +15,7 @@ namespace Internet_Banking.Controllers
     public class HomeController : Controller
     {
         private readonly IProductService _productService;
-        private readonly ValidateUserSession _validateUserSession;
+        private readonly ValidateUserSession _validateUser;
         private readonly IDashboradService _dashboradService;
 
         private readonly ITransactionService _transactionService;
@@ -23,17 +23,18 @@ namespace Internet_Banking.Controllers
             IDashboradService dashboradService, ITransactionService transactionService)
         {
             _productService = productService;
-            _validateUserSession = validateUserSession;
+            _validateUser = validateUserSession;
             _dashboradService = dashboradService;
             _transactionService = transactionService;
         }
 
         public async Task<IActionResult> Index()
         {
-            if(!_validateUserSession.HasUser())
+            if (!_validateUser.HasUser())
             {
-               return RedirectToRoute(new { Controller = "User", Action = "Index" });
+                return RedirectToRoute(new { controller = "User", action = "Index" });
             }
+
 
             ViewBag.lista = await _productService.GetAllViewModelWithInclude();
             

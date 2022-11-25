@@ -19,6 +19,7 @@ builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
 builder.Services.AddScoped<LoginAuthorize>();
+builder.Services.AddScoped<LoginAuthorizeNoUser>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<ValidateUserSession, ValidateUserSession>();
 
