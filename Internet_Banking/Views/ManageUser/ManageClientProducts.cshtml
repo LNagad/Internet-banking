@@ -6,12 +6,14 @@
     var userName = ViewBag.UserName;
 }
 
-<form method="post" asp-action="ManageClientProducts" asp-controller="ManageUser">
-    <h4>Agregando cuenta de ahorro para el usuario: @userName</h4>
-    <div>
+<form class="mx-auto border border-1 border-secondary rounded-2" style="max-width: 450px;" method="post" asp-action="ManageClientProducts" asp-controller="ManageUser">
+    <div class="d-flex flex-column justify-content-center align-content-center p-1 m-1">
+        <h4 class="m-1">Agregar cuenta de ahorro a: @userName</h4>
+        
         <label asp-for="Balance" class="form form-label">Monto de la cuenta de ahorro:</label>
-        <input type="number" required class="form form-control" asp-for="Balance" value="">
+        <input type="number" required class="form form-control m-1" asp-for="Balance" value="">
         <input type="hidden" asp-for="UserId" value="@Model.UserId">
+
+        <button type="submit" class="btn btn-primary m-1">Crear</button>
     </div>
-    <button type="submit" class="btn btn-primary">Crear</button>
 </form>

@@ -4,25 +4,25 @@
 
 <h2>Selecciona el producto que quieres agregar al usuario</h2>
 
-<div class="mx-auto">
-    <div style="max-width: 400px" class="border border-1 border-dark d-flex justify-content-center align-items-center p-2 m-2">
-        <a class="btn btn-primary m-1" asp-controller="ManageUser" 
+<div class="mx-auto" style="max-width: 450px;">
+    <div style="max-width: 400px" class="border rounded d-flex justify-content-center align-items-center p-2 m-2">
+        <a class="btn btn-primary m-2" asp-controller="ManageUser" 
            asp-action="ManageClientProducts" 
            asp-route-status="@ViewBag.Status"
            asp-route-name="@ViewBag.UserName"
-           asp-route-Id="@ViewBag.UserId">Cuenta de Ahorros</a>
+           asp-route-Id="@ViewBag.UserId">Cuentas</a>
         
-        <a class="btn btn-primary m-1" asp-controller="ManageUser"
+        <a class="btn btn-primary m-2" asp-controller="ManageUser"
            asp-action="ManageTarjetaCredito"
-           asp-route-Id="@ViewBag.UserId">Tarjeta de creditos</a>
+           asp-route-Id="@ViewBag.UserId">Tarjetas</a>
         
-        <a class="btn btn-primary m-1" asp-controller="ManageUser"
+        <a class="btn btn-primary m-2" asp-controller="ManageUser"
            asp-action="ManagePrestamo"
            asp-route-UserId="@ViewBag.UserId">Prestamo</a>
     </div>
 </div>
 
-<div class="border border-dark border-1 m-1 p1">
+<div class="border border-1 m-1 p1">
     <h4>Lista de productos de @ViewBag.UserName</h4>
     
     
@@ -32,7 +32,7 @@
         {
             if (item.CuentaAhorros != null)
             {
-                <div class="text-white d-flex flex-column align-items-center justify-content-center border border-1 border-danger m-2 p-2 rounded bg-dark">
+                <div class="text-white d-flex flex-column align-items-center justify-content-center border border-1 m-2 p-2 rounded bg-dark">
                     <h2><strong>Cuenta de ahorro</strong></h2>
                     <div>
                         <h4>Numero de cuenta: @item.CuentaAhorros.NumeroCuenta</h4>

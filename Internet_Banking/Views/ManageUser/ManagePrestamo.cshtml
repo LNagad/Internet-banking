@@ -4,14 +4,12 @@
     var userId = ViewBag.UserId;
 }
 
-<h2> Prestamos Clientes </h2>
-
-<form method="post" asp-action="ManagePrestamo" asp-controller="ManageUser" asp-route-UserId="@userId">
-    
-    <div>
-        <label asp-for="Monto" class="form form-label">Monto del prestamo</label>
-        <input class="form form-control" type="number" required value="" asp-for="Monto">
-    </div> 
-   
-    <button class="btn btn-primary">Obtener prestamo</button> 
+<form class="mx-auto border border-1 border-secondary rounded-2" style="max-width: 450px;" method="post" asp-action="ManagePrestamo" asp-controller="ManageUser" asp-route-UserId="@userId">
+    <div class="d-flex flex-column justify-content-center align-content-center p-1 m-1">
+        <h2 class="m-1"> Prestamo Clientes </h2>
+        <label asp-for="Monto" class="m-1 form form-label">Monto del prestamo</label>
+        <input class="form form-control m-1" type="number" required value="" asp-for="Monto">
+        
+        <button class="btn btn-primary m-1">Obtener prestamo</button> 
+    </div>
 </form>

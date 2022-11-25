@@ -4,12 +4,13 @@
     var userId = ViewBag.UserId;
 }
 
-<h4>Solicitando una tarjeta de credito</h4>
 
-<form method="post" asp-action="ManageTarjetaCredito" asp-controller="ManageUser">
-    <div>
+
+<form class="mx-auto border border-1 border-secondary rounded-2" style="max-width: 450px;" method="post" asp-action="ManageTarjetaCredito" asp-controller="ManageUser">
+    <div class="d-flex flex-column justify-content-center align-content-center p-1 m-1">
+    <h4 class="m-1">Solicitud tarjeta de credito</h4>
         <label asp-for="Limite" class="form form-label"> Seleccione un monto limite para la tarjeta de credito: </label>
-        <select asp-for="Limite" class="form form-select">
+        <select asp-for="Limite" class="form form-select mb-2">
             <option value="10000">$10,000</option>
             <option value="15000">$15,000</option>
             <option value="20000">$20,000</option>
@@ -23,7 +24,7 @@
         <input type="hidden" asp-for="Balance" value="0"/>
         <input type="hidden" asp-for="Pago" value="0" />
         <input type="hidden" asp-for="IdProduct" value="@null" />
+        
+        <button type="submit" class="btn btn-primary m-1">Agregar tarjeta de credito</button>
     </div>
-    
-    <button type="submit" class="btn btn-primary">Agregar tarjeta de credito</button>
 </form>
