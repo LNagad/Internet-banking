@@ -6,6 +6,7 @@ using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Prestamos;
 using Core.Application.ViewModels.Products;
 using Core.Application.ViewModels.TarjetaCreditos;
+using Core.Application.ViewModels.Transactions;
 using Core.Application.ViewModels.Users;
 using Core.Domain.Entities;
 
@@ -160,6 +161,16 @@ namespace Core.Application.Mappings
                 .ForMember(P => P.LastModified, opt => opt.Ignore())
                 .ForMember(P => P.LastModifiedBy, opt => opt.Ignore())
                 .ForMember(P => P.CuentaAhorro, opt => opt.Ignore());
+
+            #endregion
+
+            #region transaction
+
+            CreateMap<Transaction, TransactionViewModel>()
+                .ReverseMap()
+                .ForMember(P => P.CreatedBy, opt => opt.Ignore())
+                .ForMember(P => P.LastModified, opt => opt.Ignore())
+                .ForMember(P => P.LastModifiedBy, opt => opt.Ignore());
 
             #endregion
         }

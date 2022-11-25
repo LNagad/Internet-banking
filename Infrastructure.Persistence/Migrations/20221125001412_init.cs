@@ -31,6 +31,29 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductFromId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ToId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductToId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isCuentaAhorro = table.Column<bool>(type: "bit", nullable: true),
+                    isTarjetaCredito = table.Column<bool>(type: "bit", nullable: true),
+                    isPrestamo = table.Column<bool>(type: "bit", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CuentaAhorros",
                 columns: table => new
                 {
@@ -140,17 +163,21 @@ namespace Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CuentaAhorros_IdProduct",
                 table: "CuentaAhorros",
-                column: "IdProduct");
+                column: "IdProduct",
+                unique: true,
+                filter: "[IdProduct] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Prestamos_IdProduct",
                 table: "Prestamos",
-                column: "IdProduct");
+                column: "IdProduct",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TarjetaCreditos_IdProduct",
                 table: "TarjetaCreditos",
-                column: "IdProduct");
+                column: "IdProduct",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -163,6 +190,9 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "TarjetaCreditos");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "CuentaAhorros");

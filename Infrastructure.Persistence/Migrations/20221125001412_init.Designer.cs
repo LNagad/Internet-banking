@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221122215844_init")]
+    [Migration("20221125001412_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduct");
+                    b.HasIndex("IdProduct")
+                        .IsUnique()
+                        .HasFilter("[IdProduct] IS NOT NULL");
 
                     b.ToTable("CuentaAhorros", (string)null);
                 });
@@ -140,7 +142,8 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduct");
+                    b.HasIndex("IdProduct")
+                        .IsUnique();
 
                     b.ToTable("Prestamos", (string)null);
                 });
@@ -225,9 +228,62 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProduct");
+                    b.HasIndex("IdProduct")
+                        .IsUnique();
 
                     b.ToTable("TarjetaCreditos", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Domain.Entities.Transaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FromId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductFromId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductToId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("isCuentaAhorro")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("isPrestamo")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("isTarjetaCredito")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.Beneficiario", b =>
@@ -244,8 +300,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>
                 {
                     b.HasOne("Core.Domain.Entities.Product", "Product")
-                        .WithMany("CuentaAhorros")
-                        .HasForeignKey("IdProduct")
+                        .WithOne("CuentaAhorros")
+                        .HasForeignKey("Core.Domain.Entities.CuentaAhorro", "IdProduct")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Product");
@@ -254,8 +310,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Core.Domain.Entities.Prestamo", b =>
                 {
                     b.HasOne("Core.Domain.Entities.Product", "Product")
-                        .WithMany("Prestamos")
-                        .HasForeignKey("IdProduct")
+                        .WithOne("Prestamos")
+                        .HasForeignKey("Core.Domain.Entities.Prestamo", "IdProduct")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -265,8 +321,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Core.Domain.Entities.TarjetaCredito", b =>
                 {
                     b.HasOne("Core.Domain.Entities.Product", "Product")
-                        .WithMany("TarjetaCreditos")
-                        .HasForeignKey("IdProduct")
+                        .WithOne("TarjetaCreditos")
+                        .HasForeignKey("Core.Domain.Entities.TarjetaCredito", "IdProduct")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
