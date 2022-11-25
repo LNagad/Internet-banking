@@ -1,22 +1,25 @@
 ﻿using Core.Application.Dtos.Account;
 using Core.Application.Dtos.Pagos;
+using Core.Application.Enums;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.Pagos;
 using Core.Application.ViewModels.Pagos.PagosBeneficiarios;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
 using Core.Application.ViewModels.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.X509;
 using SocialMedia.Middlewares;
 
 namespace Internet_Banking.Controllers
 {
+    [Authorize(Roles = "Basic, SuperAdmin")]
     public class PagosController : Controller
     {
         private readonly ICuentaAhorroService _cuentaAhorroService;
         private readonly IPrestamoService _prestamoService;
-        private readonly ValidateUserSession _validateUserSession;
+        private readonly ValidateUserSession _validateUser;
         private readonly ITarjetaCreditoService _tarjetaCreditoService;
         private readonly IPagosService _pagosService;
         private readonly IBeneficiarioService _beneficiarioService;
@@ -27,17 +30,27 @@ namespace Internet_Banking.Controllers
             IBeneficiarioService beneficiarioService)
         {
             _cuentaAhorroService = cuentaAhorro;
-            _validateUserSession = validateUserSession;
+            _validateUser = validateUserSession;
             _pagosService = pagosService;
             _prestamoService = prestamoService;
             _beneficiarioService = beneficiarioService;
 
-            _user = _validateUserSession.UserLoggedIn();
+            _user = _validateUser.UserLoggedIn();
             _tarjetaCreditoService = tarjetaCreditoService;
         }
 
         public async Task<IActionResult> Index()
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
             ViewBag.listaTarjetas = await _tarjetaCreditoService.GetAllTarjetaById(_user.Id);
@@ -54,6 +67,17 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public IActionResult PagosExpresosGetCuenta(string cuenta)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
             SavePagoExpresoViewModel pago = new();
             pago.NumeroCuentaOrigen = cuenta;
 
@@ -63,6 +87,18 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public async Task<IActionResult> PagosExpresos(SavePagoExpresoViewModel vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             if (!ModelState.IsValid)
             {
                 return View("PagosExpreso/PagosExpresos", vm);
@@ -83,12 +119,35 @@ namespace Internet_Banking.Controllers
 
         public IActionResult PagoExpresoDetails(PagoExpressResponse response)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
             return View("PagosExpreso/PagoExpresoDetails", response);
         }
 
         [HttpPost]
         public async Task<IActionResult> PagosExpresoConfirm(PagoExpressResponse vm)
         {
+
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
 
             PagoConfirmedViewModel response = await _pagosService.PagosExpresoConfirmed(vm);
 
@@ -111,6 +170,18 @@ namespace Internet_Banking.Controllers
         
         public async Task<IActionResult> GetAllTarjetas(string productId)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
             SavePagoTarjetaViewModel vm = new();
@@ -122,6 +193,18 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public async Task<IActionResult> EnvioPagoTarjetaPost(SavePagoTarjetaViewModel vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             if (!ModelState.IsValid)
             {
                 ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
@@ -163,6 +246,19 @@ namespace Internet_Banking.Controllers
 
         public async Task<IActionResult> GetAllPrestamos(string productId)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
+
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
             SavePagoPrestamoViewModel vm = new();
@@ -174,6 +270,18 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public async Task<IActionResult> EnvioPagoPrestamoPost(SavePagoPrestamoViewModel vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             if (!ModelState.IsValid)
             {
                 ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
@@ -213,6 +321,19 @@ namespace Internet_Banking.Controllers
         
         public async Task<IActionResult> GetAllBeneficiarios(string numeroCuenta, string BeneficiarioName, string BeneficiarioLastname)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
+
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
             SavePagoBeneficiariosViewModel vm = new();
@@ -226,6 +347,18 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public async Task<IActionResult> EnvioPagoBeneficiario(SavePagoBeneficiariosViewModel vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             if (!ModelState.IsValid)
             {
                 ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
@@ -269,6 +402,18 @@ namespace Internet_Banking.Controllers
 
         public async Task<IActionResult> EnvioPagoEntreCuentas()
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
 
             return View("PagosEntreCuentas/EnvioPagoEntreCuentas", new SavePagoEntreCuentas());
@@ -277,6 +422,18 @@ namespace Internet_Banking.Controllers
         [HttpPost]
         public async Task<IActionResult> EnvioPagoEntreCuentas(SavePagoEntreCuentas vm)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             if (!ModelState.IsValid)
             {
                 ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
@@ -314,6 +471,18 @@ namespace Internet_Banking.Controllers
 
         public IActionResult PagoConfirmed(PagoConfirmedViewModel response)
         {
+            if (!_validateUser.HasUser())
+            {
+                return RedirectToRoute(new { Controller = "User", Action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
+
+
             return View(response);
         }
     }
