@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace SocialMedia.Middlewares;
 
-public class LoginAuthorizeNoUser : IAsyncActionFilter
+public class LoginAuthorize : IAsyncActionFilter
 {
     private readonly ValidateUserSession _userSession;
 
-    public LoginAuthorizeNoUser(ValidateUserSession userSession)
+    public LoginAuthorize(ValidateUserSession userSession)
     {
         _userSession = userSession;
     }
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        if (!_userSession.HasUser())
+        if (_userSession.HasUser())
         {
 
             var controller = (UserController)context.Controller;

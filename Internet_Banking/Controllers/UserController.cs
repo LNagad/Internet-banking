@@ -86,6 +86,11 @@ namespace Internet_Banking.Controllers
                 return RedirectToRoute(new { controller = "User", action = "Index" });
             }
 
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
+            }
+
             SaveUserViewModel vm = await _manageUserService.GetSaveuserViewModelById(id);
 
             return View("Register", vm);
@@ -97,6 +102,11 @@ namespace Internet_Banking.Controllers
             if (!_validateUser.HasUser())
             {
                 return RedirectToRoute(new { controller = "User", action = "Index" });
+            }
+
+            if (!_validateUser.IsAdmin())
+            {
+                return RedirectToRoute(new { Controller = "Home", Action = "Index" });
             }
 
             await _manageUserService.UpdateUser(vm);
