@@ -4,6 +4,7 @@ using Core.Application.Interfaces.Repositories;
 using Core.Application.Interfaces.Services;
 using Core.Application.ViewModels.CuentaAhorros;
 using Core.Application.ViewModels.Pagos;
+using Core.Application.ViewModels.Pagos.PagoAvance;
 using Core.Application.ViewModels.Pagos.PagosBeneficiarios;
 using Core.Application.ViewModels.Pagos.PagosExpresos;
 using Core.Application.ViewModels.Pagos.PagosTarjetaCredito;
@@ -391,6 +392,87 @@ namespace Core.Application.Services
             response.LastNameOrigen = userOrigen.LastName;
             response.Monto = beneficiarioVm.Monto;
             response.LastNameOrigen = beneficiarioVm.BeneficiarioLastName;
+
+            return response;
+        }
+
+        #endregion
+        
+
+        #region Avance_pago
+
+        public async Task<PagoAvanceEfectivoResponse> GetAvancePago(SavePagoAvanceViewModel avancePagoVm)
+        {
+            var response = new PagoAvanceEfectivoResponse();
+            response.HasError = false;
+            
+            CuentaAhorroViewModel cuentaOrigin = await _cuentaAhorroService.AccountExists(avancePagoVm.NumeroCuentaOrigen);
+
+            response.oldMontoCuenta = cuentaOrigin.Balance;
+            
+            if (cuentaOrigin == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta seleccionada no existe!";
+
+                return response;
+            }
+            
+            var getTarjeta = await _tarjetaRepo.TarjetaExist(avancePagoVm.IdProduct);
+            
+            if (getTarjeta == null)
+            {
+                response.HasError = true;
+                response.Error = "La tarjeta seleccionada no existe!";
+
+                return response;
+            }
+
+            double tarjetaLimite = getTarjeta.Limite;
+
+            if (avancePagoVm.Monto > tarjetaLimite)
+            {
+                response.HasError = true;
+                response.Error = "La Tarjeta no posee el Monto Solicitado";
+
+                return response;
+            }
+
+            double resultadoTasa = new();
+
+            if ( avancePagoVm.Monto <= tarjetaLimite )
+            {
+                cuentaOrigin.Balance += avancePagoVm.Monto;
+
+                double tasa = 6.25;
+                
+                resultadoTasa = ((tasa * avancePagoVm.Monto) / 100) + avancePagoVm.Monto ;
+
+                getTarjeta.Debe += resultadoTasa;
+
+                getTarjeta.Limite -= avancePagoVm.Monto;
+            }
+            
+            //updating
+            
+            var cuentaOrigenVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigin);
+
+            await _cuentaAhorroService.Update(cuentaOrigenVm, cuentaOrigenVm.Id);
+
+            SaveTarjetaCreditoViewModel tarjeta = new();
+            tarjeta.Id = getTarjeta.Id;
+            tarjeta.Debe = getTarjeta.Debe;
+
+            await _tarjetaCreditoService.Update(tarjeta, tarjeta.Id);
+
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigin.Product.IdUser);
+            response.FirstNameOrigen = userOrigen.FirstName;
+            response.LastNameOrigen = userOrigen.LastName;
+            response.NumeroTarjeta = getTarjeta.NumeroTarjeta;
+            response.Monto = avancePagoVm.Monto;
+            response.NumeroCuenta = avancePagoVm.NumeroCuentaOrigen;
+            response.MontoCargado = resultadoTasa;
+            response.newMontoCuenta = cuentaOrigin.Balance;
 
             return response;
         }
