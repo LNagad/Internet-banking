@@ -87,6 +87,7 @@ namespace Core.Application.Services
             producto.IdProductType = resultado.Id;
             producto.CreatedBy = authenticationResponse.Id;
             resultado.IdProduct = productResult.Id;
+            resultado.Debe = 0;
 
             await _repository.UpdateAsync(resultado, resultado.Id);
             await _productRepository.UpdateAsync(producto, producto.Id);

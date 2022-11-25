@@ -1,7 +1,7 @@
-@using Core.Application.ViewModels.Pagos;
-@using Core.Application.ViewModels.CuentaAhorros;
-@using Core.Application.ViewModels.Pagos.PagosBeneficiarios;
-@model SavePagoBeneficiariosViewModel
+@using Core.Application.ViewModels.CuentaAhorros
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Core.Application.ViewModels.Pagos.PagoAvance;
+@model SavePagoAvanceViewModel
 @{
     ViewData["Title"] = "Pagos Beneficiario";
 }
@@ -11,7 +11,7 @@
         <form method="post" asp-action="EnvioPagoBeneficiario" asp-controller="Pagos">
             <div class="card">
                 <div class="card-header">
-                    <h4>Pagos a beneficiarios</h4>
+                    <h4>Avance de efectivo</h4>
                 </div>
                 <div class="card-body">
                     @Html.ValidationSummary(false, "", new{@class = "text-danger"})
@@ -24,7 +24,7 @@
                         </div>
                     }
                     
-                    <p class="fs-3">Beneficiario a pagar: @Model.BeneficiarioName</p>
+                    <p class="fs-3">Numero de tarjeta a la cual se pagara: @Model.NumeroTarjetaCredito</p>
                     
                     <div class="form-outline mb-4">
                         <label asp-for="NumeroCuentaOrigen" class="form-label">Cuenta Origen:</label>
@@ -37,8 +37,8 @@
                     </div>
 
                     <div class="form-outline mb-4">
-                        <label asp-for="NumeroCuentaDestino" class="form-label">Cuenta Destino:</label>
-                        <input readonly asp-for="NumeroCuentaDestino" value="@Model.NumeroCuentaDestino" class="form-control" />
+                        <label asp-for="NumeroTarjetaCredito" class="form-label">Cuenta Destino:</label>
+                        <input readonly asp-for="NumeroTarjetaCredito" value="@Model.NumeroTarjetaCredito" class="form-control" />
                     </div>
 
                     <div class="form-outline mb-4">
