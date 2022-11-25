@@ -3,12 +3,12 @@
 @using Core.Application.ViewModels.Pagos.PagoAvance;
 @model SavePagoAvanceViewModel
 @{
-    ViewData["Title"] = "Pagos Beneficiario";
+    ViewData["Title"] = "Avance efectivo";
 }
 
 <div class="col-12 d-flex justify-content-center">
     <div class="col-5 mt-5">
-        <form method="post" asp-action="EnvioPagoBeneficiario" asp-controller="Pagos">
+        <form method="post" asp-action="SaveAvanzeEfectivo" asp-controller="AvanzeEfectivo">
             <div class="card">
                 <div class="card-header">
                     <h4>Avance de efectivo</h4>
@@ -37,18 +37,23 @@
                     </div>
 
                     <div class="form-outline mb-4">
-                        <label asp-for="NumeroTarjetaCredito" class="form-label">Cuenta Destino:</label>
-                        <input readonly asp-for="NumeroTarjetaCredito" value="@Model.NumeroTarjetaCredito" class="form-control" />
+                        <p>Monto que posee la tarjeta actualmnete: @Model.TarjetaMonto</p>
+                        <label asp-for="NumeroTarjetaCredito" class="form-label">Tarjeta:</label>
+                        <input readonly asp-for="NumeroTarjetaCredito" value="@Model.NumeroTarjetaCredito" class="form-control"/>
+                        <input type="hidden" asp-for="idTarjetaCredito" value="@Model.idTarjetaCredito" class="form-control"/>
+                        <input type="hidden" asp-for="TarjetaMonto" value="@Model.TarjetaMonto" class="form-control"/>
+                        <input type="hidden" asp-for="IdProduct" value="@Model.IdProduct" class="form-control"/>
                     </div>
 
                     <div class="form-outline mb-4">
-                        <label asp-for="Monto" class="form-label">Monto:</label>
-                      @*  <input id="monto" type="number" step="any" asp-for="Monto" class="form-control" />*@
+                        <label asp-for="Monto" class="form-label">Monto a tomar de la tarjeta:</label>
 
                         <input class="form-control" asp-for="Monto" step="any" min="100" id="montoInput" placeholder="Monto">
+                      
+                      <p>se le suma un 6.25 % de interés del monto tomado prestado de la tarjeta de crédito</p>
                     </div>
                     
-                    <button type="submit" class="btn btn-success btn-block mb-3">Enviar pago</button>
+                    <button type="submit" class="btn btn-success btn-block mb-3">Obtener dinero</button>
                 </div>
             </div>
         </form>

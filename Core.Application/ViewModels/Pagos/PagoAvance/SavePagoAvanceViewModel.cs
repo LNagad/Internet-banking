@@ -15,6 +15,10 @@ public class SavePagoAvanceViewModel
     public string NumeroTarjetaCredito { get; set; }
 
     public string? idTarjetaCredito { get; set; }
+    
+    public double? TarjetaMonto { get; set; }
+    
+    public string? IdProduct { get; set; }
 
     public bool? HasError { get; set; }
     public string? Error { get; set; }
