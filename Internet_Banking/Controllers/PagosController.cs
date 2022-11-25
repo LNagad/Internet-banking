@@ -262,7 +262,54 @@ namespace Internet_Banking.Controllers
 
             return RedirectToAction("PagoConfirmed", resultado);
         }
-        
+
+        #endregion
+
+        #region pagoEntreCuentas
+
+        public async Task<IActionResult> EnvioPagoEntreCuentas()
+        {
+            ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+            return View("PagosEntreCuentas/EnvioPagoEntreCuentas", new SavePagoEntreCuentas());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnvioPagoEntreCuentas(SavePagoEntreCuentas vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosEntreCuentas/EnvioPagoEntreCuentas", vm);
+            }
+
+            var response = await _pagosService.SendPaymentPagoEntreCuenta(vm);
+
+            if (response.HasError == true)
+            {
+                vm.HasError = response.HasError;
+                vm.Error = response.Error;
+
+                ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                return View("PagosEntreCuentas/EnvioPagoEntreCuentas", vm);
+            }
+
+            //PagoConfirmedViewModel resultado = new();
+
+            //resultado.isPrestamo = true;
+
+            //resultado.FirstNameOrigen = response.FirstNameOrigen;
+            //resultado.LastNameOrigen = response.LastNameOrigen;
+            //resultado.NumeroPrestamo = response.NumeroPrestamo;
+            //resultado.Monto = response.Monto;
+            //resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+            //resultado.TransactionId = response.TransactionId;
+
+            return RedirectToAction("PagoConfirmed", response);
+        }
+
         #endregion
 
         public IActionResult PagoConfirmed(PagoConfirmedViewModel response)
