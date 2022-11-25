@@ -17,5 +17,7 @@ namespace Core.Application.Interfaces.Services
 
         Task<PagoBeneficiarioResponse> SendPaymentBeneficiario(SavePagoBeneficiariosViewModel beneficiarioVm);
         Task<PagoAvanceEfectivoResponse> GetAvancePago(SavePagoAvanceViewModel avancePagoVm);
+
+        Task<PagoConfirmedViewModel> SendPaymentPagoEntreCuenta(SavePagoEntreCuentas vm);
     }
 }

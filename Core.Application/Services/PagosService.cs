@@ -117,6 +117,12 @@ namespace Core.Application.Services
 
             CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
 
+            if (vm.NumeroCuentaOrigen == vm.NumeroCuentaDestino)
+            {
+                response.HasError = true;
+                response.Error = "No puede usar la misma cuenta de origen!";
+                return response;
+            }
 
             if (cuentaOrigen == null)
             {
@@ -565,6 +571,92 @@ namespace Core.Application.Services
 
             return response;
         }
+
+        #endregion
+
+        #region pagoEntreCuentas
+
+        public async Task<PagoConfirmedViewModel> SendPaymentPagoEntreCuenta(SavePagoEntreCuentas vm)
+        {
+            PagoConfirmedViewModel response = new();
+            response.HasError = false;
+
+            CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
+
+            if (vm.NumeroCuentaOrigen == vm.NumeroCuentaDestino)
+            {
+                response.HasError = true;
+                response.Error = "No puede usar la misma cuenta de origen!";
+                return response;
+            }
+
+            if (cuentaOrigen == null)
+            {
+                response.HasError = true;
+                response.Error = "La cuenta de origen seleccionada no existe!";
+                return response;
+            }
+
+            var cuentaOrigenVM = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
+
+            CuentaAhorroViewModel cuentaDestino = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
+
+            if (cuentaDestino == null)
+            {
+                response.HasError = true;
+                response.Error = "Cuenta de destino no encontrada.";
+                return response;
+            }
+
+            //Update balances
+
+            var cuentaDestinoVM = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaDestino);
+
+            cuentaOrigenVM.Balance -= vm.Monto;
+
+            await _cuentaAhorroService.Update(cuentaOrigenVM, cuentaOrigenVM.Id);
+
+            cuentaDestinoVM.Balance += vm.Monto;
+
+            await _cuentaAhorroService.Update(cuentaDestinoVM, cuentaDestinoVM.Id);
+
+
+            //Transaction Create transactin Id
+
+            var transaction = await _transactionRepo.AddAsync(new Domain.Entities.Transaction()
+            {
+                UserId = cuentaOrigen.Product.IdUser,
+                FromId = cuentaOrigen.Id,
+                ProductFromId = cuentaOrigen.Product.Id,
+                ToId = cuentaDestino.Product.IdUser,
+                ProductToId = cuentaDestino.Product.Id,
+                isCuentaAhorro = true,
+                isTarjetaCredito = false,
+                isPrestamo = false
+            });
+
+            var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+
+            var userDestino = await _userService.getUserAndInformation(cuentaDestino.Product.IdUser);
+
+            //Return vw props
+
+            response.FirstNameOrigen = userOrigen.FirstName;
+            response.LastNameOrigen = userOrigen.LastName;
+            response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
+
+            response.FirstNameDestino = userDestino.FirstName;
+            response.LastNameDestino = userDestino.FirstName;
+            response.NumeroCuentaDestino = cuentaDestino.NumeroCuenta;
+
+            response.Monto = vm.Monto;
+
+            response.isCuentaAhorro = true;
+            response.TransactionId = transaction.Id;
+
+            return response;
+        }
+
 
         #endregion
     }
