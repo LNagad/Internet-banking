@@ -26,11 +26,12 @@ namespace Core.Application.Services
 
         private readonly ITarjetaCreditoRepository _tarjetaRepo;
         private readonly IPrestamoRepository _prestamoRepo;
+        private readonly ITransactionRepository _transactionRepo;
 
         public PagosService(ICuentaAhorroService cuentaAhorroService, IProductService productService, 
             IDashboradService userService, IMapper mapper, ITarjetaCreditoService tarjetaCreditoService, 
             ITarjetaCreditoRepository tarjetaRepo, IPrestamoRepository prestamoRepo, IPrestamoService prestamoService,
-            IBeneficiarioService beneficiarioService)
+            IBeneficiarioService beneficiarioService, ITransactionRepository transactionRepo)
         {
             _cuentaAhorroService = cuentaAhorroService;
             _productService = productService;
@@ -42,6 +43,8 @@ namespace Core.Application.Services
             _tarjetaRepo = tarjetaRepo;
             _prestamoRepo = prestamoRepo;
             _mapper = mapper;
+
+            _transactionRepo = transactionRepo;
         }
 
         #region pagosExpresosos
@@ -54,6 +57,12 @@ namespace Core.Application.Services
             double parsedMonto = double.Parse(vm.Monto);
             parsedMonto = Math.Round(parsedMonto, 2);
 
+            if (vm.NumeroCuentaOrigen == vm.NumeroCuentaDestino)
+            {
+                response.HasError = true;
+                response.Error = "No puede usar la misma cuenta de origen!";
+                return response;
+            }
 
             CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaOrigen);
 
@@ -63,6 +72,8 @@ namespace Core.Application.Services
                 response.Error = "La cuenta de origen seleccionada no existe!";
                 return response;
             }
+
+
 
             CuentaAhorroViewModel cuentaDestino = await _cuentaAhorroService.AccountExists(vm.NumeroCuentaDestino);
 
@@ -138,6 +149,18 @@ namespace Core.Application.Services
 
 
             //Transaction Create transactin Id
+            
+            var transaction = await _transactionRepo.AddAsync(new Domain.Entities.Transaction()
+            {
+                UserId = cuentaOrigen.Product.IdUser,
+                FromId = cuentaOrigen.Id,
+                ProductFromId = cuentaOrigen.Product.Id,
+                ToId = cuentaDestino.Product.IdUser,
+                ProductToId = cuentaDestino.Product.Id,
+                isCuentaAhorro = true,
+                isTarjetaCredito = false,
+                isPrestamo = false
+            });
 
             //Return vw props
 
@@ -152,6 +175,7 @@ namespace Core.Application.Services
             response.Monto = vm.Monto;
 
             response.isCuentaAhorro = true;
+            response.TransactionId = transaction.Id;
 
             return response;
         }
@@ -177,6 +201,15 @@ namespace Core.Application.Services
 
                 return response;
             }
+
+            if (getTarjeta.Debe == 0)
+            {
+                response.HasError = true;
+                response.Error = "Usted aun no debe esta tarjeta!";
+
+                return response;
+            }
+
 
             double debeTarjeta = getTarjeta.Debe;
 
@@ -232,11 +265,28 @@ namespace Core.Application.Services
             await _tarjetaCreditoService.Update(tarjeta, tarjeta.Id);
 
             var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+
+            //Transaction Create transactin Id
+
+            var transaction = await _transactionRepo.AddAsync(new Domain.Entities.Transaction()
+            {
+                UserId = cuentaOrigen.Product.IdUser,
+                FromId = cuentaOrigen.Id,
+                ProductFromId = cuentaOrigen.Product.Id,
+                ToId = getTarjeta.Id,
+                ProductToId = getTarjeta.IdProduct,
+                isCuentaAhorro = false,
+                isTarjetaCredito = true,
+                isPrestamo = false
+            });
+
             response.FirstNameOrigen = userOrigen.FirstName;
             response.LastNameOrigen = userOrigen.LastName;
             response.LastTarjetaCredito = getTarjeta.NumeroTarjeta;
             response.Monto= parsedMonto;
             response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
+
+            response.TransactionId = transaction.Id;
 
             return response;
         }
@@ -306,11 +356,28 @@ namespace Core.Application.Services
             await _prestamoService.Update(prestamo, prestamo.Id);
 
             var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+
+            //Transaction Create transactin Id
+
+            var transaction = await _transactionRepo.AddAsync(new Domain.Entities.Transaction()
+            {
+                UserId = cuentaOrigen.Product.IdUser,
+                FromId = cuentaOrigen.Id,
+                ProductFromId = cuentaOrigen.Product.Id,
+                ToId = getPrestamo.Id,
+                ProductToId = getPrestamo.IdProduct,
+                isCuentaAhorro = false,
+                isTarjetaCredito = false,
+                isPrestamo = true
+            });
+
             response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
             response.FirstNameOrigen = userOrigen.FirstName;
             response.LastNameOrigen = userOrigen.LastName;
             response.NumeroPrestamo = getPrestamo.NumeroPrestamo;
             response.Monto = prestamoVm.Monto;
+
+            response.TransactionId = transaction.Id;
 
             return response;
         }
@@ -320,9 +387,9 @@ namespace Core.Application.Services
         
         #region Beneficiario
 
-        public async Task<PagoPrestamoResponse> SendPaymentBeneficiario(SavePagoBeneficiariosViewModel beneficiarioVm)
+        public async Task<PagoBeneficiarioResponse> SendPaymentBeneficiario(SavePagoBeneficiariosViewModel beneficiarioVm)
         {
-            var response = new PagoPrestamoResponse();
+            var response = new PagoBeneficiarioResponse();
             response.HasError = false;
 
             CuentaAhorroViewModel cuentaOrigen = await _cuentaAhorroService.AccountExists(beneficiarioVm.NumeroCuentaOrigen);
@@ -373,8 +440,21 @@ namespace Core.Application.Services
 
                 cuentaDestino.Balance += beneficiarioVm.Monto;
             }
-            
-            
+
+            //Transaction Create transactin Id
+
+            var transaction = await _transactionRepo.AddAsync(new Domain.Entities.Transaction()
+            {
+                UserId = cuentaOrigen.Product.IdUser,
+                FromId = cuentaOrigen.Id,
+                ProductFromId = cuentaOrigen.Product.Id,
+                ToId = cuentaDestino.Product.IdUser,
+                ProductToId = cuentaDestino.Product.Id,
+                isCuentaAhorro = true,
+                isTarjetaCredito = false,
+                isPrestamo = false
+            });
+
             //updating
 
             var cuentaOrigenVm = _mapper.Map<SaveCuentaAhorroViewModel>(cuentaOrigen);
@@ -386,11 +466,20 @@ namespace Core.Application.Services
             await _cuentaAhorroService.Update(cuentaDestinoVm, cuentaDestino.Id);
 
             var userOrigen = await _userService.getUserAndInformation(cuentaOrigen.Product.IdUser);
+
+            var userDestino = await _userService.getUserAndInformation(cuentaDestino.Product.IdUser);
+
             response.NumeroCuentaOrigen = cuentaOrigen.NumeroCuenta;
             response.FirstNameOrigen = userOrigen.FirstName;
             response.LastNameOrigen = userOrigen.LastName;
             response.Monto = beneficiarioVm.Monto;
             response.LastNameOrigen = beneficiarioVm.BeneficiarioLastName;
+
+            response.FirstNameDestino = userDestino.FirstName;
+            response.LastNameDestino = userDestino.LastName;
+            response.NumeroCuentaDestino = cuentaDestino.NumeroCuenta;
+
+            response.TransactionId = transaction.Id;
 
             return response;
         }

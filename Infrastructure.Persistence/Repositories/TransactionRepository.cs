@@ -14,6 +14,12 @@ namespace Infrastructure.Persistence.Repositories
             _dbContext = dbContext;
         }
 
+        public override async Task<Transaction> AddAsync(Transaction entity)
+        {
+            Guid guid = Guid.NewGuid();
+            entity.Id = guid.ToString();
 
+            return await base.AddAsync(entity);
+        }
     }
 }

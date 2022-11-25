@@ -134,6 +134,12 @@ namespace Internet_Banking.Controllers
             if (response.HasError == true)
             {
                 ViewBag.listaCuentasAhorro = await _cuentaAhorroService.GetAllViewModelWithInclude(_user.Id);
+
+                if (response.Error == "Usted aun no debe esta tarjeta!")
+                {
+                    return View("PagoTarjetaCredito/ErrorMessage", response);
+                }
+
                 return View("PagoTarjetaCredito/EnvioPagoTarjeta", vm);
             }
 
@@ -146,6 +152,7 @@ namespace Internet_Banking.Controllers
             resultado.LastTarjetaCredito = response.LastTarjetaCredito;
             resultado.Monto = response.Monto;
             resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+            resultado.TransactionId = response.TransactionId;
 
             return RedirectToAction("PagoConfirmed", resultado);
         }
@@ -195,6 +202,7 @@ namespace Internet_Banking.Controllers
             resultado.NumeroPrestamo = response.NumeroPrestamo;
             resultado.Monto = response.Monto;
             resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+            resultado.TransactionId = response.TransactionId;
 
             return RedirectToAction("PagoConfirmed", resultado);
         }
@@ -239,13 +247,18 @@ namespace Internet_Banking.Controllers
 
             PagoConfirmedViewModel resultado = new();
 
-            resultado.isPrestamo = true;
+            resultado.isBeneficiario = true;
 
+            resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
             resultado.FirstNameOrigen = response.FirstNameOrigen;
             resultado.LastNameOrigen = response.LastNameOrigen;
-            resultado.NumeroPrestamo = response.NumeroPrestamo;
             resultado.Monto = response.Monto;
-            resultado.NumeroCuentaOrigen = response.NumeroCuentaOrigen;
+            resultado.LastNameOrigen = response.LastNameOrigen;
+
+            resultado.FirstNameDestino = response.FirstNameDestino;
+            resultado.LastNameDestino = response.LastNameDestino;
+            resultado.NumeroCuentaDestino = response.NumeroCuentaDestino;
+            resultado.TransactionId = response.TransactionId;
 
             return RedirectToAction("PagoConfirmed", resultado);
         }

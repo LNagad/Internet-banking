@@ -36,7 +36,7 @@ public static class ServiceRegistration
             services.AddTransient<IPrestamoRepository, PrestamoRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ITarjetaCreditoRepository, TarjetaCreditoRepository>();
-
+            services.AddTransient<ITransactionRepository, TransactionRepository>();
         #endregion
     }
 }

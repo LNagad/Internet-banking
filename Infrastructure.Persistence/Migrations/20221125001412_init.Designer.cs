@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20221124224043_init")]
+    [Migration("20221125001412_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,7 +161,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdProductType")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdUser")
                         .IsRequired()
@@ -188,10 +188,6 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProductType")
-                        .IsUnique()
-                        .HasFilter("[IdProductType] IS NOT NULL");
-
                     b.ToTable("Products", (string)null);
                 });
 
@@ -212,7 +208,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("IdProduct")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -231,6 +227,9 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdProduct")
+                        .IsUnique();
 
                     b.ToTable("TarjetaCreditos", (string)null);
                 });
@@ -319,14 +318,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
+            modelBuilder.Entity("Core.Domain.Entities.TarjetaCredito", b =>
                 {
-                    b.HasOne("Core.Domain.Entities.TarjetaCredito", "TarjetaCreditos")
-                        .WithOne("Product")
-                        .HasForeignKey("Core.Domain.Entities.Product", "IdProductType")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Core.Domain.Entities.Product", "Product")
+                        .WithOne("TarjetaCreditos")
+                        .HasForeignKey("Core.Domain.Entities.TarjetaCredito", "IdProduct")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("TarjetaCreditos");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Core.Domain.Entities.CuentaAhorro", b =>
@@ -339,12 +339,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("CuentaAhorros");
 
                     b.Navigation("Prestamos");
-                });
 
-            modelBuilder.Entity("Core.Domain.Entities.TarjetaCredito", b =>
-                {
-                    b.Navigation("Product")
-                        .IsRequired();
+                    b.Navigation("TarjetaCreditos");
                 });
 #pragma warning restore 612, 618
         }

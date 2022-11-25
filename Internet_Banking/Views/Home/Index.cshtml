@@ -1,10 +1,11 @@
 ﻿@using Core.Application.ViewModels.Products
 @using Core.Application.ViewModels.CuentaAhorros
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Core.Application.Dtos.Account
 @using Core.Application.Helpers
 @using Core.Application.ViewModels.TarjetaCreditos
 @using Core.Domain.Entities
+@using Core.Application.ViewModels.Transactions;
+
 @inject IHttpContextAccessor httpContextAccessor
 @{
     ViewData["Title"] = "Inicio";
@@ -37,7 +38,7 @@
     </nav>
 
     <div class="mt-5 d-flex justify-content-center border border-5">
-        <div class="col-11" style="border: 1px solid red">
+        <div class="col-11">
             <h2>Cuentas</h2>
             <div class="d-flex flex-wrap">
                 @foreach (ProductViewModel item in ViewBag.lista)
@@ -106,7 +107,15 @@
     </nav>
 
     <div class="mt-5 d-flex justify-content-center border border-5">
-        <div class="col-11" style="border: 1px solid red">
+        <div class="col-11">
+
+            <h2>Cantidad de transacciones</h2>
+
+            <p>Cantidad de transacciones que se han realizado en el sistema desde todos los tiempos @ViewBag.cantidadTransaccionesTotal</p>
+            <p>Cantidad de transacciones que se han realizado en el sistema Hoy @ViewBag.cantidadTransaccionesHoy</p>
+
+            <p>Cantidad de pagos realizados hoy @ViewBag.cantidadPagosHoy</p>
+            <p>Cantidad de pagos realizados en el sistema desde todos los tiempos @ViewBag.cantidadPagosTotal</p>
 
             <h2>Cantidad de clientes activos y los inactivos</h2>
 
@@ -120,9 +129,12 @@
     </div>
 
     <div class="mt-5 d-flex justify-content-center border border-5">
-        <div class="col-11" style="border: 1px solid red">
+        <div class="col-11">
             <h2>Cantidad de productos asignados a los clientes</h2>
 
+            <p>@ViewBag.cantidadProductosAsignados</p>
         </div>
     </div>
+
+    
 }

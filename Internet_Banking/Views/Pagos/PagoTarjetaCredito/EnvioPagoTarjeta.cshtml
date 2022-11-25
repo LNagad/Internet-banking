@@ -22,7 +22,6 @@
                             <a class="btn btn-close" data-bs-dismiss="alert" arial-label="Close"></a>
                         </div>
                     }
-
                     <div class="form-outline mb-4">
                         <input hidden asp-for="Id" class="form-control" />
                         <input hidden asp-for="idProduct" value="@Model.idProduct" class="form-control" />
@@ -31,7 +30,7 @@
                     <div class="form-outline mb-4">
                         <label asp-for="NumeroCuentaOrigen" class="form-label">Cuenta Origen:</label>
                         <select class="form-select" asp-for="NumeroCuentaOrigen">
-                            @foreach(CuentaAhorroViewModel item in ViewBag.listaCuentasAhorro)
+                            @foreach (CuentaAhorroViewModel item in ViewBag.listaCuentasAhorro)
                             {
                                 <option value="@item.NumeroCuenta">@item.NumeroCuenta || $@item.Balance</option>
                             }
@@ -45,6 +44,7 @@
 
                     <!-- Submit button -->
                     <button type="submit" class="btn btn-success btn-block mb-3">Enviar pago</button>
+                    <a class="btn btn-secondary btn-block mb-3">Volver al home</a>
                 </div>
             </div>
         </form>

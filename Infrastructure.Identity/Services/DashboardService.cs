@@ -52,8 +52,6 @@ public class DashboardService : IDashboradService
         var getUser = _userManager.
             Users.Where(x => x.FirstName != "SuperAdmin" && x.FirstName != "Basic").ToList();
 
-        
-        
         List<AuthenticationResponse> userList = new();
         
         foreach ( var item in getUser)
