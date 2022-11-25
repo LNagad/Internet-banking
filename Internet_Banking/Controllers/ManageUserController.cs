@@ -159,12 +159,14 @@ namespace Internet_Banking.Controllers
         public async Task<IActionResult> ManagePrestamo(SavePrestamoViewModel prestamoVm, string UserId)
         {
             var prestamoObj = new SavePrestamoViewModel();
+            
+            ViewBag.usersList = await _dashboradService.getAllUsersAndInformation();
 
             var prestamoFinal = await _prestamoService.AddCuentaAhorro(prestamoVm, UserId);
 
             await _manageUserService.addPrestamoToUser(prestamoFinal, UserId);
 
-            return View(prestamoObj);
+            return View("Index", new AuthenticationResponse());
         }
 
         public async Task<IActionResult> ErrorMessage()

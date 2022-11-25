@@ -99,6 +99,8 @@ public class ManageUserService : IManageUserService
             }
             
             await _product.Delete(Id);
+
+            return "Cuenta elimiada correctamente";
         }
         else if ( tipo == "Tarjeta")
         {
@@ -113,9 +115,11 @@ public class ManageUserService : IManageUserService
                         if (tarjetaVm.Debe == 0)
                         {
                             await _product.Delete(productGot.Id);
+
+                            return "Producto Eliminado correctamente";
                         }
 
-                        return "";
+                        return "Todavia Debe a esta Tarjeta, no puede ser eliminada";
                     }
                 }
             }
@@ -133,15 +137,17 @@ public class ManageUserService : IManageUserService
                         if ( prestamoVm.Debe == 0 )
                         {
                             await _product.Delete(productGot.Id);
+                            
+                            return "Prestamo elimiado correctamente";
                         }
 
-                        return "";
+                        return "Este prestamo aun no esta Pagado, no puede ser eliminado";
                     }
                 }
             }
         }
 
-        return "";
+        return "Algo ocurrio y el proceso no pudo ser completado correctamente";
     }
 
     public async Task<SavePrestamoViewModel> addPrestamoToUser(SavePrestamoViewModel prestamoVm, string Id)
